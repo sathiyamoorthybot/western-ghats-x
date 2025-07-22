@@ -1,6 +1,11 @@
+// src/context/authprovider.tsx
+
+import {
+  useSession,
+  useSupabaseClient,
+} from "@supabase/auth-helpers-react";
 import { createContext, useContext, useEffect, useState } from "react";
-import { Session } from "@supabase/supabase-js";
-import { supabase } from "@/integrations/supabase/client";
+import type { Session } from "@supabase/supabase-js";
 
 type AuthContextType = {
   session: Session | null;
@@ -13,34 +18,14 @@ const AuthContext = createContext<AuthContextType>({
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [session, setSession] = useState<Session | null>(null);
+  const session = useSession(); // pulled from SessionContextProvider
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const initSession = async () => {
-      const {
-        data: { session },
-        error,
-      } = await supabase.auth.getSession();
-
-      if (error) console.error("Error fetching session:", error);
-
-      setSession(session);
+    if (session !== undefined) {
       setLoading(false);
-    };
-
-    initSession();
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, newSession) => {
-      setSession(newSession);
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, []);
+    }
+  }, [session]);
 
   return (
     <AuthContext.Provider value={{ session, loading }}>
