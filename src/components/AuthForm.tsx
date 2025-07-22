@@ -6,6 +6,7 @@ import { Mail, Lock, User, Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface AuthFormProps {
   type: "login" | "signup";
@@ -41,40 +42,34 @@ const AuthForm = ({ type }: AuthFormProps) => {
     }
 
     try {
-      import { supabase } from "@/integrations/supabase/client";
+      let result;
 
-let result;
+      if (type === "signup") {
+        result = await supabase.auth.signUp({
+          email: formData.email,
+          password: formData.password,
+          options: {
+            data: { name: formData.name },
+            emailRedirectTo: window.location.origin, // ✅ Ensures proper redirection
+          },
+        });
+      } else {
+        result = await supabase.auth.signInWithPassword({
+          email: formData.email,
+          password: formData.password,
+        });
+      }
 
-if (type === "signup") {
-  result = await supabase.auth.signUp({
-    email: formData.email,
-    password: formData.password,
-    options: {
-      data: { name: formData.name },
-      emailRedirectTo: window.location.origin,
-    },
-  });
-} else {
-  result = await supabase.auth.signInWithPassword({
-    email: formData.email,
-    password: formData.password,
-  });
-}
+      const { error } = result;
+      if (error) throw error;
 
-const { error } = result;
-
-if (error) {
-  throw error;
-}
-
-      
       toast({
         title: type === "login" ? "Welcome back!" : "Account created!",
         description: type === "login" 
           ? "You have successfully logged in." 
-          : "Your account has been created successfully."
+          : "Please check your email to confirm your signup."
       });
-      
+
       // Reset form
       setFormData({
         name: "",
@@ -103,11 +98,10 @@ if (error) {
           <CardDescription>
             {type === "login" 
               ? "Sign in to your Western Ghats X account" 
-              : "Join Western Ghats X community today"
-            }
+              : "Join Western Ghats X community today"}
           </CardDescription>
         </CardHeader>
-        
+
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             {type === "signup" && (
