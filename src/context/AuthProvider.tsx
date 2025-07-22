@@ -1,37 +1,36 @@
-// src/context/authprovider.tsx
+// src/providers/auth-provider.tsx
+import { useEffect, useState, createContext, useContext, ReactNode } from "react";
+import { useSession } from "@supabase/auth-helpers-react";
+import { supabase } from "@/integrations/supabase/client";
 
-import {
-  useSession,
-  useSupabaseClient,
-} from "@supabase/auth-helpers-react";
-import { createContext, useContext, useEffect, useState } from "react";
-import type { Session } from "@supabase/supabase-js";
-
-type AuthContextType = {
-  session: Session | null;
+interface AuthContextType {
+  user: any;
   loading: boolean;
-};
+}
 
-const AuthContext = createContext<AuthContextType>({
-  session: null,
-  loading: true,
-});
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const session = useSession(); // pulled from SessionContextProvider
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const session = useSession(); // Uses @supabase/auth-helpers-react
+  const [user, setUser] = useState(session?.user ?? null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (session !== undefined) {
-      setLoading(false);
-    }
+    setUser(session?.user ?? null);
+    setLoading(false);
   }, [session]);
 
   return (
-    <AuthContext.Provider value={{ session, loading }}>
+    <AuthContext.Provider value={{ user, loading }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within AuthProvider");
+  }
+  return context;
+};
