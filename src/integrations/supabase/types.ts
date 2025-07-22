@@ -14,7 +14,290 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      cricket_players: {
+        Row: {
+          age: number
+          created_at: string
+          id: string
+          jersey_number: number | null
+          name: string
+          phone: string
+          photo_url: string | null
+          player_type: string
+          team_id: string
+          updated_at: string
+        }
+        Insert: {
+          age: number
+          created_at?: string
+          id?: string
+          jersey_number?: number | null
+          name: string
+          phone: string
+          photo_url?: string | null
+          player_type?: string
+          team_id: string
+          updated_at?: string
+        }
+        Update: {
+          age?: number
+          created_at?: string
+          id?: string
+          jersey_number?: number | null
+          name?: string
+          phone?: string
+          photo_url?: string | null
+          player_type?: string
+          team_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cricket_players_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "cricket_teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cricket_teams: {
+        Row: {
+          captain_name: string
+          captain_phone: string
+          created_at: string
+          event_id: string
+          id: string
+          payment_method: string | null
+          payment_status: string
+          registration_fee: number
+          team_jersey_url: string | null
+          team_name: string
+          transaction_id: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          captain_name: string
+          captain_phone: string
+          created_at?: string
+          event_id: string
+          id?: string
+          payment_method?: string | null
+          payment_status?: string
+          registration_fee?: number
+          team_jersey_url?: string | null
+          team_name: string
+          transaction_id?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          captain_name?: string
+          captain_phone?: string
+          created_at?: string
+          event_id?: string
+          id?: string
+          payment_method?: string | null
+          payment_status?: string
+          registration_fee?: number
+          team_jersey_url?: string | null
+          team_name?: string
+          transaction_id?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cricket_teams_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      events: {
+        Row: {
+          created_at: string
+          description: string | null
+          event_date: string
+          event_type: string
+          id: string
+          location: string | null
+          max_participants: number | null
+          name: string
+          registration_fee: number | null
+          registration_open: boolean | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          event_date: string
+          event_type: string
+          id?: string
+          location?: string | null
+          max_participants?: number | null
+          name: string
+          registration_fee?: number | null
+          registration_open?: boolean | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          event_date?: string
+          event_type?: string
+          id?: string
+          location?: string | null
+          max_participants?: number | null
+          name?: string
+          registration_fee?: number | null
+          registration_open?: boolean | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      marathon_participants: {
+        Row: {
+          age: number
+          bib_number: number | null
+          blood_group: string
+          created_at: string
+          email: string
+          emergency_contact: string
+          emergency_phone: string
+          full_name: string
+          gender: string
+          id: string
+          phone: string
+          race_type: string
+          registration_id: string
+          tshirt_size: string
+          updated_at: string
+        }
+        Insert: {
+          age: number
+          bib_number?: number | null
+          blood_group: string
+          created_at?: string
+          email: string
+          emergency_contact: string
+          emergency_phone: string
+          full_name: string
+          gender: string
+          id?: string
+          phone: string
+          race_type: string
+          registration_id: string
+          tshirt_size: string
+          updated_at?: string
+        }
+        Update: {
+          age?: number
+          bib_number?: number | null
+          blood_group?: string
+          created_at?: string
+          email?: string
+          emergency_contact?: string
+          emergency_phone?: string
+          full_name?: string
+          gender?: string
+          id?: string
+          phone?: string
+          race_type?: string
+          registration_id?: string
+          tshirt_size?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marathon_participants_registration_id_fkey"
+            columns: ["registration_id"]
+            isOneToOne: false
+            referencedRelation: "marathon_registrations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      marathon_registrations: {
+        Row: {
+          created_at: string
+          event_id: string
+          id: string
+          payment_method: string | null
+          payment_status: string
+          registration_type: string
+          total_amount: number
+          transaction_id: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          event_id: string
+          id?: string
+          payment_method?: string | null
+          payment_status?: string
+          registration_type: string
+          total_amount: number
+          transaction_id?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          event_id?: string
+          id?: string
+          payment_method?: string | null
+          payment_status?: string
+          registration_type?: string
+          total_amount?: number
+          transaction_id?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marathon_registrations_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+          phone: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
