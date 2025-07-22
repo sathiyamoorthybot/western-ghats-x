@@ -453,7 +453,7 @@ const SBL = () => {
                             </div>
                             <div className="flex justify-between">
                               <span>Last Date for Cancellation:</span>
-                              <span className="font-semibold text-red-600">August 25, 2025 - Monday</span>
+                              <span className="font-semibold text-red-600">August 20, 2025 - Monday</span>
                             </div>
                           </div>
                         </div>
