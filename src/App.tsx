@@ -1,31 +1,40 @@
-// src/App.tsx
-import { BrowserRouter } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { SessionContextProvider } from "@supabase/auth-helpers-react";
+// src/providers/auth-provider.tsx
+import { createContext, useContext, useEffect, useState } from "react";
+import { useSession, useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
+import type { Session, SupabaseClient, User } from "@supabase/supabase-js";
 
-import { supabase } from "@/integrations/supabase/client";
-import { AuthProvider } from "@/providers/auth-provider";
-import { Toaster } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import AppRoutes from "@/routes";
+type AuthContextType = {
+  session: Session | null;
+  user: User | null;
+  supabase: SupabaseClient;
+  userMetadata: any;
+};
 
-const queryClient = new QueryClient();
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const App = () => {
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const session = useSession();
+  const user = useUser();
+  const supabase = useSupabaseClient();
+  const [userMetadata, setUserMetadata] = useState<any>(null);
+
+  useEffect(() => {
+    if (user) {
+      setUserMetadata(user.user_metadata); // Load from Supabase Auth
+    } else {
+      setUserMetadata(null);
+    }
+  }, [user]);
+
   return (
-    <SessionContextProvider supabaseClient={supabase}>
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <BrowserRouter>
-            <TooltipProvider>
-              <AppRoutes />
-              <Toaster />
-            </TooltipProvider>
-          </BrowserRouter>
-        </AuthProvider>
-      </QueryClientProvider>
-    </SessionContextProvider>
+    <AuthContext.Provider value={{ session, user, supabase, userMetadata }}>
+      {children}
+    </AuthContext.Provider>
   );
 };
 
-export default App;
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) throw new Error("useAuth must be used within AuthProvider");
+  return context;
+};
