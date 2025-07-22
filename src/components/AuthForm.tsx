@@ -41,8 +41,32 @@ const AuthForm = ({ type }: AuthFormProps) => {
     }
 
     try {
-      // Simulate authentication
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      import { supabase } from "@/integrations/supabase/client";
+
+let result;
+
+if (type === "signup") {
+  result = await supabase.auth.signUp({
+    email: formData.email,
+    password: formData.password,
+    options: {
+      data: { name: formData.name },
+      emailRedirectTo: window.location.origin,
+    },
+  });
+} else {
+  result = await supabase.auth.signInWithPassword({
+    email: formData.email,
+    password: formData.password,
+  });
+}
+
+const { error } = result;
+
+if (error) {
+  throw error;
+}
+
       
       toast({
         title: type === "login" ? "Welcome back!" : "Account created!",
