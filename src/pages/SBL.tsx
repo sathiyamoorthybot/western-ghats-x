@@ -452,7 +452,7 @@ const SBL = () => {
                               <span className="font-semibold text-red-600">August 24, 2025 - Sunday</span>
                             </div>
                             <div className="flex justify-between">
-                              <span>Last Date for registration:</span>
+                              <span>Last Date for Cancellation:</span>
                               <span className="font-semibold text-red-600">August 25, 2025 - Monday</span>
                             </div>
                           </div>
@@ -544,43 +544,31 @@ const SBL = () => {
         </section>
 
         {/* FAQs Section */}
-        <FAQComponent 
-          title="SBL Tournament FAQs"
-          faqs={[
-            {
-              question: "What is the format of the SBL tournament?",
-              answer: "SBL is a one-day knockout tournament with 16 teams participating. Each match consists of 6 overs per innings, making it fast-paced and exciting."
-            },
-            {
-              question: "How much is the entry fee?",
-              answer: "The entry fee is ₹2,000 per team. This covers tournament organization, venue, umpiring, and prize distribution."
-            },
-            {
-              question: "What are the prizes?",
-              answer: "Winner gets ₹6,000 cash prize and trophy. Runner-up receives ₹3,000 cash prize and trophy. Additional individual awards for best batsman and best bowler."
-            },
-            {
-              question: "How many players can be in a team?",
-              answer: "Each team can have 7 playing members and 2 substitutes, making it a total of 9 players per team."
-            },
-            {
-              question: "What are the venue details?",
-              answer: "The tournament will be held at Ten Sports Turf (SMS Mahal), Kalapatti Rd, Ramanandha Nagar, Saravanampatti, Coimbatore – 641035."
-            },
-            {
-              question: "What time does the tournament start?",
-              answer: "The tournament starts at 8:00 AM and runs until 6:15 PM. Teams must report 30 minutes before their scheduled match time."
-            },
-            {
-              question: "Is team jersey mandatory?",
-              answer: "Yes, all players must wear their team jersey. Team jersey design must be uploaded during registration."
-            },
-            {
-              question: "When will the team list and fixtures be shared?",
-              answer: "Team list and match fixtures will be shared 1 day before the tournament date via email and WhatsApp."
-            }
-          ]}
-        />
+        <FAQComponent title="SBL Tournament FAQs" faqs={[{
+        question: "What is the format of the SBL tournament?",
+        answer: "SBL is a one-day knockout tournament with 16 teams participating. Each match consists of 6 overs per innings, making it fast-paced and exciting."
+      }, {
+        question: "How much is the entry fee?",
+        answer: "The entry fee is ₹2,000 per team. This covers tournament organization, venue, umpiring, and prize distribution."
+      }, {
+        question: "What are the prizes?",
+        answer: "Winner gets ₹6,000 cash prize and trophy. Runner-up receives ₹3,000 cash prize and trophy. Additional individual awards for best batsman and best bowler."
+      }, {
+        question: "How many players can be in a team?",
+        answer: "Each team can have 7 playing members and 2 substitutes, making it a total of 9 players per team."
+      }, {
+        question: "What are the venue details?",
+        answer: "The tournament will be held at Ten Sports Turf (SMS Mahal), Kalapatti Rd, Ramanandha Nagar, Saravanampatti, Coimbatore – 641035."
+      }, {
+        question: "What time does the tournament start?",
+        answer: "The tournament starts at 8:00 AM and runs until 6:15 PM. Teams must report 30 minutes before their scheduled match time."
+      }, {
+        question: "Is team jersey mandatory?",
+        answer: "Yes, all players must wear their team jersey. Team jersey design must be uploaded during registration."
+      }, {
+        question: "When will the team list and fixtures be shared?",
+        answer: "Team list and match fixtures will be shared 1 day before the tournament date via email and WhatsApp."
+      }]} />
       </div>
       <Footer />
     </div>;
