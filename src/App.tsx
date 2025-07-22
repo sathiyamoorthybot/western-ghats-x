@@ -1,40 +1,49 @@
-// src/providers/auth-provider.tsx
-import { createContext, useContext, useEffect, useState } from "react";
-import { useSession, useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
-import type { Session, SupabaseClient, User } from "@supabase/supabase-js";
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Index from "./pages/Index";
+import KattanjiMarathon from "./pages/KattanjiMarathon";
+import SBL from "./pages/SBL";
+import Contact from "./pages/Contact";
+import Profile from "./pages/Profile";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsConditions from "./pages/TermsConditions";
+import RefundPolicy from "./pages/RefundPolicy";
+import ContactSupport from "./pages/ContactSupport";
+import CricketTournament from "./pages/CricketTournament";
+import NotFound from "./pages/NotFound";
+import Login from "./pages/Login";
+import SignUp from "./pages/SignUp";
 
-type AuthContextType = {
-  session: Session | null;
-  user: User | null;
-  supabase: SupabaseClient;
-  userMetadata: any;
-};
+const queryClient = new QueryClient();
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const App = () => (
+  <QueryClientProvider client={queryClient}>
+    <TooltipProvider>
+      <Toaster />
+      <Sonner />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/kattanji-marathon" element={<KattanjiMarathon />} />
+          <Route path="/sbl" element={<SBL />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms-conditions" element={<TermsConditions />} />
+          <Route path="/refund-policy" element={<RefundPolicy />} />
+          <Route path="/contact-support" element={<ContactSupport />} />
+          <Route path="/cricket-tournament" element={<CricketTournament />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </TooltipProvider>
+  </QueryClientProvider>
+);
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const session = useSession();
-  const user = useUser();
-  const supabase = useSupabaseClient();
-  const [userMetadata, setUserMetadata] = useState<any>(null);
-
-  useEffect(() => {
-    if (user) {
-      setUserMetadata(user.user_metadata); // Load from Supabase Auth
-    } else {
-      setUserMetadata(null);
-    }
-  }, [user]);
-
-  return (
-    <AuthContext.Provider value={{ session, user, supabase, userMetadata }}>
-      {children}
-    </AuthContext.Provider>
-  );
-};
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) throw new Error("useAuth must be used within AuthProvider");
-  return context;
-};
+export default App;

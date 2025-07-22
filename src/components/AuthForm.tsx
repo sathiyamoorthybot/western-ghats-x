@@ -6,7 +6,6 @@ import { Mail, Lock, User, Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 
 interface AuthFormProps {
   type: "login" | "signup";
@@ -42,34 +41,16 @@ const AuthForm = ({ type }: AuthFormProps) => {
     }
 
     try {
-      let result;
-
-      if (type === "signup") {
-        result = await supabase.auth.signUp({
-          email: formData.email,
-          password: formData.password,
-          options: {
-            data: { name: formData.name },
-            emailRedirectTo: window.location.origin, // ✅ Ensures proper redirection
-          },
-        });
-      } else {
-        result = await supabase.auth.signInWithPassword({
-          email: formData.email,
-          password: formData.password,
-        });
-      }
-
-      const { error } = result;
-      if (error) throw error;
-
+      // Simulate authentication
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
       toast({
         title: type === "login" ? "Welcome back!" : "Account created!",
         description: type === "login" 
           ? "You have successfully logged in." 
-          : "Please check your email to confirm your signup."
+          : "Your account has been created successfully."
       });
-
+      
       // Reset form
       setFormData({
         name: "",
@@ -98,10 +79,11 @@ const AuthForm = ({ type }: AuthFormProps) => {
           <CardDescription>
             {type === "login" 
               ? "Sign in to your Western Ghats X account" 
-              : "Join Western Ghats X community today"}
+              : "Join Western Ghats X community today"
+            }
           </CardDescription>
         </CardHeader>
-
+        
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             {type === "signup" && (
