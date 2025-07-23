@@ -10,7 +10,7 @@ const KattanjiMarathon = () => {
         {/* Hero Section */}
         <section className="relative bg-gradient-to-br from-primary/10 to-secondary/10 py-20">
           <div className="container mx-auto px-4 text-center">
-            <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-4">Kattanji Hills Marathan 2025</h1>
+            <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-4">Kattanji Hills Marathon 2025</h1>
             <p className="text-xl md:text-2xl text-muted-foreground mb-8">
               Coming This December
             </p>
@@ -35,11 +35,7 @@ const KattanjiMarathon = () => {
               </p>
             </div>
             <div className="max-w-4xl mx-auto">
-              <img 
-                src={kattanjiTrail} 
-                alt="Kattanji Hills Marathon Trail" 
-                className="w-full h-64 md:h-80 object-cover rounded-lg shadow-lg"
-              />
+              <img src={kattanjiTrail} alt="Kattanji Hills Marathon Trail" className="w-full h-64 md:h-80 object-cover rounded-lg shadow-lg" />
             </div>
           </div>
         </section>
@@ -71,11 +67,7 @@ const KattanjiMarathon = () => {
               </div>
             </div>
             <div className="mt-12 max-w-4xl mx-auto">
-              <img 
-                src={marathonRunners} 
-                alt="Marathon Runners on Trail" 
-                className="w-full h-64 md:h-80 object-cover rounded-lg shadow-lg"
-              />
+              <img src={marathonRunners} alt="Marathon Runners on Trail" className="w-full h-64 md:h-80 object-cover rounded-lg shadow-lg" />
             </div>
           </div>
         </section>
@@ -134,11 +126,7 @@ const KattanjiMarathon = () => {
               </div>
             </div>
             <div className="max-w-4xl mx-auto">
-              <img 
-                src={marathonFinish} 
-                alt="Marathon Finish Line" 
-                className="w-full h-64 md:h-80 object-cover rounded-lg shadow-lg"
-              />
+              <img src={marathonFinish} alt="Marathon Finish Line" className="w-full h-64 md:h-80 object-cover rounded-lg shadow-lg" />
             </div>
           </div>
         </section>
