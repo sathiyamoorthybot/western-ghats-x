@@ -383,7 +383,7 @@ const SBL = () => {
 
         {/* Tournament Content Tabs */}
         <section className="py-16">
-          <div className="container mx-auto px-10">
+          <div className="container mx-auto px-4">
             <Tabs defaultValue="fixtures" className="w-full">
               <TabsList className="grid w-full grid-cols-1">
                 <TabsTrigger value="fixtures">One Day. One Trophy. One Champion.</TabsTrigger>
@@ -397,7 +397,7 @@ const SBL = () => {
                     <CardHeader>
                       <CardTitle className="flex items-center gap-2">
                         <Trophy className="h-6 w-6 text-primary" />
-                        Tournament Format
+                        Road to Victory
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
