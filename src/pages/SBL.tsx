@@ -376,7 +376,7 @@ const SBL = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/cricket-tournament">
                 <Button size="lg" className="bg-gradient-to-r from-mountain-green to-primary-hover text-white px-8 py-4 text-lg font-semibold rounded-full">
-                  Register Team
+                  Register Team - Pay ₹2,000
                 </Button>
               </Link>
             </div>
@@ -537,7 +537,7 @@ const SBL = () => {
             </p>
             <Link to="/cricket-tournament">
               <Button size="lg" className="bg-gradient-to-r from-mountain-green to-primary-hover text-white px-8 py-4 text-lg font-semibold rounded-full">
-                Register Your Team Now
+                Register Your Team Now - Pay ₹2,000
               </Button>
             </Link>
           </div>

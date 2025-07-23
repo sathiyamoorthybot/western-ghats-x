@@ -1,19 +1,16 @@
-
-interface PhonePePaymentRequest {
+export interface PhonePePaymentRequest {
   merchantId: string;
-  merchantTransactionId: string;
-  merchantUserId: string;
   amount: number;
+  merchantTransactionId: string;
   redirectUrl: string;
   redirectMode: string;
   callbackUrl: string;
-  mobileNumber?: string;
   paymentInstrument: {
     type: string;
   };
 }
 
-interface PhonePeResponse {
+export interface PhonePePaymentResponse {
   success: boolean;
   code: string;
   message: string;
@@ -31,76 +28,77 @@ interface PhonePeResponse {
 }
 
 export class PhonePeService {
-  private static readonly MERCHANT_ID = 'PGTESTPAYUAT'; // Test merchant ID
-  private static readonly SALT_KEY = '099eb0cd-02cf-4e2a-8aca-3e6c6aff0399'; // Test salt key
-  private static readonly SALT_INDEX = 1;
-  private static readonly API_ENDPOINT = 'https://api-preprod.phonepe.com/apis/pg-sandbox'; // Test endpoint
-
-  static generateTransactionId(): string {
-    return 'TXN' + Date.now() + Math.random().toString(36).substr(2, 9);
-  }
-
-  static async initiatePayment(amount: number, userPhone?: string): Promise<string> {
-    const transactionId = this.generateTransactionId();
-    const userId = 'USER' + Date.now();
+  private static readonly MERCHANT_ID = 'M223OJ2NC23VT';
+  private static readonly BASE_URL = 'https://api-preprod.phonepe.com/apis/pg-sandbox';
+  
+  static async initiateCricketTournamentPayment(
+    teamName: string, 
+    captainPhone: string,
+    amount: number = 2000
+  ): Promise<PhonePePaymentResponse> {
+    const merchantTransactionId = `CT_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
     const paymentRequest: PhonePePaymentRequest = {
       merchantId: this.MERCHANT_ID,
-      merchantTransactionId: transactionId,
-      merchantUserId: userId,
-      amount: amount * 100, // Convert to paise
-      redirectUrl: `${window.location.origin}/payment-status?transactionId=${transactionId}`,
-      redirectMode: 'REDIRECT',
-      callbackUrl: `${window.location.origin}/api/phonepe/callback`,
-      mobileNumber: userPhone,
+      amount: amount * 100, // Amount in paise
+      merchantTransactionId,
+      redirectUrl: `${window.location.origin}/cricket-tournament?success=true&txnId=${merchantTransactionId}`,
+      redirectMode: 'POST',
+      callbackUrl: `${window.location.origin}/api/payment/callback`,
       paymentInstrument: {
         type: 'PAY_PAGE'
       }
     };
 
     try {
-      // In a real implementation, this would be done on the backend
-      // For demo purposes, we'll simulate the PhonePe payment flow
-      const base64Payload = btoa(JSON.stringify(paymentRequest));
-      const checksum = await this.generateChecksum(base64Payload);
+      // For now, we'll simulate the PhonePe integration
+      // In production, you would make actual API calls to PhonePe
       
-      // Return PhonePe payment URL (simulated)
-      const paymentUrl = `${this.API_ENDPOINT}/pg/v1/pay`;
-      
-      // For demo, we'll redirect to a simulated PhonePe page
-      return this.createPhonePeUrl(base64Payload, checksum);
+      // Simulate payment initiation
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            code: 'PAYMENT_INITIATED',
+            message: 'Payment initiated successfully',
+            data: {
+              merchantId: this.MERCHANT_ID,
+              merchantTransactionId,
+              instrumentResponse: {
+                type: 'PAY_PAGE',
+                redirectInfo: {
+                  url: `${this.BASE_URL}/pg/v1/pay/${merchantTransactionId}`,
+                  method: 'GET'
+                }
+              }
+            }
+          });
+        }, 1000);
+      });
     } catch (error) {
       console.error('PhonePe payment initiation failed:', error);
       throw new Error('Payment initiation failed');
     }
   }
 
-  private static async generateChecksum(payload: string): Promise<string> {
-    // In production, this should be done on the backend for security
-    // This is a simplified version for demo purposes
-    const string = payload + '/pg/v1/pay' + this.SALT_KEY;
-    const encoder = new TextEncoder();
-    const data = encoder.encode(string);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    return hashHex + '###' + this.SALT_INDEX;
+  static async verifyPayment(merchantTransactionId: string): Promise<boolean> {
+    try {
+      // Simulate payment verification
+      // In production, you would verify with PhonePe's API
+      
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          // For demo purposes, randomly succeed/fail
+          resolve(Math.random() > 0.3); // 70% success rate
+        }, 2000);
+      });
+    } catch (error) {
+      console.error('Payment verification failed:', error);
+      return false;
+    }
   }
 
-  private static createPhonePeUrl(payload: string, checksum: string): string {
-    // For demo purposes, we'll create a simulated payment URL
-    // In production, this would be the actual PhonePe payment page
-    const params = new URLSearchParams({
-      request: payload,
-      checksum: checksum
-    });
-    return `${this.API_ENDPOINT}/pg/v1/pay?${params.toString()}`;
-  }
-
-  static async verifyPayment(transactionId: string): Promise<boolean> {
-    // In production, this would verify the payment with PhonePe
-    // For demo purposes, we'll simulate a successful payment after 2 seconds
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    return Math.random() > 0.1; // 90% success rate for demo
+  static generatePaymentReference(): string {
+    return `CT_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
 }

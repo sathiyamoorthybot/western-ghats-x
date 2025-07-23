@@ -11,6 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { Calendar, Clock, MapPin, Trophy, Users, IndianRupee, Camera, Upload, Copy, QrCode, Smartphone, AlertCircle, CheckCircle, Clock3, ExternalLink } from "lucide-react";
+import { PhonePeService } from "@/services/phonePeService";
 interface Player {
   name: string;
   age: string;
@@ -163,6 +164,51 @@ const CricketTournament = () => {
     if (validateForm()) {
       setIsPaymentDialogOpen(true);
       setPaymentStatus('pending');
+    }
+  };
+
+  // PhonePe Payment Integration
+  const initiatePhonePePayment = async () => {
+    setIsProcessingPayment(true);
+    setPaymentStatus('processing');
+
+    try {
+      const response = await PhonePeService.initiateCricketTournamentPayment(
+        teamName,
+        captainPhone,
+        2000
+      );
+
+      if (response.success && response.data) {
+        // Redirect to PhonePe payment page
+        window.open(response.data.instrumentResponse.redirectInfo.url, '_blank');
+        
+        toast({
+          title: "Payment Initiated",
+          description: "You will be redirected to PhonePe payment page.",
+        });
+        
+        // Set a timeout to check payment status
+        setTimeout(() => {
+          setIsProcessingPayment(false);
+          setPaymentMethod('manual');
+          toast({
+            title: "Complete Payment",
+            description: "Please complete the payment and click 'Payment Completed' below.",
+          });
+        }, 3000);
+      } else {
+        throw new Error('Payment initiation failed');
+      }
+    } catch (error) {
+      setIsProcessingPayment(false);
+      setPaymentStatus('failed');
+      setPaymentMethod('manual');
+      toast({
+        title: "Payment Error",
+        description: "PhonePe payment failed. Please use manual payment method.",
+        variant: "destructive"
+      });
     }
   };
 

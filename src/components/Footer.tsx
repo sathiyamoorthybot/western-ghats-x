@@ -35,11 +35,11 @@ const Footer = () => {
               </li>
             </ul>
             <div className="space-y-2">
-              <p className="text-sm text-white/80">
+              <p className="text-sm text-white/80 cursor-pointer hover:text-white transition-colors" onClick={() => window.open('https://www.westernghatsx.in', '_blank')}>
                 <Globe className="w-4 h-4 inline mr-2" />
                 www.westernghatsx.in
               </p>
-              <p className="text-sm text-white/80">
+              <p className="text-sm text-white/80 cursor-pointer hover:text-white transition-colors" onClick={() => window.open('mailto:info@westernghatsx.in', '_blank')}>
                 <Mail className="w-4 h-4 inline mr-2" />
                 info@westernghatsx.in
               </p>
@@ -72,16 +72,36 @@ const Footer = () => {
               </li>
             </ul>
             <div className="flex gap-3">
-              <Button variant="ghost" size="sm" className="text-white hover:bg-white/20 p-2">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="text-white hover:bg-white/20 p-2"
+                onClick={() => window.open('https://facebook.com/westernghatsx', '_blank')}
+              >
                 <Facebook className="w-4 h-4" />
               </Button>
-              <Button variant="ghost" size="sm" className="text-white hover:bg-white/20 p-2">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="text-white hover:bg-white/20 p-2"
+                onClick={() => window.open('https://instagram.com/westernghatsx', '_blank')}
+              >
                 <Instagram className="w-4 h-4" />
               </Button>
-              <Button variant="ghost" size="sm" className="text-white hover:bg-white/20 p-2">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="text-white hover:bg-white/20 p-2"
+                onClick={() => window.open('https://twitter.com/westernghatsx', '_blank')}
+              >
                 <Twitter className="w-4 h-4" />
               </Button>
-              <Button variant="ghost" size="sm" className="text-white hover:bg-white/20 p-2">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="text-white hover:bg-white/20 p-2"
+                onClick={() => window.open('mailto:info@westernghatsx.in', '_blank')}
+              >
                 <Mail className="w-4 h-4" />
               </Button>
             </div>

@@ -42,9 +42,9 @@ const Profile = () => {
             name: data.full_name || user.email?.split('@')[0] || "",
             email: data.email || user.email || "",
             phone: data.phone || "",
-            address: "",
-            emergencyContact: "",
-            emergencyPhone: ""
+            address: data.address || "",
+            emergencyContact: data.emergency_contact || "",
+            emergencyPhone: data.emergency_phone || ""
           });
         }
       };
@@ -97,7 +97,10 @@ const Profile = () => {
           user_id: user.id,
           full_name: editableInfo.name,
           email: editableInfo.email,
-          phone: editableInfo.phone
+          phone: editableInfo.phone,
+          address: editableInfo.address,
+          emergency_contact: editableInfo.emergencyContact,
+          emergency_phone: editableInfo.emergencyPhone
         });
 
       if (error) throw error;
@@ -136,7 +139,7 @@ const Profile = () => {
               <h1 className="text-3xl sm:text-4xl font-bold text-foreground">
                 {userInfo.name}
               </h1>
-              <p className="text-muted-foreground">Runner Profile</p>
+              <p className="text-muted-foreground">Sports Profile</p>
             </div>
           </div>
           
@@ -187,7 +190,12 @@ const Profile = () => {
                           <Input 
                             id="phone" 
                             value={editableInfo.phone} 
-                            onChange={(e) => setEditableInfo({...editableInfo, phone: e.target.value})}
+                            onChange={(e) => {
+                              const value = e.target.value.replace(/\D/g, '').slice(0, 10);
+                              setEditableInfo({...editableInfo, phone: value});
+                            }}
+                            placeholder="10 digit phone number"
+                            maxLength={10}
                           />
                         </div>
                         <div className="space-y-2">
@@ -260,14 +268,19 @@ const Profile = () => {
                             onChange={(e) => setEditableInfo({...editableInfo, emergencyContact: e.target.value})}
                           />
                         </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="emergencyPhone">Contact Phone</Label>
-                          <Input 
-                            id="emergencyPhone" 
-                            value={editableInfo.emergencyPhone} 
-                            onChange={(e) => setEditableInfo({...editableInfo, emergencyPhone: e.target.value})}
-                          />
-                        </div>
+                         <div className="space-y-2">
+                           <Label htmlFor="emergencyPhone">Contact Phone</Label>
+                           <Input 
+                             id="emergencyPhone" 
+                             value={editableInfo.emergencyPhone} 
+                             onChange={(e) => {
+                               const value = e.target.value.replace(/\D/g, '').slice(0, 10);
+                               setEditableInfo({...editableInfo, emergencyPhone: value});
+                             }}
+                             placeholder="10 digit phone number"
+                             maxLength={10}
+                           />
+                         </div>
                       </>
                     ) : (
                       <>

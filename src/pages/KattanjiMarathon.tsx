@@ -81,9 +81,20 @@ const KattanjiMarathon = () => {
             <p className="text-lg text-muted-foreground mb-4">
               Be part of one of Coimbatore's most memorable and historical marathon events.
             </p>
-            <p className="text-lg text-muted-foreground">
+            <p className="text-lg text-muted-foreground mb-8">
               Stay tuned as we unveil a thrilling route and an experience like no other.
             </p>
+            <div className="flex justify-center">
+              <button 
+                className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-8 py-3 rounded-full font-semibold hover:shadow-lg transition-all duration-300"
+                onClick={() => {
+                  // Add early bird offer functionality here
+                  alert('Early bird offer coming soon! Stay tuned for exclusive discounts.');
+                }}
+              >
+                🎯 Early Bird Offer - Request Coupon
+              </button>
+            </div>
           </div>
         </section>
 
