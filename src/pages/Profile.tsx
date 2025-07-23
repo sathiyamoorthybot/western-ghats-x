@@ -81,35 +81,40 @@ const Profile = () => {
     setEditableInfo({ ...userInfo });
   };
 
-  const handleSave = async () => {
-    if (!user) return;
+const handleSave = async () => {
+  if (!user) return;
 
-    try {
-      const { error } = await supabase.from("profiles").upsert({
-        user_id: user.id,
-        full_name: editableInfo.name,
-        email: editableInfo.email,
-        phone: editableInfo.phone,
-        address: editableInfo.address
-      });
+  try {
+    const { error } = await supabase
+      .from("profiles")
+      .upsert(
+        {
+          user_id: user.id,
+          full_name: editableInfo.name,
+          email: editableInfo.email,
+          phone: editableInfo.phone,
+          address: editableInfo.address
+        },
+        { onConflict: "user_id" } // 🛠 This is the key fix!
+      );
 
-      if (error) throw error;
+    if (error) throw error;
 
-      setUserInfo({ ...editableInfo });
-      setIsEditing(false);
-      toast({
-        title: "Profile Updated",
-        description: "Your profile information has been updated successfully."
-      });
-    } catch (error: any) {
-      toast({
-        title: "Update Failed",
-        description:
-          error.message || "Failed to update profile. Please try again.",
-        variant: "destructive"
-      });
-    }
-  };
+    setUserInfo({ ...editableInfo });
+    setIsEditing(false);
+    toast({
+      title: "Profile Updated",
+      description: "Your profile information has been updated successfully.",
+    });
+  } catch (error: any) {
+    toast({
+      title: "Update Failed",
+      description: error.message || "Failed to update profile. Please try again.",
+      variant: "destructive",
+    });
+  }
+};
+
 
   const handleCancel = () => {
     setIsEditing(false);
