@@ -383,7 +383,7 @@ const SBL = () => {
 
         {/* Tournament Content Tabs */}
         <section className="py-16">
-          <div className="container mx-auto px-4">
+          <div className="container mx-auto px-10">
             <Tabs defaultValue="fixtures" className="w-full">
               <TabsList className="grid w-full grid-cols-1">
                 <TabsTrigger value="fixtures">One Day. One Trophy. One Champion.</TabsTrigger>
