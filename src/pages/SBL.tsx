@@ -390,8 +390,7 @@ const SBL = () => {
               </TabsList>
 
 
-...
-// Inside your <TabsContent value="fixtures"> block
+{/* Inside your <TabsContent value="fixtures"> block */}
 <TabsContent value="fixtures" className="mt-6">
   <div className="grid gap-6">
     {/* Tournament Format and Prize Pool */}
@@ -455,10 +454,6 @@ const SBL = () => {
                 <span>Last Date for Cancellation:</span>
                 <span className="font-semibold text-red-600">August 20, 2025 - Monday</span>
               </div>
-            </div>
-
-            <h4 className="font-semibold text-lg mt-6 mb-3">Prize Pool</h4>
-            <div className="space-y-3">
               <div className="flex justify-between">
                 <span>Winner:</span>
                 <span className="font-semibold">₹6,000 + Trophy</span>
@@ -476,7 +471,6 @@ const SBL = () => {
     {/* Continue with other cards */}
   </div>
 </TabsContent>
-...
 
 
                    {/* Recognition */}
