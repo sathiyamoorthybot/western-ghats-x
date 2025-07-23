@@ -453,8 +453,6 @@ const SBL = () => {
                               <span>Last Date for Cancellation:</span>
                               <span className="font-semibold text-red-600">August 20, 2025 - Monday</span>
                             </div>
-                          </div>
-                     
                         <div className="space-y-4">
                           <h4 className="font-semibold text-lg mb-3">Prizes</h4>
                           <div className="space-y-3">
