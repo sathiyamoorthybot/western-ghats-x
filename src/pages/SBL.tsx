@@ -354,9 +354,7 @@ const SBL = () => {
             <p className="text-xl md:text-2xl text-muted-foreground mb-4">
               ⚡ A One-Day Turf Cricket Showdown
             </p>
-            <p className="text-lg text-muted-foreground mb-8">
-              8 overs per innings cricket tournament - August 31, 2025 (Sunday)
-            </p>
+            <p className="text-lg text-muted-foreground mb-8">6 overs per innings cricket tournament - August 31, 2025 (Sunday)</p>
             
             <div className="flex flex-wrap justify-center gap-6 mb-8 text-sm sm:text-base">
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
