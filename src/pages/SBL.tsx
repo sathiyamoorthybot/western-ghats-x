@@ -455,22 +455,6 @@ const SBL = () => {
                             </div>
                           </div>
                         </div>
-                        
-                        {/* Registration */}
-                        <div className="space-y-4">
-                          <h4 className="font-semibold text-lg mb-3">Prizes</h4>
-                          <div className="space-y-3">
-                            <div className="flex justify-between">
-                              <span>Winnner:</span>
-                              <span className="font-semibold text-red-600">₹6,000 + Trophy</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span>Runner-up:</span>
-                              <span className="font-semibold text-red-600">₹3,000 + Trophy</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
                     </CardContent>
                   </Card>
 
