@@ -3,9 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Mail, Lock, User, Eye, EyeOff } from "lucide-react";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
 
 interface AuthFormProps {
   type: "login" | "signup";
@@ -21,6 +22,15 @@ const AuthForm = ({ type }: AuthFormProps) => {
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate();
+  const { signUp, signIn, user } = useAuth();
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -41,27 +51,44 @@ const AuthForm = ({ type }: AuthFormProps) => {
     }
 
     try {
-      // Simulate authentication
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      let result;
       
-      toast({
-        title: type === "login" ? "Welcome back!" : "Account created!",
-        description: type === "login" 
-          ? "You have successfully logged in." 
-          : "Your account has been created successfully."
-      });
-      
-      // Reset form
-      setFormData({
-        name: "",
-        email: "",
-        password: "",
-        confirmPassword: ""
-      });
-    } catch (error) {
+      if (type === "signup") {
+        result = await signUp(formData.email, formData.password, formData.name);
+      } else {
+        result = await signIn(formData.email, formData.password);
+      }
+
+      if (result.error) {
+        toast({
+          title: "Authentication failed",
+          description: result.error.message || "Something went wrong. Please try again.",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: type === "login" ? "Welcome back!" : "Account created!",
+          description: type === "login" 
+            ? "You have been successfully logged in." 
+            : "Please check your email to verify your account.",
+        });
+        
+        if (type === "login") {
+          navigate("/");
+        } else {
+          // Reset form after successful signup
+          setFormData({
+            name: "",
+            email: "",
+            password: "",
+            confirmPassword: ""
+          });
+        }
+      }
+    } catch (error: any) {
       toast({
         title: "Authentication failed",
-        description: "Please check your credentials and try again.",
+        description: error.message || "Something went wrong. Please try again.",
         variant: "destructive"
       });
     } finally {

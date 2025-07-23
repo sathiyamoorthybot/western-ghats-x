@@ -1,7 +1,10 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import ProtectedRoute from "@/components/ProtectedRoute";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -13,15 +16,42 @@ import { User, Mail, Phone, Award, Calendar, MapPin, Edit, Save, Clock } from "l
 
 const Profile = () => {
   const { toast } = useToast();
+  const { user } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [userInfo, setUserInfo] = useState({
-    name: "Rahul Sharma",
-    email: "rahul.sharma@example.com",
-    phone: "+91 98765 43210",
-    address: "123 Main Street, Coimbatore, Tamil Nadu",
-    emergencyContact: "Priya Sharma",
-    emergencyPhone: "+91 87654 32109"
+    name: "",
+    email: "",
+    phone: "",
+    address: "",
+    emergencyContact: "",
+    emergencyPhone: ""
   });
+
+  useEffect(() => {
+    if (user) {
+      // Load user profile data
+      const loadProfile = async () => {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('user_id', user.id)
+          .single();
+
+        if (data) {
+          setUserInfo({
+            name: data.full_name || user.email?.split('@')[0] || "",
+            email: data.email || user.email || "",
+            phone: data.phone || "",
+            address: "",
+            emergencyContact: "",
+            emergencyPhone: ""
+          });
+        }
+      };
+      
+      loadProfile();
+    }
+  }, [user]);
   
   const [editableInfo, setEditableInfo] = useState({ ...userInfo });
   
@@ -57,13 +87,34 @@ const Profile = () => {
     setEditableInfo({ ...userInfo });
   };
   
-  const handleSave = () => {
-    setUserInfo({ ...editableInfo });
-    setIsEditing(false);
-    toast({
-      title: "Profile Updated",
-      description: "Your profile information has been updated successfully.",
-    });
+  const handleSave = async () => {
+    if (!user) return;
+
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .upsert({
+          user_id: user.id,
+          full_name: editableInfo.name,
+          email: editableInfo.email,
+          phone: editableInfo.phone
+        });
+
+      if (error) throw error;
+
+      setUserInfo({ ...editableInfo });
+      setIsEditing(false);
+      toast({
+        title: "Profile Updated",
+        description: "Your profile information has been updated successfully.",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Update Failed",
+        description: error.message || "Failed to update profile. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
   
   const handleCancel = () => {
@@ -71,8 +122,9 @@ const Profile = () => {
   };
   
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
+    <ProtectedRoute>
+      <div className="min-h-screen bg-background">
+        <Header />
       <div className="pt-24 pb-16">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
           <div className="mb-8 flex flex-col md:flex-row items-center md:items-end gap-6">
@@ -342,9 +394,10 @@ const Profile = () => {
             </TabsContent>
           </Tabs>
         </div>
+        </div>
+        <Footer />
       </div>
-      <Footer />
-    </div>
+    </ProtectedRoute>
   );
 };
 
