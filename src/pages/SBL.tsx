@@ -389,8 +389,7 @@ const SBL = () => {
                 <TabsTrigger value="fixtures">One Day. One Trophy. One Champion.</TabsTrigger>
               </TabsList>
 
-
-{/* Inside your <TabsContent value="fixtures"> block */}
+              {/* Inside your <TabsContent value="fixtures"> block */}
 <TabsContent value="fixtures" className="mt-6">
   <div className="grid gap-6">
     {/* Tournament Format and Prize Pool */}
@@ -444,7 +443,7 @@ const SBL = () => {
 
           {/* Registration */}
           <div className="space-y-4">
-            <h4 className="font-semibold text-lg mb-3">Registration Dates</h4>
+            <h4 className="font-semibold text-lg mb-3">Registration & Prizes</h4>
             <div className="space-y-3">
               <div className="flex justify-between">
                 <span>Last Date for registration:</span>
@@ -464,13 +463,14 @@ const SBL = () => {
               </div>
             </div>
           </div>
-        </div> {/* Close grid inside CardContent properly */}
+        </div>
       </CardContent>
     </Card>
 
     {/* Continue with other cards */}
   </div>
 </TabsContent>
+
 
 
                    {/* Recognition */}
