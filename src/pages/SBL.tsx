@@ -386,7 +386,7 @@ const SBL = () => {
           <div className="container mx-auto px-4">
             <Tabs defaultValue="fixtures" className="w-full">
               <TabsList className="grid w-full grid-cols-1">
-                <TabsTrigger value="fixtures">Tournament Format</TabsTrigger>
+                <TabsTrigger value="fixtures">One Day. One Trophy. One Champion.</TabsTrigger>
               </TabsList>
 
 
