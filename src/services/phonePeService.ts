@@ -27,6 +27,47 @@ export interface PhonePePaymentResponse {
   };
 }
 
+export interface PaymentData {
+  teamName: string;
+  captainName: string;
+  phone: string;
+  email: string;
+  eventType: string;
+  amount: number;
+}
+
+export const initiatePhonePePayment = async (paymentData: PaymentData) => {
+  try {
+    // Get the Supabase auth token from session storage
+    const supabaseAuth = localStorage.getItem('sb-xzppribyovslacpmrqdc-auth-token');
+    let authToken = '';
+    
+    if (supabaseAuth) {
+      const authData = JSON.parse(supabaseAuth);
+      authToken = authData.access_token;
+    }
+
+    const response = await fetch('https://xzppribyovslacpmrqdc.supabase.co/functions/v1/create-phonepe-payment', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`
+      },
+      body: JSON.stringify(paymentData)
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error('Payment initiation error:', error);
+    throw error;
+  }
+};
+
 export class PhonePeService {
   private static readonly MERCHANT_ID = 'M223OJ2NC23VT';
   private static readonly BASE_URL = 'https://api-preprod.phonepe.com/apis/pg-sandbox';

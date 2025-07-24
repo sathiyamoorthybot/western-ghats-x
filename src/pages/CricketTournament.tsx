@@ -6,18 +6,18 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Separator } from "@/components/ui/separator";
-import { Calendar, Clock, MapPin, Trophy, Users, IndianRupee, Camera, Upload, Copy, QrCode, Smartphone, AlertCircle, CheckCircle, Clock3, ExternalLink } from "lucide-react";
-import { PhonePeService } from "@/services/phonePeService";
+import { Calendar, Clock, MapPin, Trophy, Users, IndianRupee, Camera, Upload, CheckCircle, Clock3, ExternalLink } from "lucide-react";
+import { initiatePhonePePayment } from "@/services/phonePeService";
+
 interface Player {
   name: string;
   age: string;
   phone: string;
   photo: File | null;
 }
+
 const CricketTournament = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -26,6 +26,7 @@ const CricketTournament = () => {
   const [teamName, setTeamName] = useState("");
   const [captainName, setCaptainName] = useState("");
   const [captainPhone, setCaptainPhone] = useState("");
+  const [captainEmail, setCaptainEmail] = useState("");
   const [teamJersey, setTeamJersey] = useState<File | null>(null);
   const [players, setPlayers] = useState<Player[]>(Array(9).fill(null).map(() => ({
     name: "",
@@ -37,13 +38,11 @@ const CricketTournament = () => {
   // Payment state
   const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState<'upi' | 'manual' | 'qr'>('upi');
   const [paymentStatus, setPaymentStatus] = useState<'pending' | 'processing' | 'completed' | 'failed'>('pending');
 
   // Payment details
-  const upiId = "6374521141@ptyes";
-  const amount = "2000";
-  const merchantName = "Cricket Tournament Registration";
+  const registrationFee = 2000;
+
   const handlePlayerChange = (index: number, field: keyof Player, value: string | File) => {
     const updatedPlayers = [...players];
     updatedPlayers[index] = {
@@ -52,20 +51,18 @@ const CricketTournament = () => {
     };
     setPlayers(updatedPlayers);
   };
+
   const handlePhotoUpload = (index: number, file: File | null) => {
     handlePlayerChange(index, 'photo', file);
   };
+
   const handleJerseyUpload = (file: File | null) => {
     setTeamJersey(file);
   };
-  // Device detection
-  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-  const isAndroid = /Android/i.test(navigator.userAgent);
-  const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
   // Form validation
   const validateForm = () => {
-    if (!teamName || !captainName || !captainPhone || !teamJersey) {
+    if (!teamName || !captainName || !captainPhone || !captainEmail || !teamJersey) {
       toast({
         title: "Missing Information",
         description: "Please fill in all team details and upload team jersey.",
@@ -87,76 +84,6 @@ const CricketTournament = () => {
     return true;
   };
 
-  // UPI payment methods
-  const initiateUPIPayment = async () => {
-    setIsProcessingPayment(true);
-    setPaymentStatus('processing');
-
-    try {
-      const upiUrl = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(merchantName)}&am=${amount}&cu=INR&tn=${encodeURIComponent(`${merchantName} - ${teamName}`)}`;
-      
-      if (isMobile) {
-        // For mobile devices, use location.href for better app opening
-        window.location.href = upiUrl;
-        
-        // Fallback: If UPI doesn't open, show manual options after delay
-        setTimeout(() => {
-          setIsProcessingPayment(false);
-          setPaymentMethod('manual');
-          toast({
-            title: "UPI App Not Found?",
-            description: "Use manual payment option below or scan QR code",
-          });
-        }, 3000);
-      } else {
-        // For desktop, try to open UPI in new tab
-        const popup = window.open(upiUrl, '_blank');
-        
-        // If popup blocked or UPI not supported, show alternatives
-        setTimeout(() => {
-          if (!popup || popup.closed) {
-            setPaymentMethod('qr');
-            toast({
-              title: "UPI Not Available",
-              description: "Please use QR code or manual payment method",
-            });
-          }
-          setIsProcessingPayment(false);
-        }, 2000);
-      }
-    } catch (error) {
-      setIsProcessingPayment(false);
-      setPaymentStatus('failed');
-      setPaymentMethod('manual');
-      toast({
-        title: "Payment Error",
-        description: "Unable to open UPI. Please use manual payment method.",
-        variant: "destructive"
-      });
-    }
-  };
-
-  // Copy to clipboard function
-  const copyToClipboard = (text: string, label: string) => {
-    navigator.clipboard.writeText(text).then(() => {
-      toast({
-        title: "Copied!",
-        description: `${label} copied to clipboard`,
-      });
-    }).catch(() => {
-      toast({
-        title: "Copy Failed",
-        description: "Please manually copy the information",
-        variant: "destructive"
-      });
-    });
-  };
-
-  // Generate QR code data
-  const generateQRData = () => {
-    return `upi://pay?pa=${upiId}&pn=${encodeURIComponent(merchantName)}&am=${amount}&cu=INR&tn=${encodeURIComponent(`${merchantName} - ${teamName}`)}`;
-  };
-
   // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -168,51 +95,42 @@ const CricketTournament = () => {
   };
 
   // PhonePe Payment Integration
-  const initiatePhonePePayment = async () => {
+  const handlePhonePePayment = async () => {
     setIsProcessingPayment(true);
     setPaymentStatus('processing');
 
     try {
-      const response = await PhonePeService.initiateCricketTournamentPayment(
-        teamName,
-        captainPhone,
-        2000
-      );
+      const paymentData = {
+        teamName: teamName,
+        captainName: captainName,
+        phone: captainPhone,
+        email: captainEmail,
+        eventType: 'cricket',
+        amount: registrationFee
+      };
 
-      if (response.success && response.data) {
+      const result = await initiatePhonePePayment(paymentData);
+      
+      if (result.success && result.redirectUrl) {
         // Redirect to PhonePe payment page
-        window.open(response.data.instrumentResponse.redirectInfo.url, '_blank');
-        
-        toast({
-          title: "Payment Initiated",
-          description: "You will be redirected to PhonePe payment page.",
-        });
-        
-        // Set a timeout to check payment status
-        setTimeout(() => {
-          setIsProcessingPayment(false);
-          setPaymentMethod('manual');
-          toast({
-            title: "Complete Payment",
-            description: "Please complete the payment and click 'Payment Completed' below.",
-          });
-        }, 3000);
+        window.location.href = result.redirectUrl;
       } else {
-        throw new Error('Payment initiation failed');
+        throw new Error('Failed to initiate payment');
       }
+      
     } catch (error) {
+      console.error('Payment error:', error);
       setIsProcessingPayment(false);
       setPaymentStatus('failed');
-      setPaymentMethod('manual');
       toast({
-        title: "Payment Error",
-        description: "PhonePe payment failed. Please use manual payment method.",
-        variant: "destructive"
+        title: "Payment Failed",
+        description: "There was an error processing your payment. Please try again.",
+        variant: "destructive",
       });
     }
   };
 
-  // Payment confirmation
+  // Payment confirmation for manual fallback
   const handlePaymentConfirmation = () => {
     setPaymentStatus('completed');
     toast({
@@ -226,6 +144,7 @@ const CricketTournament = () => {
       setTeamName("");
       setCaptainName("");
       setCaptainPhone("");
+      setCaptainEmail("");
       setTeamJersey(null);
       setPlayers(Array(9).fill(null).map(() => ({
         name: "",
@@ -236,7 +155,9 @@ const CricketTournament = () => {
       setPaymentStatus('pending');
     }, 2000);
   };
-  return <div className="min-h-screen bg-background">
+
+  return (
+    <div className="min-h-screen bg-background">
       <Header />
       <div className="pt-24 pb-16">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -255,7 +176,6 @@ const CricketTournament = () => {
               📣 Get Ready for a Power-Packed Cricket Festival in Saravanampatti!
             </p>
           </div>
-
 
           {/* Registration Form */}
           <Card className="shadow-lg">
@@ -287,14 +207,22 @@ const CricketTournament = () => {
                       <Input id="captainPhone" value={captainPhone} onChange={e => setCaptainPhone(e.target.value)} placeholder="Enter captain's phone number" required />
                     </div>
                     <div>
+                      <Label htmlFor="captainEmail">Captain Email *</Label>
+                      <Input id="captainEmail" type="email" value={captainEmail} onChange={e => setCaptainEmail(e.target.value)} placeholder="Enter captain's email" required />
+                    </div>
+                    <div className="md:col-span-2">
                       <Label htmlFor="teamJersey">Team Jersey Design *</Label>
                       <div className="mt-1">
                         <input type="file" id="teamJersey" accept="image/*" onChange={e => handleJerseyUpload(e.target.files?.[0] || null)} className="hidden" required />
                         <label htmlFor="teamJersey" className="flex items-center justify-center w-full h-20 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-mountain-green transition-colors">
-                          {teamJersey ? <span className="text-sm text-mountain-green">Jersey uploaded ✓</span> : <div className="text-center">
+                          {teamJersey ? (
+                            <span className="text-sm text-mountain-green">Jersey uploaded ✓</span>
+                          ) : (
+                            <div className="text-center">
                               <Upload className="w-6 h-6 text-gray-400 mx-auto mb-1" />
                               <span className="text-sm text-gray-500">Upload Jersey Design</span>
-                            </div>}
+                            </div>
+                          )}
                         </label>
                       </div>
                     </div>
@@ -305,7 +233,8 @@ const CricketTournament = () => {
                 <div className="space-y-4">
                   <h3 className="text-lg font-semibold">Player Details (7 Players + 2 Substitutes)</h3>
                   <div className="space-y-6">
-                    {players.map((player, index) => <Card key={index} className="p-4">
+                    {players.map((player, index) => (
+                      <Card key={index} className="p-4">
                         <h4 className="font-medium mb-3">
                           Player {index + 1} {index < 7 ? "(Playing XI)" : "(Substitute)"}
                         </h4>
@@ -326,14 +255,19 @@ const CricketTournament = () => {
                             <Label htmlFor={`player${index}Photo`}>Photo</Label>
                             <input type="file" id={`player${index}Photo`} accept="image/*" onChange={e => handlePhotoUpload(index, e.target.files?.[0] || null)} className="hidden" />
                             <label htmlFor={`player${index}Photo`} className="flex items-center justify-center w-full h-10 border border-gray-300 rounded-md cursor-pointer hover:border-mountain-green transition-colors">
-                              {player.photo ? <span className="text-xs text-mountain-green">Photo uploaded ✓</span> : <div className="flex items-center gap-1">
+                              {player.photo ? (
+                                <span className="text-xs text-mountain-green">Photo uploaded ✓</span>
+                              ) : (
+                                <div className="flex items-center gap-1">
                                   <Camera className="w-4 h-4 text-gray-400" />
                                   <span className="text-xs text-gray-500">Upload</span>
-                                </div>}
+                                </div>
+                              )}
                             </label>
                           </div>
                         </div>
-                      </Card>)}
+                      </Card>
+                    ))}
                   </div>
                 </div>
 
@@ -393,7 +327,7 @@ const CricketTournament = () => {
       </div>
       <Footer />
 
-      {/* Enhanced Payment Dialog */}
+      {/* PhonePe Payment Dialog */}
       <Dialog open={isPaymentDialogOpen} onOpenChange={setIsPaymentDialogOpen}>
         <DialogContent className="max-w-md mx-auto">
           <DialogHeader>
@@ -413,7 +347,7 @@ const CricketTournament = () => {
                 <Clock3 className="w-5 h-5 text-blue-600 animate-spin" />
                 <div>
                   <p className="font-medium text-blue-900">Processing Payment...</p>
-                  <p className="text-sm text-blue-700">Opening UPI app</p>
+                  <p className="text-sm text-blue-700">Redirecting to PhonePe...</p>
                 </div>
               </div>
             )}
@@ -428,175 +362,63 @@ const CricketTournament = () => {
               </div>
             )}
 
-            {/* Payment Method Selection */}
-            <div className="space-y-4">
-              <div className="flex gap-2">
-                <Button
-                  variant={paymentMethod === 'upi' ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => setPaymentMethod('upi')}
-                  className="flex-1"
-                >
-                  <Smartphone className="w-4 h-4 mr-2" />
-                  UPI App
-                </Button>
-                <Button
-                  variant={paymentMethod === 'qr' ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => setPaymentMethod('qr')}
-                  className="flex-1"
-                >
-                  <QrCode className="w-4 h-4 mr-2" />
-                  QR Code
-                </Button>
-                <Button
-                  variant={paymentMethod === 'manual' ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => setPaymentMethod('manual')}
-                  className="flex-1"
-                >
-                  <Copy className="w-4 h-4 mr-2" />
-                  Manual
-                </Button>
+            {paymentStatus === 'failed' && (
+              <div className="flex items-center gap-3 p-4 bg-red-50 rounded-lg">
+                <ExternalLink className="w-5 h-5 text-red-600" />
+                <div>
+                  <p className="font-medium text-red-900">Payment Failed</p>
+                  <p className="text-sm text-red-700">Please try again or contact support</p>
+                </div>
               </div>
+            )}
 
-              {/* UPI App Payment */}
-              {paymentMethod === 'upi' && (
-                <div className="space-y-4">
-                  <div className="text-center">
-                    <Button 
-                      onClick={initiateUPIPayment}
-                      disabled={isProcessingPayment}
-                      className="w-full bg-gradient-to-r from-mountain-green to-mountain-blue"
-                    >
-                      {isProcessingPayment ? (
-                        <>
-                          <Clock3 className="w-4 h-4 mr-2 animate-spin" />
-                          Opening UPI App...
-                        </>
-                      ) : (
-                        <>
-                          <ExternalLink className="w-4 h-4 mr-2" />
-                          Pay with UPI App
-                        </>
-                      )}
-                    </Button>
-                  </div>
-                  <div className="text-xs text-center text-muted-foreground">
-                    This will open your UPI app (GPay, PhonePe, Paytm, etc.)
-                  </div>
-                </div>
-              )}
+            {/* PhonePe Payment Button */}
+            {paymentStatus === 'pending' && (
+              <div className="text-center space-y-4">
+                <Button 
+                  onClick={handlePhonePePayment}
+                  disabled={isProcessingPayment}
+                  className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800"
+                >
+                  {isProcessingPayment ? (
+                    <>
+                      <Clock3 className="w-4 h-4 mr-2 animate-spin" />
+                      Processing...
+                    </>
+                  ) : (
+                    <>
+                      <ExternalLink className="w-4 h-4 mr-2" />
+                      Pay with PhonePe
+                    </>
+                  )}
+                </Button>
+                <p className="text-xs text-muted-foreground">
+                  You will be redirected to PhonePe to complete the payment securely
+                </p>
+              </div>
+            )}
 
-              {/* QR Code Payment */}
-              {paymentMethod === 'qr' && (
-                <div className="text-center space-y-4">
-                  <div className="p-4 bg-gray-50 rounded-lg">
-                    <div className="w-48 h-48 mx-auto bg-white border-2 border-gray-200 rounded-lg flex items-center justify-center">
-                      <div className="text-center">
-                        <QrCode className="w-16 h-16 mx-auto text-gray-400 mb-2" />
-                        <p className="text-sm text-gray-600">QR Code</p>
-                        <p className="text-xs text-gray-500 mt-1">Scan with any UPI app</p>
-                      </div>
-                    </div>
-                  </div>
-                  <p className="text-sm text-muted-foreground">
-                    Scan this QR code with any UPI app to pay ₹{amount}
-                  </p>
-                </div>
-              )}
-
-              {/* Manual Payment */}
-              {paymentMethod === 'manual' && (
-                <div className="space-y-4">
-                  <div className="p-4 bg-gray-50 rounded-lg space-y-3">
-                    <div className="flex justify-between items-center">
-                      <span className="font-medium">UPI ID:</span>
-                      <div className="flex items-center gap-2">
-                        <code className="bg-white px-2 py-1 rounded text-sm">{upiId}</code>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => copyToClipboard(upiId, "UPI ID")}
-                        >
-                          <Copy className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    </div>
-                    <Separator />
-                    <div className="flex justify-between items-center">
-                      <span className="font-medium">Amount:</span>
-                      <div className="flex items-center gap-2">
-                        <code className="bg-white px-2 py-1 rounded text-sm">₹{amount}</code>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => copyToClipboard(amount, "Amount")}
-                        >
-                          <Copy className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    </div>
-                    <Separator />
-                    <div className="flex justify-between items-center">
-                      <span className="font-medium">Note:</span>
-                      <div className="flex items-center gap-2">
-                        <code className="bg-white px-2 py-1 rounded text-sm text-xs max-w-32 truncate">
-                          {teamName} Registration
-                        </code>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => copyToClipboard(`${teamName} Registration`, "Payment Note")}
-                        >
-                          <Copy className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="bg-blue-50 p-3 rounded-lg">
-                    <div className="flex gap-2">
-                      <AlertCircle className="w-5 h-5 text-blue-600 mt-0.5" />
-                      <div className="text-sm">
-                        <p className="font-medium text-blue-900">Manual Payment Steps:</p>
-                        <ol className="list-decimal list-inside mt-1 text-blue-700 space-y-1">
-                          <li>Open any UPI app (GPay, PhonePe, Paytm)</li>
-                          <li>Choose "Send Money" or "Pay"</li>
-                          <li>Enter UPI ID: {upiId}</li>
-                          <li>Enter amount: ₹{amount}</li>
-                          <li>Add note: {teamName} Registration</li>
-                          <li>Complete the payment</li>
-                        </ol>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Payment Confirmation */}
-            {paymentStatus !== 'completed' && (
-              <div className="space-y-4">
-                <Separator />
-                <div className="text-center">
-                  <p className="text-sm text-muted-foreground mb-3">
-                    After completing the payment, click confirm below:
-                  </p>
-                  <Button 
-                    onClick={handlePaymentConfirmation}
-                    variant="outline"
-                    className="w-full"
-                  >
-                    <CheckCircle className="w-4 h-4 mr-2" />
-                    I have completed the payment
-                  </Button>
-                </div>
+            {/* Manual Payment Confirmation (fallback) */}
+            {paymentStatus === 'failed' && (
+              <div className="text-center space-y-4">
+                <p className="text-sm text-muted-foreground">
+                  If you have completed the payment manually, click confirm below:
+                </p>
+                <Button 
+                  onClick={handlePaymentConfirmation}
+                  variant="outline"
+                  className="w-full"
+                >
+                  <CheckCircle className="w-4 h-4 mr-2" />
+                  I have completed the payment
+                </Button>
               </div>
             )}
           </div>
         </DialogContent>
       </Dialog>
-    </div>;
+    </div>
+  );
 };
+
 export default CricketTournament;
