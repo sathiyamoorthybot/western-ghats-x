@@ -13,18 +13,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useToast } from "@/hooks/use-toast";
 import { User, Mail, Phone, Award, Calendar, MapPin, Edit, Save, Clock } from "lucide-react";
 
-type SupabaseProfile = {
-  user_id: string;
-  full_name: string;
-  email: string;
-  phone: string;
-  address?: string | null;
-  emergency_contact?: string | null;
-  emergency_phone?: string | null;
-  created_at?: string;
-  updated_at?: string;
-};
-
 const Profile = () => {
   const { toast } = useToast();
   const { user } = useAuth();
@@ -37,28 +25,27 @@ const Profile = () => {
   });
 
   useEffect(() => {
-  if (user) {
-    const loadProfile = async () => {
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("user_id", user.id)
-        .single();
+    if (user) {
+      const loadProfile = async () => {
+        const { data, error } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("user_id", user.id)
+          .single();
 
-      if (data) {
-        setUserInfo({
-          name: data.full_name || user.email?.split("@")[0] || "",
-          email: data.email || user.email || "",
-          phone: data.phone || "",
-          address: data.address || ""
-        });
-      }
-    };
+        if (data) {
+          setUserInfo({
+            name: data.full_name || user.email?.split("@")[0] || "",
+            email: data.email || user.email || "",
+            phone: data.phone || "",
+            address: data.address || ""
+          });
+        }
+      };
 
-    loadProfile();
-  }
-}, [user]);
-
+      loadProfile();
+    }
+  }, [user]);
 
   const [editableInfo, setEditableInfo] = useState({ ...userInfo });
 
