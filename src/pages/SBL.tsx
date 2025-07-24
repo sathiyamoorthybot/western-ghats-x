@@ -386,7 +386,7 @@ const SBL = () => {
           <div className="container mx-auto px-4">
             <Tabs defaultValue="fixtures" className="w-full">
               <TabsList className="grid w-full grid-cols-1">
-                <TabsTrigger value="fixtures">Tournament Format</TabsTrigger>
+                <TabsTrigger value="fixtures">One Day. One Trophy. One Champion.</TabsTrigger>
               </TabsList>
 
 
@@ -397,7 +397,7 @@ const SBL = () => {
                     <CardHeader>
                       <CardTitle className="flex items-center gap-2">
                         <Trophy className="h-6 w-6 text-primary" />
-                        Tournament Format
+                        Road to Victory
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -452,6 +452,21 @@ const SBL = () => {
                             <div className="flex justify-between">
                               <span>Last Date for Cancellation:</span>
                               <span className="font-semibold text-red-600">August 20, 2025 - Monday</span>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {/* Registration */}
+                        <div className="space-y-4">
+                          <h4 className="font-semibold text-lg mb-3">Prizes</h4>
+                          <div className="space-y-3">
+                            <div className="flex justify-between">
+                              <span>Winnner:</span>
+                              <span className="font-semibold text-red-600">₹6,000 + Trophy</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span>Runner-up:</span>
+                              <span className="font-semibold text-red-600">₹3,000 + Trophy</span>
                             </div>
                           </div>
                         </div>
