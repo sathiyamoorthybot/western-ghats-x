@@ -18,6 +18,8 @@ import CricketTournament from "./pages/CricketTournament";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
+import PaymentSuccess from "./pages/PaymentSuccess";
+import Checkout from "./pages/checkout";
 
 const queryClient = new QueryClient();
 
@@ -39,6 +41,8 @@ const App = () => (
           <Route path="/refund-policy" element={<RefundPolicy />} />
           <Route path="/contact-support" element={<ContactSupport />} />
           <Route path="/cricket-tournament" element={<CricketTournament />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/payment-success" element={<PaymentSuccess />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
