@@ -8,9 +8,10 @@ const WesternGhatsXIntro = () => {
         <div className="text-center mb-12">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4">
             Welcome to <span className="text-mountain-green">Western Ghats X</span>
-             <div className="space-y-6">
-            <h3 className="text-2xl font-bold text-foreground mb-6">Extreme - Explore - Experience</h3>
           </h2>
+            <div className="space-y-6">
+            <h3 className="text-2xl font-bold text-foreground mb-6">Extreme - Explore - Experience
+            </h3>
           <p className="text-lg text-muted-foreground max-w-3xl mx-auto">Fueling the next-gen sporting movement across Coimbatore. We organize premium outdoor adventures, marathons, cricket tournaments, and diverse sporting events that bring communities together and celebrate the spirit of competition.</p>
         </div>
 
