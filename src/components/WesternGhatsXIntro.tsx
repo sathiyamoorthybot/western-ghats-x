@@ -9,10 +9,9 @@ const WesternGhatsXIntro = () => {
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4">
             Welcome to <span className="text-mountain-green">Western Ghats X</span>
           </h2>
-          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-            Fueling the next-gen sporting movement across Coimbatore. We organize premium outdoor adventures, 
-            marathons, cricket tournaments, and diverse sporting events that bring communities together and celebrate the spirit of competition.
-          </p>
+          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">Extreme - Explore - Experience
+
+Fueling the next-gen sporting movement across Coimbatore. We organize premium outdoor adventures, marathons, cricket tournaments, and diverse sporting events that bring communities together and celebrate the spirit of competition.</p>
         </div>
 
         {/* Main Content */}
