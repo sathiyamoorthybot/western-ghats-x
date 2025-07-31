@@ -3,11 +3,10 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
- "scripts": {
+"scripts": {
   "start": "react-scripts start",
   "build": "react-scripts build",
-  "test": "react-scripts test",
-  "eject": "react-scripts eject"
+  "test": "react-scripts test"
 }
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
