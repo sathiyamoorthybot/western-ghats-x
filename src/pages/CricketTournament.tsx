@@ -92,36 +92,12 @@ const CricketTournament: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    if (!user) {
-      toast({ title: "Error", description: "Please login to register", variant: "destructive" });
-      return;
-    }
-
     if (!validateForm()) return;
 
     setIsSubmitting(true);
     
     try {
-      // Save team registration to Supabase
-      const { data, error } = await supabase
-        .from('team_registrations')
-        .insert({
-          team_name: teamData.teamName,
-          captain_name: teamData.captainName,
-          captain_phone: teamData.captainPhone,
-          captain_email: teamData.captainEmail,
-          jersey_color: "Custom Jersey",
-          team_size: 9,
-          players: teamData.players as any,
-          amount: 2000,
-          payment_status: 'pending'
-        })
-        .select()
-        .single();
-
-      if (error) throw error;
-
-      // Send confirmation emails via FormSubmit
+      // Send confirmation emails via FormSubmit first
       const adminEmailData = {
         _subject: "New Cricket Tournament Registration",
         _template: "table",
@@ -131,7 +107,6 @@ const CricketTournament: React.FC = () => {
         captain_phone: teamData.captainPhone,
         captain_email: teamData.captainEmail,
         players: JSON.stringify(teamData.players),
-        registration_id: data.id,
         amount: "₹2,000"
       };
 
@@ -175,16 +150,15 @@ const CricketTournament: React.FC = () => {
 
   const initiateRazorpayPayment = async () => {
     try {
-      const { data, error } = await supabase.functions.invoke('razorpay-payment', {
+      const { data, error } = await supabase.functions.invoke('create-razorpay-order', {
         body: {
           teamData: {
             teamName: teamData.teamName,
             captainName: teamData.captainName,
             captainPhone: teamData.captainPhone,
             captainEmail: teamData.captainEmail,
-            teamSize: 9,
-            players: teamData.players,
-            jerseyColor: "Custom Jersey"
+            teamJerseyUrl: teamData.teamJerseyUrl,
+            players: teamData.players
           },
           amount: 2000
         }
@@ -205,7 +179,7 @@ const CricketTournament: React.FC = () => {
             description: `Team: ${teamData.teamName}`,
             order_id: data.orderId,
             handler: async function (response: any) {
-              const { data: verifyData, error: verifyError } = await supabase.functions.invoke('razorpay-verify', {
+              const { data: verifyData, error: verifyError } = await supabase.functions.invoke('verify-razorpay-payment', {
                 body: {
                   razorpay_order_id: response.razorpay_order_id,
                   razorpay_payment_id: response.razorpay_payment_id,

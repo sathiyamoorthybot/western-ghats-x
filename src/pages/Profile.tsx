@@ -1,331 +1,391 @@
-import { useState, useEffect } from "react";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import ProtectedRoute from "@/components/ProtectedRoute";
-import { useAuth } from "@/hooks/useAuth";
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { User, Mail, Phone, Award, Calendar, MapPin, Edit, Save, Clock } from "lucide-react";
+import { User, Mail, Phone, MapPin, Shield, Trophy } from "lucide-react";
 
-const Profile = () => {
-  const { toast } = useToast();
+interface Profile {
+  id: string;
+  user_id: string;
+  full_name: string | null;
+  email: string | null;
+  phone: string | null;
+  address: string | null;
+  emergency_contact: string | null;
+  emergency_phone: string | null;
+}
+
+interface CricketRegistration {
+  id: string;
+  team_name: string;
+  captain_name: string;
+  captain_email: string;
+  captain_phone: string;
+  payment_status: string;
+  entry_fee: number;
+  created_at: string;
+  players: any[];
+}
+
+const Profile: React.FC = () => {
   const { user } = useAuth();
+  const { toast } = useToast();
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [cricketRegistrations, setCricketRegistrations] = useState<CricketRegistration[]>([]);
   const [isEditing, setIsEditing] = useState(false);
-  const [userInfo, setUserInfo] = useState({
-    name: "",
+  const [isLoading, setIsLoading] = useState(true);
+  const [formData, setFormData] = useState({
+    full_name: "",
     email: "",
     phone: "",
-    address: ""
+    address: "",
+    emergency_contact: "",
+    emergency_phone: ""
   });
 
   useEffect(() => {
     if (user) {
-      setUserInfo({
-        name: user.email?.split("@")[0] || "",
-        email: user.email || "",
-        phone: "",
-        address: ""
-      });
+      fetchProfile();
+      fetchCricketRegistrations();
     }
   }, [user]);
 
-  const [editableInfo, setEditableInfo] = useState({ ...userInfo });
+  const fetchProfile = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('user_id', user?.id)
+        .single();
 
-  const upcomingEvents = [
-    {
-      id: 1,
-      name: "Kattanji Hills Marathon 2025",
-      date: "March 15, 2025",
-      category: "Half Marathon",
-      bib: "KHM-2025-1234"
+      if (error && error.code !== 'PGRST116') {
+        throw error;
+      }
+
+      if (data) {
+        setProfile(data);
+        setFormData({
+          full_name: data.full_name || "",
+          email: data.email || user?.email || "",
+          phone: data.phone || "",
+          address: data.address || "",
+          emergency_contact: data.emergency_contact || "",
+          emergency_phone: data.emergency_phone || ""
+        });
+      } else {
+        // Create a new profile if one doesn't exist
+        setFormData({
+          full_name: "",
+          email: user?.email || "",
+          phone: "",
+          address: "",
+          emergency_contact: "",
+          emergency_phone: ""
+        });
+      }
+    } catch (error: any) {
+      console.error('Error fetching profile:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load profile",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
     }
-  ];
+  };
 
-  const pastEvents = [
-    {
-      id: 1,
-      name: "Coimbatore City Run",
-      date: "November 12, 2024",
-      category: "10K Challenge",
-      position: "156/1023"
-    },
-    {
-      id: 2,
-      name: "Western Ghats Trail Run",
-      date: "August 24, 2024",
-      category: "5K Fun Run",
-      position: "42/512"
+  const fetchCricketRegistrations = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('cricket_tournaments')
+        .select('*')
+        .eq('captain_email', user?.email)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      setCricketRegistrations(data || []);
+    } catch (error: any) {
+      console.error('Error fetching cricket registrations:', error);
     }
-  ];
-
-  const handleEdit = () => {
-    setIsEditing(true);
-    setEditableInfo({ ...userInfo });
   };
 
-  const handleSave = async () => {
-    setUserInfo({ ...editableInfo });
-    setIsEditing(false);
-    toast({
-      title: "Profile Updated",
-      description: "Your profile information has been updated successfully.",
-    });
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    try {
+      const profileData = {
+        user_id: user?.id,
+        full_name: formData.full_name,
+        email: formData.email,
+        phone: formData.phone,
+        address: formData.address,
+        emergency_contact: formData.emergency_contact,
+        emergency_phone: formData.emergency_phone
+      };
+
+      let result;
+      if (profile) {
+        result = await supabase
+          .from('profiles')
+          .update(profileData)
+          .eq('user_id', user?.id)
+          .select()
+          .single();
+      } else {
+        result = await supabase
+          .from('profiles')
+          .insert(profileData)
+          .select()
+          .single();
+      }
+
+      if (result.error) throw result.error;
+
+      setProfile(result.data);
+      setIsEditing(false);
+      toast({
+        title: "Success",
+        description: "Profile updated successfully"
+      });
+    } catch (error: any) {
+      console.error('Error updating profile:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update profile",
+        variant: "destructive"
+      });
+    }
   };
 
-  const handleCancel = () => {
-    setIsEditing(false);
+  const handleInputChange = (field: keyof typeof formData, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
   };
+
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 flex items-center justify-center p-4">
+        <Card className="w-full max-w-md">
+          <CardContent className="pt-6">
+            <p className="text-center text-gray-600">Please log in to view your profile.</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 flex items-center justify-center p-4">
+        <Card className="w-full max-w-2xl">
+          <CardContent className="pt-6">
+            <p className="text-center text-gray-600">Loading profile...</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
-    <ProtectedRoute>
-      <div className="min-h-screen bg-background">
-        <Header />
-        <div className="pt-24 pb-16">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
-            <div className="mb-8 flex flex-col md:flex-row items-center md:items-end gap-6">
-              <Avatar className="w-24 h-24 border-4 border-card">
-                <AvatarImage src="https://source.unsplash.com/random/200x200/?portrait" />
-                <AvatarFallback className="text-3xl">RS</AvatarFallback>
-              </Avatar>
-              <div>
-                <h1 className="text-3xl sm:text-4xl font-bold text-foreground">
-                  {userInfo.name}
-                </h1>
-                <p className="text-muted-foreground">Sports Profile</p>
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 p-4 md:p-10">
+      <div className="max-w-4xl mx-auto space-y-6">
+        {/* Profile Information Card */}
+        <Card className="shadow-xl">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-2xl text-green-700">
+              <User className="h-6 w-6" />
+              Profile Information
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {isEditing ? (
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="full_name">Full Name</Label>
+                    <Input
+                      id="full_name"
+                      value={formData.full_name}
+                      onChange={(e) => handleInputChange('full_name', e.target.value)}
+                      placeholder="Enter your full name"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={(e) => handleInputChange('email', e.target.value)}
+                      placeholder="Enter your email"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="phone">Phone Number</Label>
+                    <Input
+                      id="phone"
+                      value={formData.phone}
+                      onChange={(e) => handleInputChange('phone', e.target.value)}
+                      placeholder="Enter your phone number"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="address">Address</Label>
+                    <Input
+                      id="address"
+                      value={formData.address}
+                      onChange={(e) => handleInputChange('address', e.target.value)}
+                      placeholder="Enter your address"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="emergency_contact">Emergency Contact Name</Label>
+                    <Input
+                      id="emergency_contact"
+                      value={formData.emergency_contact}
+                      onChange={(e) => handleInputChange('emergency_contact', e.target.value)}
+                      placeholder="Emergency contact name"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="emergency_phone">Emergency Contact Phone</Label>
+                    <Input
+                      id="emergency_phone"
+                      value={formData.emergency_phone}
+                      onChange={(e) => handleInputChange('emergency_phone', e.target.value)}
+                      placeholder="Emergency contact phone"
+                    />
+                  </div>
+                </div>
+                <div className="flex gap-4">
+                  <Button type="submit" className="bg-green-600 hover:bg-green-700">
+                    Save Changes
+                  </Button>
+                  <Button 
+                    type="button" 
+                    variant="outline" 
+                    onClick={() => setIsEditing(false)}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </form>
+            ) : (
+              <div className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="flex items-center gap-3">
+                    <User className="h-5 w-5 text-gray-500" />
+                    <div>
+                      <p className="text-sm text-gray-500">Full Name</p>
+                      <p className="font-medium">{profile?.full_name || "Not provided"}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Mail className="h-5 w-5 text-gray-500" />
+                    <div>
+                      <p className="text-sm text-gray-500">Email</p>
+                      <p className="font-medium">{profile?.email || user.email}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Phone className="h-5 w-5 text-gray-500" />
+                    <div>
+                      <p className="text-sm text-gray-500">Phone</p>
+                      <p className="font-medium">{profile?.phone || "Not provided"}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <MapPin className="h-5 w-5 text-gray-500" />
+                    <div>
+                      <p className="text-sm text-gray-500">Address</p>
+                      <p className="font-medium">{profile?.address || "Not provided"}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Shield className="h-5 w-5 text-gray-500" />
+                    <div>
+                      <p className="text-sm text-gray-500">Emergency Contact</p>
+                      <p className="font-medium">{profile?.emergency_contact || "Not provided"}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Phone className="h-5 w-5 text-gray-500" />
+                    <div>
+                      <p className="text-sm text-gray-500">Emergency Phone</p>
+                      <p className="font-medium">{profile?.emergency_phone || "Not provided"}</p>
+                    </div>
+                  </div>
+                </div>
+                <Button 
+                  onClick={() => setIsEditing(true)}
+                  className="bg-green-600 hover:bg-green-700"
+                >
+                  Edit Profile
+                </Button>
               </div>
-            </div>
+            )}
+          </CardContent>
+        </Card>
 
-            <Tabs defaultValue="profile" className="w-full">
-              <TabsList className="mb-6">
-                <TabsTrigger value="profile">Profile</TabsTrigger>
-                <TabsTrigger value="events">My Events</TabsTrigger>
-              </TabsList>
-
-              <TabsContent value="profile">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Personal Information */}
-                  <Card className="shadow-lg">
-                    <CardHeader className="flex flex-row items-center justify-between">
+        {/* Cricket Tournament Registrations */}
+        <Card className="shadow-xl">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-2xl text-green-700">
+              <Trophy className="h-6 w-6" />
+              Cricket Tournament Registrations
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {cricketRegistrations.length > 0 ? (
+              <div className="space-y-4">
+                {cricketRegistrations.map((registration) => (
+                  <div key={registration.id} className="border rounded-lg p-4 bg-gray-50">
+                    <div className="flex justify-between items-start mb-2">
+                      <h3 className="font-semibold text-lg">{registration.team_name}</h3>
+                      <span className={`px-2 py-1 rounded text-sm ${
+                        registration.payment_status === 'completed' 
+                          ? 'bg-green-100 text-green-800' 
+                          : 'bg-yellow-100 text-yellow-800'
+                      }`}>
+                        {registration.payment_status === 'completed' ? 'Paid' : 'Pending'}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                       <div>
-                        <CardTitle className="text-xl">Personal Information</CardTitle>
-                        <CardDescription>Your contact and personal details</CardDescription>
+                        <p className="text-gray-600">Captain:</p>
+                        <p className="font-medium">{registration.captain_name}</p>
                       </div>
-                      {!isEditing && (
-                        <Button variant="outline" size="sm" onClick={handleEdit}>
-                          <Edit className="w-4 h-4 mr-2" />
-                          Edit
-                        </Button>
-                      )}
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      {isEditing ? (
-                        <>
-                          <div className="space-y-2">
-                            <Label htmlFor="name">Full Name</Label>
-                            <Input
-                              id="name"
-                              value={editableInfo.name}
-                              onChange={(e) =>
-                                setEditableInfo({ ...editableInfo, name: e.target.value })
-                              }
-                            />
-                          </div>
-                          <div className="space-y-2">
-                            <Label htmlFor="email">Email</Label>
-                            <Input
-                              id="email"
-                              type="email"
-                              value={editableInfo.email}
-                              onChange={(e) =>
-                                setEditableInfo({ ...editableInfo, email: e.target.value })
-                              }
-                            />
-                          </div>
-                          <div className="space-y-2">
-                            <Label htmlFor="phone">Phone</Label>
-                            <Input
-                              id="phone"
-                              value={editableInfo.phone}
-                              onChange={(e) => {
-                                const value = e.target.value.replace(/\D/g, "").slice(0, 10);
-                                setEditableInfo({ ...editableInfo, phone: value });
-                              }}
-                              placeholder="10 digit phone number"
-                              maxLength={10}
-                            />
-                          </div>
-                          <div className="space-y-2">
-                            <Label htmlFor="address">Address</Label>
-                            <Input
-                              id="address"
-                              value={editableInfo.address}
-                              onChange={(e) =>
-                                setEditableInfo({ ...editableInfo, address: e.target.value })
-                              }
-                            />
-                          </div>
-                          <div className="pt-4 flex justify-end gap-2">
-                            <Button variant="outline" onClick={handleCancel}>
-                              Cancel
-                            </Button>
-                            <Button onClick={handleSave}>
-                              <Save className="w-4 h-4 mr-2" />
-                              Save Changes
-                            </Button>
-                          </div>
-                        </>
-                      ) : (
-                        <>
-                          <div className="flex items-center gap-3">
-                            <User className="w-5 h-5 text-muted-foreground" />
-                            <div>
-                              <p className="text-sm text-muted-foreground">Full Name</p>
-                              <p className="font-medium">{userInfo.name}</p>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-3">
-                            <Mail className="w-5 h-5 text-muted-foreground" />
-                            <div>
-                              <p className="text-sm text-muted-foreground">Email</p>
-                              <p className="font-medium">{userInfo.email}</p>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-3">
-                            <Phone className="w-5 h-5 text-muted-foreground" />
-                            <div>
-                              <p className="text-sm text-muted-foreground">Phone</p>
-                              <p className="font-medium">{userInfo.phone}</p>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-3">
-                            <MapPin className="w-5 h-5 text-muted-foreground" />
-                            <div>
-                              <p className="text-sm text-muted-foreground">Address</p>
-                              <p className="font-medium">{userInfo.address}</p>
-                            </div>
-                          </div>
-                        </>
-                      )}
-                    </CardContent>
-                  </Card>
-                </div>
-              </TabsContent>
-
-              <TabsContent value="events">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Upcoming Events */}
-                  <Card className="shadow-lg">
-                    <CardHeader className="bg-gradient-to-r from-green-100 to-blue-100">
-                      <CardTitle className="text-xl flex items-center gap-2">
-                        <Calendar className="w-5 h-5" />
-                        Upcoming Events
-                      </CardTitle>
-                      <CardDescription>Your registered future events</CardDescription>
-                    </CardHeader>
-                    <CardContent className="pt-6">
-                      {upcomingEvents.length > 0 ? (
-                        <div className="space-y-6">
-                          {upcomingEvents.map((event) => (
-                            <div key={event.id} className="border rounded-lg p-4 shadow-sm">
-                              <div className="flex justify-between items-start">
-                                <h3 className="font-medium text-lg">{event.name}</h3>
-                                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary">
-                                  {event.category}
-                                </span>
-                              </div>
-                              <div className="mt-2 space-y-2">
-                                <div className="flex items-center text-sm">
-                                  <Calendar className="w-4 h-4 mr-2 text-muted-foreground" />
-                                  <span>{event.date}</span>
-                                </div>
-                                <div className="flex items-center text-sm">
-                                  <Award className="w-4 h-4 mr-2 text-muted-foreground" />
-                                  <span>BIB Number: {event.bib}</span>
-                                </div>
-                              </div>
-                              <div className="mt-4 pt-3 border-t border-border">
-                                <div className="flex justify-between items-center">
-                                  <div className="flex items-center text-sm text-muted-foreground">
-                                    <Clock className="w-4 h-4 mr-1" />
-                                    <span>Event countdown: 247 days</span>
-                                  </div>
-                                  <Button variant="outline" size="sm">
-                                    View Details
-                                  </Button>
-                                </div>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      ) : (
-                        <div className="text-center py-8 text-muted-foreground">
-                          <p>No upcoming events</p>
-                          <Button variant="link" className="mt-2">
-                            Register for an event
-                          </Button>
-                        </div>
-                      )}
-                    </CardContent>
-                  </Card>
-
-                  {/* Past Events */}
-                  <Card className="shadow-lg">
-                    <CardHeader>
-                      <CardTitle className="text-xl flex items-center gap-2">
-                        <Award className="w-5 h-5" />
-                        Past Events
-                      </CardTitle>
-                      <CardDescription>Your previous race history</CardDescription>
-                    </CardHeader>
-                    <CardContent className="pt-6">
-                      {pastEvents.length > 0 ? (
-                        <div className="space-y-4">
-                          {pastEvents.map((event) => (
-                            <div key={event.id} className="border rounded-lg p-4 shadow-sm">
-                              <div className="flex justify-between items-start">
-                                <h3 className="font-medium">{event.name}</h3>
-                                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-secondary/10 text-secondary">
-                                  {event.category}
-                                </span>
-                              </div>
-                              <div className="mt-2 space-y-2 text-sm">
-                                <div className="flex items-center">
-                                  <Calendar className="w-4 h-4 mr-2 text-muted-foreground" />
-                                  <span>{event.date}</span>
-                                </div>
-                                <div className="flex items-center">
-                                  <Award className="w-4 h-4 mr-2 text-muted-foreground" />
-                                  <span>Position: {event.position}</span>
-                                </div>
-                              </div>
-                              <div className="mt-4 text-right">
-                                <Button variant="ghost" size="sm">
-                                  View Certificate
-                                </Button>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      ) : (
-                        <div className="text-center py-8 text-muted-foreground">
-                          <p>No past events</p>
-                        </div>
-                      )}
-                    </CardContent>
-                  </Card>
-                </div>
-              </TabsContent>
-            </Tabs>
-          </div>
-        </div>
-        <Footer />
+                      <div>
+                        <p className="text-gray-600">Phone:</p>
+                        <p className="font-medium">{registration.captain_phone}</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-600">Entry Fee:</p>
+                        <p className="font-medium">₹{registration.entry_fee}</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-600">Registered On:</p>
+                        <p className="font-medium">{new Date(registration.created_at).toLocaleDateString()}</p>
+                      </div>
+                    </div>
+                    <div className="mt-2">
+                      <p className="text-gray-600 text-sm">Players: {registration.players.length}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-gray-600 text-center py-8">No cricket tournament registrations found.</p>
+            )}
+          </CardContent>
+        </Card>
       </div>
-    </ProtectedRoute>
+    </div>
   );
 };
 
