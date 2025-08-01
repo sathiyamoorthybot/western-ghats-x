@@ -29,7 +29,6 @@ const CricketTournament: React.FC = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [registered, setRegistered] = useState(false);
 
@@ -146,10 +145,7 @@ const CricketTournament: React.FC = () => {
   const initiateRazorpayPayment = async () => {
     try {
       const { data, error } = await supabase.functions.invoke('create-razorpay-order', {
-        body: {
-          teamData,
-          amount: 2000
-        }
+        body: { teamData, amount: 2000 }
       });
 
       if (error) throw error;
@@ -217,57 +213,53 @@ const CricketTournament: React.FC = () => {
           </CardHeader>
 
           <CardContent className="space-y-8">
-            {/* Team and Player Details Sections remain unchanged */}
-          <div className="bg-green-50 p-6 rounded-lg">
-                <h3 className="font-semibold text-lg mb-4">Team Details</h3>
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <p className="text-gray-600">Team Name:</p>
-                    <p className="font-medium">{teamData.teamName}</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-600">Captain:</p>
-                    <p className="font-medium">{teamData.captainName}</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-600">Phone:</p>
-                    <p className="font-medium">{teamData.captainPhone}</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-600">Email:</p>
-                    <p className="font-medium">{teamData.captainEmail}</p>
-                  </div>
+            {/* Team Details */}
+            <div>
+              <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                <Users className="h-5 w-5" />
+                Team Details
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label>Team Name *</Label>
+                  <Input value={teamData.teamName} onChange={(e) => handleInputChange('teamName', e.target.value)} required />
+                </div>
+                <div>
+                  <Label>Captain Name *</Label>
+                  <Input value={teamData.captainName} onChange={(e) => handleInputChange('captainName', e.target.value)} required />
+                </div>
+                <div>
+                  <Label>Captain Phone *</Label>
+                  <Input value={teamData.captainPhone} onChange={(e) => handleInputChange('captainPhone', e.target.value.replace(/\D/g, '').slice(0, 10))} maxLength={10} required />
+                </div>
+                <div>
+                  <Label>Captain Email *</Label>
+                  <Input type="email" value={teamData.captainEmail} onChange={(e) => handleInputChange('captainEmail', e.target.value)} required />
                 </div>
               </div>
-              
-              <div className="bg-blue-50 p-6 rounded-lg">
-                <h3 className="font-semibold text-lg mb-4">Payment Details</h3>
-                <div className="flex justify-between items-center">
-                  <span>Entry Fee:</span>
-                  <span className="text-2xl font-bold text-blue-600">₹2,000</span>
+            </div>
+
+            {/* Players */}
+            <div>
+              <h3 className="text-xl font-semibold mb-4">Players (7 + 2 Subs)</h3>
+              {teamData.players.map((player, index) => (
+                <div key={index} className="border p-4 rounded-md bg-gray-50 mb-4">
+                  <h4 className="font-medium mb-3">Player {index + 1} ({index < 7 ? "Playing XI" : "Substitute"})</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label>Name *</Label>
+                      <Input value={player.name} onChange={(e) => handlePlayerChange(index, 'name', e.target.value)} required />
+                    </div>
+                    <div>
+                      <Label>Age *</Label>
+                      <Input type="number" value={player.age} min={16} onChange={(e) => handlePlayerChange(index, 'age', e.target.value)} required />
+                    </div>
+                  </div>
                 </div>
-              </div>
+              ))}
+            </div>
 
-              <div className="flex gap-4">
-                <Button 
-                  variant="outline" 
-                  className="flex-1"
-                  onClick={() => setCurrentStep(2)}
-                >
-                  Back to Edit
-                </Button>
-                <Button 
-                  className="flex-1 bg-blue-600 hover:bg-blue-700"
-                  onClick={initiateRazorpayPayment}
-                >
-                  Pay with Razorpay
-                </Button>
-              </div>
-            </CardContent>
-
-            {/* ... insert all other form fields here ... */}
-
-            {/* Submit or Payment */}
+            {/* Final Actions */}
             <div className="text-center pt-4">
               {registered ? (
                 <>
