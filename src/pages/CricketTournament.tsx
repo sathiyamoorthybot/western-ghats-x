@@ -145,7 +145,7 @@ const CricketTournament: React.FC = () => {
   const initiateRazorpayPayment = async () => {
     try {
       const { data, error } = await supabase.functions.invoke('create-razorpay-order', {
-        body: { teamData, amount: 2000 }
+        body: { teamData, amount: 2 }
       });
 
       if (error) throw error;
