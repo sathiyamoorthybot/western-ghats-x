@@ -8,7 +8,7 @@ const corsHeaders = {
 };
 
 serve(async (req) => {
-  console.log("🚀 Razorpay Payment Function Called");
+  console.log("🔍 Razorpay Verify Function Called");
   
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
@@ -18,15 +18,15 @@ serve(async (req) => {
   try {
     const body = await req.json();
     console.log("📦 Request body:", JSON.stringify(body, null, 2));
+    
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = body;
 
-    const { teamData, amount } = body;
-
-    if (!teamData || !amount) {
-      console.error("❌ Missing required fields:", { teamData: !!teamData, amount: !!amount });
+    if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
+      console.error("❌ Missing payment verification data");
       return new Response(
         JSON.stringify({ 
           success: false, 
-          error: "Missing required fields: teamData and amount are required" 
+          error: 'Missing payment verification data' 
         }),
         { 
           status: 400, 
@@ -36,20 +36,13 @@ serve(async (req) => {
     }
 
     // Get Razorpay credentials
-    const keyId = Deno.env.get('RAZORPAY_KEY_ID');
     const keySecret = Deno.env.get('RAZORPAY_KEY_SECRET');
 
-    console.log("🔐 Razorpay credentials check:", {
-      keyId: keyId ? 'SET' : 'NOT SET',
-      keySecret: keySecret ? 'SET' : 'NOT SET'
-    });
-
-    if (!keyId || !keySecret) {
-      console.error("❌ Razorpay credentials missing");
+    if (!keySecret) {
       return new Response(
         JSON.stringify({ 
           success: false, 
-          error: "Payment gateway configuration error - missing credentials" 
+          error: 'Payment gateway configuration error' 
         }),
         { 
           status: 500, 
@@ -58,41 +51,70 @@ serve(async (req) => {
       );
     }
 
-    // Generate order ID
-    const orderId = `order_${Date.now()}`;
+    // Verify signature
+    const text = razorpay_order_id + "|" + razorpay_payment_id;
+    const encoder = new TextEncoder();
+    const key = await crypto.subtle.importKey(
+      "raw",
+      encoder.encode(keySecret),
+      { name: "HMAC", hash: "SHA-256" },
+      false,
+      ["sign"]
+    );
     
+    const signature = await crypto.subtle.sign(
+      "HMAC",
+      key,
+      encoder.encode(text)
+    );
+    
+    const expectedSignature = Array.from(new Uint8Array(signature))
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('');
+
+    console.log("🔐 Signature verification:", {
+      expected: expectedSignature,
+      received: razorpay_signature,
+      match: expectedSignature === razorpay_signature
+    });
+
+    if (expectedSignature !== razorpay_signature) {
+      console.error("❌ Invalid payment signature");
+      return new Response(
+        JSON.stringify({ 
+          success: false, 
+          error: 'Invalid payment signature' 
+        }),
+        { 
+          status: 400, 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        }
+      );
+    }
+
     // Initialize Supabase client
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseKey = Deno.env.get('SUPABASE_ANON_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    console.log("💾 Inserting team registration data");
-
-    // Insert team registration data
-    const { data: insertData, error: insertError } = await supabase
+    // Update payment status in database
+    const { data, error } = await supabase
       .from('team_registrations')
-      .insert({
-        team_name: teamData.teamName,
-        captain_name: teamData.captainName,
-        captain_phone: teamData.captainPhone,
-        captain_email: teamData.captainEmail,
-        team_size: teamData.teamSize,
-        players: teamData.players,
-        jersey_color: teamData.jerseyColor,
-        special_requests: teamData.specialRequests,
-        transaction_id: orderId,
-        amount: amount,
-        payment_status: 'pending'
+      .update({ 
+        payment_status: 'completed',
+        payment_id: razorpay_payment_id,
+        updated_at: new Date().toISOString()
       })
+      .eq('payment_id', razorpay_order_id)
       .select()
       .single();
 
-    if (insertError) {
-      console.error("❌ Database insertion error:", insertError);
+    if (error) {
+      console.error("❌ Database update error:", error);
       return new Response(
         JSON.stringify({ 
           success: false, 
-          error: "Failed to save registration data" 
+          error: 'Failed to update payment status' 
         }),
         { 
           status: 500, 
@@ -101,73 +123,22 @@ serve(async (req) => {
       );
     }
 
-    console.log("✅ Team registration saved:", insertData);
+    console.log("✅ Payment verified and database updated:", data);
 
-    // Create Razorpay order
-    const orderData = {
-      amount: amount * 100, // Convert to paise
-      currency: 'INR',
-      receipt: orderId,
-      notes: {
-        team_name: teamData.teamName,
-        captain_name: teamData.captainName,
-        captain_email: teamData.captainEmail
+    return new Response(
+      JSON.stringify({
+        success: true,
+        paymentId: razorpay_payment_id,
+        orderId: razorpay_order_id,
+        teamData: data
+      }),
+      {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       }
-    };
-
-    console.log("💳 Creating Razorpay order:", JSON.stringify(orderData, null, 2));
-
-    // Create basic auth header
-    const credentials = btoa(`${keyId}:${keySecret}`);
-    
-    try {
-      const razorpayResponse = await fetch('https://api.razorpay.com/v1/orders', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Basic ${credentials}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(orderData)
-      });
-
-      console.log("📱 Razorpay response status:", razorpayResponse.status);
-      
-      if (!razorpayResponse.ok) {
-        const errorText = await razorpayResponse.text();
-        console.error("❌ Razorpay API error:", errorText);
-        throw new Error(`Razorpay API error: ${razorpayResponse.status} - ${errorText}`);
-      }
-
-      const razorpayData = await razorpayResponse.json();
-      console.log("✅ Razorpay order created:", JSON.stringify(razorpayData, null, 2));
-
-      // Update order ID in database
-      await supabase
-        .from('team_registrations')
-        .update({ payment_id: razorpayData.id })
-        .eq('transaction_id', orderId);
-
-      return new Response(
-        JSON.stringify({
-          success: true,
-          orderId: razorpayData.id,
-          amount: razorpayData.amount,
-          currency: razorpayData.currency,
-          keyId: keyId,
-          teamData: teamData
-        }),
-        {
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        }
-      );
-
-    } catch (razorpayError) {
-      console.error("❌ Razorpay request failed:", razorpayError);
-      throw razorpayError;
-    }
+    );
 
   } catch (error) {
-    console.error('❌ Error in razorpay-payment function:', error);
+    console.error('❌ Error in razorpay-verify function:', error);
     return new Response(
       JSON.stringify({ 
         success: false, 
