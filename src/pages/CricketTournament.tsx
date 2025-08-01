@@ -218,6 +218,52 @@ const CricketTournament: React.FC = () => {
 
           <CardContent className="space-y-8">
             {/* Team and Player Details Sections remain unchanged */}
+          <div className="bg-green-50 p-6 rounded-lg">
+                <h3 className="font-semibold text-lg mb-4">Team Details</h3>
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <p className="text-gray-600">Team Name:</p>
+                    <p className="font-medium">{teamData.teamName}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-600">Captain:</p>
+                    <p className="font-medium">{teamData.captainName}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-600">Phone:</p>
+                    <p className="font-medium">{teamData.captainPhone}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-600">Email:</p>
+                    <p className="font-medium">{teamData.captainEmail}</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="bg-blue-50 p-6 rounded-lg">
+                <h3 className="font-semibold text-lg mb-4">Payment Details</h3>
+                <div className="flex justify-between items-center">
+                  <span>Entry Fee:</span>
+                  <span className="text-2xl font-bold text-blue-600">₹2,000</span>
+                </div>
+              </div>
+
+              <div className="flex gap-4">
+                <Button 
+                  variant="outline" 
+                  className="flex-1"
+                  onClick={() => setCurrentStep(2)}
+                >
+                  Back to Edit
+                </Button>
+                <Button 
+                  className="flex-1 bg-blue-600 hover:bg-blue-700"
+                  onClick={initiateRazorpayPayment}
+                >
+                  Pay with Razorpay
+                </Button>
+              </div>
+            </CardContent>
 
             {/* ... insert all other form fields here ... */}
 
