@@ -3,7 +3,6 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { useAuth } from "@/hooks/useAuth";
-import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -26,24 +25,12 @@ const Profile = () => {
 
   useEffect(() => {
     if (user) {
-      const loadProfile = async () => {
-        const { data, error } = await supabase
-          .from("profiles")
-          .select("*")
-          .eq("user_id", user.id)
-          .single();
-
-        if (data) {
-          setUserInfo({
-            name: data.full_name || user.email?.split("@")[0] || "",
-            email: data.email || user.email || "",
-            phone: data.phone || "",
-            address: data.address || ""
-          });
-        }
-      };
-
-      loadProfile();
+      setUserInfo({
+        name: user.email?.split("@")[0] || "",
+        email: user.email || "",
+        phone: "",
+        address: ""
+      });
     }
   }, [user]);
 
@@ -81,40 +68,14 @@ const Profile = () => {
     setEditableInfo({ ...userInfo });
   };
 
-const handleSave = async () => {
-  if (!user) return;
-
-  try {
-    const { error } = await supabase
-      .from("profiles")
-      .upsert(
-        {
-          user_id: user.id,
-          full_name: editableInfo.name,
-          email: editableInfo.email,
-          phone: editableInfo.phone,
-          address: editableInfo.address
-        },
-        { onConflict: "user_id" } // 🛠 This is the key fix!
-      );
-
-    if (error) throw error;
-
+  const handleSave = async () => {
     setUserInfo({ ...editableInfo });
     setIsEditing(false);
     toast({
       title: "Profile Updated",
       description: "Your profile information has been updated successfully.",
     });
-  } catch (error: any) {
-    toast({
-      title: "Update Failed",
-      description: error.message || "Failed to update profile. Please try again.",
-      variant: "destructive",
-    });
-  }
-};
-
+  };
 
   const handleCancel = () => {
     setIsEditing(false);
@@ -259,7 +220,7 @@ const handleSave = async () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Upcoming Events */}
                   <Card className="shadow-lg">
-                    <CardHeader className="bg-gradient-to-r from-mountain-green/10 to-mountain-blue/10">
+                    <CardHeader className="bg-gradient-to-r from-green-100 to-blue-100">
                       <CardTitle className="text-xl flex items-center gap-2">
                         <Calendar className="w-5 h-5" />
                         Upcoming Events

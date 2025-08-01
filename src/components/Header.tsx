@@ -6,9 +6,9 @@ const Header = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <div className="flex items-center">
+          <Link to="/" className="flex items-center">
             <img src="/lovable-uploads/446dd634-c297-4975-bb69-8470fc0b04ce.png" alt="Western Ghats X" className="h-14 w-auto" />
-          </div>
+          </Link>
 
           {/* Navigation */}
           <NavigationMenu className="hidden md:flex">
