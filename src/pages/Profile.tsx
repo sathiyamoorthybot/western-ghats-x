@@ -9,7 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { User, Mail, Phone, MapPin, Shield, Trophy } from "lucide-react";
 
 interface Profile {
-  id: string;
+  id?: string;
   user_id: string;
   full_name: string | null;
   email: string | null;
@@ -57,24 +57,24 @@ const Profile: React.FC = () => {
   const fetchProfile = async () => {
     try {
       const { data, error } = await supabase
-        .from('profiles')
+        .from('profiles' as any)
         .select('*')
         .eq('user_id', user?.id)
-        .single();
+        .maybeSingle();
 
-      if (error && error.code !== 'PGRST116') {
+      if (error) {
         throw error;
       }
 
       if (data) {
-        setProfile(data);
+        setProfile(data as any);
         setFormData({
-          full_name: data.full_name || "",
-          email: data.email || user?.email || "",
-          phone: data.phone || "",
-          address: data.address || "",
-          emergency_contact: data.emergency_contact || "",
-          emergency_phone: data.emergency_phone || ""
+          full_name: (data as any).full_name || "",
+          email: (data as any).email || user?.email || "",
+          phone: (data as any).phone || "",
+          address: (data as any).address || "",
+          emergency_contact: (data as any).emergency_contact || "",
+          emergency_phone: (data as any).emergency_phone || ""
         });
       } else {
         // Create a new profile if one doesn't exist
@@ -102,14 +102,27 @@ const Profile: React.FC = () => {
   const fetchCricketRegistrations = async () => {
     try {
       const { data, error } = await supabase
-        .from('cricket_tournaments')
+        .from('cricket_tournaments' as any)
         .select('*')
         .eq('captain_email', user?.email)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
 
-      setCricketRegistrations(data || []);
+      // Map the data to match our interface
+      const mappedData = data?.map((item: any) => ({
+        id: item.id,
+        team_name: item.team_name,
+        captain_name: item.captain_name,
+        captain_email: item.captain_email,
+        captain_phone: item.captain_phone,
+        payment_status: item.payment_status,
+        entry_fee: item.entry_fee,
+        created_at: item.created_at,
+        players: Array.isArray(item.players) ? item.players : []
+      })) || [];
+
+      setCricketRegistrations(mappedData);
     } catch (error: any) {
       console.error('Error fetching cricket registrations:', error);
     }
@@ -132,22 +145,22 @@ const Profile: React.FC = () => {
       let result;
       if (profile) {
         result = await supabase
-          .from('profiles')
+          .from('profiles' as any)
           .update(profileData)
           .eq('user_id', user?.id)
           .select()
-          .single();
+          .maybeSingle();
       } else {
         result = await supabase
-          .from('profiles')
+          .from('profiles' as any)
           .insert(profileData)
           .select()
-          .single();
+          .maybeSingle();
       }
 
       if (result.error) throw result.error;
 
-      setProfile(result.data);
+      setProfile(result.data as any);
       setIsEditing(false);
       toast({
         title: "Success",

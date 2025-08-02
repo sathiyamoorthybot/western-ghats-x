@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Upload, Users, Trophy, AlertCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import RegistrationConfirmDialog from "@/components/RegistrationConfirmDialog";
 
 interface Player {
   name: string;
@@ -31,6 +32,8 @@ const CricketTournament: React.FC = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [registered, setRegistered] = useState(false);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const [registrationId, setRegistrationId] = useState<string | null>(null);
 
   const [teamData, setTeamData] = useState<TeamData>({
     teamName: "",
@@ -95,41 +98,34 @@ const CricketTournament: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      const adminEmailData = {
-        _subject: "New Cricket Tournament Registration",
-        _template: "table",
-        _next: window.location.origin + "/payment-success",
-        team_name: teamData.teamName,
-        captain_name: teamData.captainName,
-        captain_phone: teamData.captainPhone,
-        captain_email: teamData.captainEmail,
-        players: JSON.stringify(teamData.players),
-        amount: "₹2,000"
-      };
-
-      const userEmailData = {
-        _subject: "Cricket Tournament Registration Confirmation",
-        _template: "table",
-        _next: window.location.origin + "/payment-success",
-        team_name: teamData.teamName,
-        captain_name: teamData.captainName,
-        message: "Thank you for registering! Please complete payment to confirm your registration."
-      };
-
-      await Promise.all([
-        fetch("https://formsubmit.co/admin@westernghats-x.com", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(adminEmailData)
-        }),
-        fetch(`https://formsubmit.co/${teamData.captainEmail}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(userEmailData)
+      // Save to Supabase cricket_tournaments table
+      const { data, error } = await supabase
+        .from('cricket_tournaments' as any)
+        .insert({
+          team_name: teamData.teamName,
+          captain_name: teamData.captainName,
+          captain_phone: teamData.captainPhone,
+          captain_email: teamData.captainEmail,
+          players: teamData.players,
+          entry_fee: 2000,
+          payment_status: 'pending',
+          user_id: user?.id || null
         })
-      ]);
+        .select()
+        .single();
 
+      if (error) throw error;
+
+      setRegistrationId((data as any)?.id);
       setRegistered(true);
+      setShowConfirmDialog(true);
+
+      toast({
+        title: "Registration Successful!",
+        description: "Your team has been registered. Please proceed to payment.",
+        variant: "default"
+      });
+
     } catch (error: any) {
       console.error('Registration error:', error);
       toast({
@@ -144,8 +140,10 @@ const CricketTournament: React.FC = () => {
 
   const initiateRazorpayPayment = async () => {
     try {
+      setShowConfirmDialog(false);
+      
       const { data, error } = await supabase.functions.invoke('create-razorpay-order', {
-        body: { teamData, amount: 2 }
+        body: { teamData, amount: 2000, registrationId }
       });
 
       if (error) throw error;
@@ -174,6 +172,15 @@ const CricketTournament: React.FC = () => {
                 toast({ title: "Payment Verification Failed", description: "Please contact support.", variant: "destructive" });
                 return;
               }
+
+              // Send email notifications after successful payment
+              await supabase.functions.invoke('send-registration-email', {
+                body: {
+                  teamData,
+                  paymentStatus: 'completed',
+                  registrationId
+                }
+              });
 
               toast({ title: "Payment Successful!", description: "Your team registration is confirmed." });
               navigate(`/payment-success?paymentId=${response.razorpay_payment_id}&orderId=${response.razorpay_order_id}`);
@@ -261,28 +268,22 @@ const CricketTournament: React.FC = () => {
 
             {/* Final Actions */}
             <div className="text-center pt-4">
-              {registered ? (
-                <>
-                  <p className="text-green-600 text-lg font-semibold mb-4">
-                    ✅ Registration Successful! Proceed to Payment.
-                  </p>
-                  <Button
-                    className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3 text-lg"
-                    onClick={initiateRazorpayPayment}
-                  >
-                    Pay ₹2,000 with Razorpay
-                  </Button>
-                </>
-              ) : (
-                <Button
-                  onClick={handleSubmit}
-                  disabled={isSubmitting}
-                  className="bg-green-600 hover:bg-green-700 text-white font-semibold px-8 py-3 text-lg"
-                >
-                  {isSubmitting ? "Registering..." : "Register Team & Proceed to Payment"}
-                </Button>
-              )}
+              <Button
+                onClick={handleSubmit}
+                disabled={isSubmitting || registered}
+                className="bg-green-600 hover:bg-green-700 text-white font-semibold px-8 py-3 text-lg"
+              >
+                {isSubmitting ? "Registering..." : registered ? "Registration Complete" : "Register Team & Proceed to Payment"}
+              </Button>
             </div>
+            
+            {/* Registration Confirmation Dialog */}
+            <RegistrationConfirmDialog
+              isOpen={showConfirmDialog}
+              onClose={() => setShowConfirmDialog(false)}
+              teamData={teamData}
+              onProceedToPayment={initiateRazorpayPayment}
+            />
           </CardContent>
         </Card>
       </div>
