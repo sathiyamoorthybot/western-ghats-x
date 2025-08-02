@@ -143,7 +143,7 @@ const CricketTournament: React.FC = () => {
       setShowConfirmDialog(false);
       
       const { data, error } = await supabase.functions.invoke('create-razorpay-order', {
-        body: { teamData, amount: 2000, registrationId }
+        body: { teamData, amount: 2, registrationId }
       });
 
       if (error) throw error;
