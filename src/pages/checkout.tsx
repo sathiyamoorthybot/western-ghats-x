@@ -14,6 +14,11 @@ const CheckoutPage = () => {
   const { toast } = useToast();
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
+  const baseAmount = 2000; // ₹2,000 base registration fee
+  const platformFeeRate = 0.0235; // 2.35% platform fee
+  const platformFee = Math.round(baseAmount * platformFeeRate);
+  const totalAmount = baseAmount + platformFee;
+
   const [formData, setFormData] = useState({
     teamName: searchParams.get('teamName') || '',
     captainName: searchParams.get('captainName') || '',
@@ -69,7 +74,7 @@ const CheckoutPage = () => {
           phone: formData.phone,
           email: formData.email,
           eventType: formData.eventType,
-          amount: 2000 // ₹2,000
+          amount: totalAmount
         }
       });
 
@@ -155,7 +160,10 @@ const CheckoutPage = () => {
               <h3 className="font-semibold mb-2">Registration Summary</h3>
               <div className="space-y-1 text-sm">
                 <p><strong>Event:</strong> Saravanampatti Blasters League</p>
-                <p><strong>Registration Fee:</strong> ₹2,000</p>
+                <p><strong>Registration Fee:</strong> ₹{baseAmount.toLocaleString()}</p>
+                <p><strong>Platform Fee (2.35%):</strong> ₹{platformFee}</p>
+                <hr className="my-2" />
+                <p className="font-semibold"><strong>Total Amount:</strong> ₹{totalAmount.toLocaleString()}</p>
                 <p><strong>Payment Method:</strong> PhonePe</p>
               </div>
             </div>
@@ -166,7 +174,7 @@ const CheckoutPage = () => {
               className="w-full"
               size="lg"
             >
-              {loading ? "Processing..." : "Pay ₹2,000 with PhonePe"}
+              {loading ? "Processing..." : `Pay ₹${totalAmount.toLocaleString()} with PhonePe`}
             </Button>
 
             <p className="text-xs text-muted-foreground text-center">

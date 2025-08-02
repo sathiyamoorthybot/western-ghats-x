@@ -174,11 +174,12 @@ const CricketTournament: React.FC = () => {
               }
 
               // Send email notifications after successful payment
-              await supabase.functions.invoke('send-registration-email', {
+              await supabase.functions.invoke('send-cricket-registration-email', {
                 body: {
                   teamData,
                   paymentStatus: 'completed',
-                  registrationId
+                  registrationId,
+                  paymentAmount: 2000 + Math.round(2000 * 0.0235) // Base amount + platform fee
                 }
               });
 
