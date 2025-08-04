@@ -583,7 +583,6 @@ const SBL = () => {
         answer: "Team list and match fixtures will be shared 1 day before the tournament date via email and WhatsApp."
       }]} />
       </div>
-      <Footer />
     </div>;
 };
 export default SBL;
