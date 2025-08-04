@@ -8,7 +8,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Mail, Phone, MessageCircle } from "lucide-react";
 import { toast } from "sonner";
-
 const SponsorContact = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -16,19 +15,18 @@ const SponsorContact = () => {
     phone: "",
     message: ""
   });
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.id]: e.target.value });
+  const handleChange = e => {
+    setFormData({
+      ...formData,
+      [e.target.id]: e.target.value
+    });
   };
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
-
     if (!formData.name || !formData.email || !formData.phone || !formData.message) {
       toast.error("Please fill in all the fields.");
       return;
     }
-
     try {
       await fetch("https://formspree.io/f/mwkgyvrg", {
         method: "POST",
@@ -37,16 +35,18 @@ const SponsorContact = () => {
         },
         body: JSON.stringify(formData)
       });
-
       toast.success("Thanks for reaching out! We'll get back to you soon.");
-      setFormData({ name: "", email: "", phone: "", message: "" });
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        message: ""
+      });
     } catch (err) {
       toast.error("Something went wrong. Please try again later.");
     }
   };
-
-  return (
-    <div className="min-h-screen bg-background">
+  return <div className="min-h-screen bg-background">
       <Header />
 
       <main className="pt-20 pb-16">
@@ -77,7 +77,7 @@ const SponsorContact = () => {
                   <Phone className="w-5 h-5 text-secondary" />
                   <div>
                     <p className="font-medium">Call Us</p>
-                    <p className="text-muted-foreground">+91 98765 43210</p>
+                    <p className="text-muted-foreground">+91 63745 21141</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
@@ -125,8 +125,6 @@ const SponsorContact = () => {
           </div>
         </div>
       </main>
-    </div>
-  );
+    </div>;
 };
-
 export default SponsorContact;
