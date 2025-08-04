@@ -14,7 +14,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsConditions from "./pages/TermsConditions";
 import RefundPolicy from "./pages/RefundPolicy";
-import SponcorContact from "./pages/SponcorContact";
+import SponsorContact from "./pages/SponsorContact";
 import CricketTournament from "./pages/CricketTournament";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
