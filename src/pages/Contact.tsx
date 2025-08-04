@@ -1,4 +1,3 @@
-
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,10 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Mail, Phone, MapPin, Clock } from "lucide-react";
-
 const Contact = () => {
-  return (
-    <div className="min-h-screen bg-background">
+  return <div className="min-h-screen bg-background">
       <Header />
       <div className="pt-24 pb-16">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -36,7 +33,7 @@ const Contact = () => {
                   </CardHeader>
                   <CardContent>
                     <p className="text-muted-foreground mb-2">For general inquiries:</p>
-                    <p className="font-medium">info@westernghatsx.in</p>
+                    <p className="font-medium">events@westernghatsx.in</p>
                   </CardContent>
                 </Card>
 
@@ -108,17 +105,10 @@ const Contact = () => {
                     
                     <div>
                       <Label htmlFor="message">Message</Label>
-                      <Textarea 
-                        id="message" 
-                        placeholder="Tell us more about your inquiry..."
-                        className="min-h-[120px]"
-                      />
+                      <Textarea id="message" placeholder="Tell us more about your inquiry..." className="min-h-[120px]" />
                     </div>
                     
-                    <Button 
-                      type="submit" 
-                      className="w-full bg-gradient-to-r from-mountain-green to-primary-hover"
-                    >
+                    <Button type="submit" className="w-full bg-gradient-to-r from-mountain-green to-primary-hover">
                       Send Message
                     </Button>
                   </form>
@@ -128,8 +118,6 @@ const Contact = () => {
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default Contact;
