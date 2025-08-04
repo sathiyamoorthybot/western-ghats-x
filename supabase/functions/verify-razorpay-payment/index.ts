@@ -127,7 +127,14 @@ serve(async (req) => {
 
     // Send confirmation email
     try {
-      await supabase.functions.invoke('send-cricket-registration-email', {
+      console.log("📧 Sending registration email with data:", {
+        teamName: data.team_name,
+        captainName: data.captain_name,
+        captainEmail: data.captain_email,
+        playersCount: data.players?.length || 0
+      });
+      
+      const emailResult = await supabase.functions.invoke('send-cricket-registration-email', {
         body: {
           teamData: {
             teamName: data.team_name,
@@ -141,7 +148,12 @@ serve(async (req) => {
           paymentAmount: data.entry_fee
         }
       });
-      console.log("✅ Email sent successfully");
+      
+      if (emailResult.error) {
+        console.error("❌ Email function error:", emailResult.error);
+      } else {
+        console.log("✅ Email sent successfully:", emailResult.data);
+      }
     } catch (emailError) {
       console.error("❌ Failed to send email:", emailError);
     }

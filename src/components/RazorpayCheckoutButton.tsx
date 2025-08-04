@@ -15,6 +15,10 @@ declare global {
 
 const RazorpayCheckoutButton: React.FC<RazorpayProps> = ({ amount, teamData }) => {
   const { toast } = useToast();
+  
+  // Calculate service fee (2.35%)
+  const serviceFee = Math.round(amount * 0.0235);
+  const totalAmount = amount + serviceFee;
 
   const loadRazorpayScript = () => {
     return new Promise((resolve) => {
@@ -47,7 +51,7 @@ const RazorpayCheckoutButton: React.FC<RazorpayProps> = ({ amount, teamData }) =
             players: [],
             jerseyColor: "Blue"
           },
-          amount: amount
+          amount: totalAmount
         }
       });
 
@@ -126,12 +130,28 @@ const RazorpayCheckoutButton: React.FC<RazorpayProps> = ({ amount, teamData }) =
   };
 
   return (
-    <button 
-      onClick={initiatePayment} 
-      className="bg-blue-600 hover:bg-blue-700 px-6 py-3 text-white rounded-lg font-semibold transition-colors"
-    >
-      Pay with Razorpay - ₹{amount.toLocaleString()}
-    </button>
+    <div className="space-y-3">
+      <div className="text-sm text-gray-600 space-y-1">
+        <div className="flex justify-between">
+          <span>Registration Fee:</span>
+          <span>₹{amount.toLocaleString()}</span>
+        </div>
+        <div className="flex justify-between">
+          <span>Service Fee (2.35%):</span>
+          <span>₹{serviceFee.toLocaleString()}</span>
+        </div>
+        <div className="flex justify-between font-semibold text-lg border-t pt-1">
+          <span>Total Amount:</span>
+          <span>₹{totalAmount.toLocaleString()}</span>
+        </div>
+      </div>
+      <button 
+        onClick={initiatePayment} 
+        className="w-full bg-blue-600 hover:bg-blue-700 px-6 py-3 text-white rounded-lg font-semibold transition-colors"
+      >
+        Pay with Razorpay - ₹{totalAmount.toLocaleString()}
+      </button>
+    </div>
   );
 };
 
