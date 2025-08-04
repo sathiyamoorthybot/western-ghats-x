@@ -126,8 +126,6 @@ const KattanjiMarathon = () => {
           />
         </div>
       </section>
-
-      <Footer />
     </div>
   );
 };
