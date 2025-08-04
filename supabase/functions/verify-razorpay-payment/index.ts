@@ -129,15 +129,16 @@ serve(async (req) => {
     try {
       await supabase.functions.invoke('send-cricket-registration-email', {
         body: {
-          teamName: data.team_name,
-          captainName: data.captain_name,
-          captainEmail: data.captain_email,
-          captainPhone: data.captain_phone,
-          players: data.players,
-          entryFee: data.entry_fee,
+          teamData: {
+            teamName: data.team_name,
+            captainName: data.captain_name,
+            captainPhone: data.captain_phone,
+            captainEmail: data.captain_email,
+            players: data.players || []
+          },
           paymentStatus: 'completed',
-          transactionId: razorpay_payment_id,
-          registrationId: data.id
+          registrationId: data.id,
+          paymentAmount: data.entry_fee
         }
       });
       console.log("✅ Email sent successfully");
