@@ -9,7 +9,6 @@ const Login = () => {
       <div className="flex-1 pt-16">
         <AuthForm type="login" />
       </div>
-      <Footer />
     </div>
   );
 };
