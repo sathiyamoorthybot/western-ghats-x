@@ -113,7 +113,7 @@ const SponsorContact = () => {
 
                   <div>
                     <Label htmlFor="phone">Phone Number</Label>
-                    <Input id="phone" type="tel" placeholder="+91 12345 67890" value={formData.phone} onChange={handleChange} required />
+                    <Input id="phone" type="tel" placeholder="+91 98765 43210" value={formData.phone} onChange={handleChange} required />
                   </div>
 
                   <div>
