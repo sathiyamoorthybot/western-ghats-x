@@ -16,11 +16,11 @@ const SponsorContact = () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold text-foreground mb-4">
-              Sponsor the Kattanji Marathon
-            </h1>
+  Become a Sponsor for Our Events
+</h1>
             <p className="text-lg text-muted-foreground">
-              Partner with us and be a part of this iconic eco-conscious event.
-            </p>
+  Partner with Western Ghats X to support community-driven, eco-conscious events across the region.
+</p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8">
@@ -96,8 +96,6 @@ const SponsorContact = () => {
           </div>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 };
