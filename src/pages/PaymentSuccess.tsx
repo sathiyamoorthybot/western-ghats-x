@@ -29,7 +29,7 @@ const PaymentSuccess = () => {
     try {
       // Check payment status in database
       const { data, error } = await supabase
-        .from('team_registrations')
+        .from('cricket_tournaments')
         .select('*')
         .eq('transaction_id', transactionId)
         .single();
@@ -111,7 +111,7 @@ const PaymentSuccess = () => {
                 <p><strong>Team:</strong> {teamDetails.team_name}</p>
                 <p><strong>Captain:</strong> {teamDetails.captain_name}</p>
                 <p><strong>Transaction ID:</strong> {transactionId}</p>
-                <p><strong>Amount:</strong> ₹{teamDetails.amount}</p>
+                <p><strong>Amount:</strong> ₹{teamDetails.entry_fee}</p>
               </div>
               <p className="text-xs text-muted-foreground text-center">
                 You will receive a confirmation email shortly with your registration details.

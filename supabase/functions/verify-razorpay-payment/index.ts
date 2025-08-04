@@ -125,6 +125,26 @@ serve(async (req) => {
 
     console.log("✅ Payment verified and database updated:", data);
 
+    // Send confirmation email
+    try {
+      await supabase.functions.invoke('send-cricket-registration-email', {
+        body: {
+          teamName: data.team_name,
+          captainName: data.captain_name,
+          captainEmail: data.captain_email,
+          captainPhone: data.captain_phone,
+          players: data.players,
+          entryFee: data.entry_fee,
+          paymentStatus: 'completed',
+          transactionId: razorpay_payment_id,
+          registrationId: data.id
+        }
+      });
+      console.log("✅ Email sent successfully");
+    } catch (emailError) {
+      console.error("❌ Failed to send email:", emailError);
+    }
+
     return new Response(
       JSON.stringify({
         success: true,
