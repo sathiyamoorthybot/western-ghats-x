@@ -99,12 +99,7 @@ const KattanjiMarathon = () => {
           <p className="text-muted-foreground mb-6">
             Early bird coupons and route reveals coming your way. Stay tuned!
           </p>
-          <button
-            className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-6 py-3 rounded-full font-medium hover:shadow-lg transition-all"
-            onClick={() => alert("Early bird offer coming soon! Stay tuned.")}
-          >
-            🎯 Request Early Bird Coupon
-          </button>
+    
         </div>
       </section>
 
