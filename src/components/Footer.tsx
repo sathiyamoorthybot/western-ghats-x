@@ -51,10 +51,10 @@ const Footer = () => {
               </p>
               <p
                 className="text-sm text-white/80 cursor-pointer hover:text-white transition-colors"
-                onClick={() => window.open("mailto:info@westernghatsx.in", "_blank")}
+                onClick={() => window.open("mailto:events@westernghatsx.in", "_blank")}
               >
                 <Mail className="w-4 h-4 inline mr-2" />
-                info@westernghatsx.in
+                events@westernghatsx.in
               </p>
             </div>
           </div>
