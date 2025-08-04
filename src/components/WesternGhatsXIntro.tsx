@@ -74,8 +74,15 @@ const WesternGhatsXIntro = () => {
                   </Badge>
                 </div>
                 <p className="text-muted-foreground mb-4">
-                  Experience the thrill of running through Kerala's majestic Kattanji Hills. 
-                  Choose from 5K, 10K, or Half Marathon distances suitable for all fitness levels.
+                  Run for Nature at Kattanji Hills, Coimbatore.
+Discover the scenic trails of Kattanji Hills near Periyanaickenpalayam — known for its natural beauty, Thandi Perumal Kovil, and eco-friendly initiatives.
+
+🏃 Choose your distance: 5K | 10K | Half Marathon
+Perfect for all fitness levels.
+
+Join us where spirituality meets sustainability, and every step supports a cleaner, greener future.
+
+
                 </p>
                 <div className="flex items-center gap-4 text-sm text-muted-foreground">
                   <div className="flex items-center gap-1">
