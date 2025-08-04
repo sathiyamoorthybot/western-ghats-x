@@ -390,89 +390,114 @@ const SBL = () => {
               </TabsList>
 
 
-              <TabsContent value="fixtures" className="mt-6">
-                <div className="grid gap-6">
-                  {/* Tournament Format and Prize Pool */}
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2">
-                        <Trophy className="h-6 w-6 text-primary" />
-                        Road to Victory
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="grid md:grid-cols-2 gap-8">
-                        {/* Tournament Details */}
-                        <div className="space-y-4">
-                          <h4 className="font-semibold text-lg mb-3">Tournament Format</h4>
-                          <div className="space-y-3">
-                            <div className="flex justify-between">
-                              <span>Teams:</span>
-                              <span className="font-semibold">16 Teams</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span>Entry Fee:</span>
-                              <span className="font-semibold">₹2,000 per team</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span>Format:</span>
-                              <span className="font-semibold">Knockout</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span>Overs:</span>
-                              <span className="font-semibold">6 overs per innings</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span>Duration:</span>
-                              <span className="font-semibold">Full-day event</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span>Time:</span>
-                              <span className="font-semibold">8:00 AM - 6:15 PM</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span>Matches:</span>
-                              <span className="font-semibold">11 Total</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span>Players:</span>
-                              <span className="font-semibold">7 + 2 Subs</span>
-                            </div>
-                          </div>
-                        </div>
+<TabsContent value="fixtures" className="mt-6">
+  <div className="grid gap-6">
+    {/* Tournament Overview */}
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Trophy className="h-6 w-6 text-primary" />
+          Western Ghats X Cricket Tournament
+        </CardTitle>
+        <CardDescription>Spirit. Stamina. Sustainability.</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="grid md:grid-cols-2 gap-8">
+          {/* Registration Info */}
+          <div className="space-y-4">
+            <h4 className="font-semibold text-lg mb-3">Registration</h4>
+            <div className="space-y-3">
+              <div className="flex justify-between">
+                <span>Entry Fee:</span>
+                <span className="font-semibold">₹2,000 per team</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Last Date to Register:</span>
+                <span className="font-semibold text-red-600">August 24, 2025</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Last Date to Cancel:</span>
+                <span className="font-semibold text-red-600">August 20, 2025</span>
+              </div>
+            </div>
+          </div>
 
-                        {/* Registration */}
-                        <div className="space-y-4">
-                          <h4 className="font-semibold text-lg mb-3">Registration Dates</h4>
-                          <div className="space-y-3">
-                            <div className="flex justify-between">
-                              <span>Last Date for registration:</span>
-                              <span className="font-semibold text-red-600">August 24, 2025 - Sunday</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span>Last Date for Cancellation:</span>
-                              <span className="font-semibold text-red-600">August 20, 2025 - Monday</span>
-                            </div>
-                          </div>
-                        </div>
-                        
-                        {/* Registration */}
-                        <div className="space-y-4">
-                          <h4 className="font-semibold text-lg mb-3">Prizes</h4>
-                          <div className="space-y-3">
-                            <div className="flex justify-between">
-                              <span>Winnner:</span>
-                              <span className="font-semibold text-red-600">₹6,000 + Trophy</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span>Runner-up:</span>
-                              <span className="font-semibold text-red-600">₹3,000 + Trophy</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+          {/* Prize Pool */}
+          <div className="space-y-4">
+            <h4 className="font-semibold text-lg mb-3">Prize Pool</h4>
+            <div className="space-y-3">
+              <div className="flex justify-between">
+                <span>Winner:</span>
+                <span className="font-semibold text-green-600">₹6,000 + Trophy</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Runner-up:</span>
+                <span className="font-semibold text-green-600">₹3,000 + Trophy</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+
+    {/* Format Details */}
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Trophy className="h-6 w-6 text-primary" />
+          Road to Victory
+        </CardTitle>
+        <CardDescription>Format & Match Information</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="grid md:grid-cols-2 gap-8">
+          {/* Tournament Format */}
+          <div className="space-y-4">
+            <h4 className="font-semibold text-lg mb-3">Format Overview</h4>
+            <div className="space-y-3">
+              <div className="flex justify-between">
+                <span>Teams:</span>
+                <span className="font-semibold">16</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Format:</span>
+                <span className="font-semibold">Knockout</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Overs:</span>
+                <span className="font-semibold">6 per innings</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Matches:</span>
+                <span className="font-semibold">11 total</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Timing & Squad */}
+          <div className="space-y-4">
+            <h4 className="font-semibold text-lg mb-3">Schedule & Squad</h4>
+            <div className="space-y-3">
+              <div className="flex justify-between">
+                <span>Time:</span>
+                <span className="font-semibold">8:00 AM – 6:15 PM</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Duration:</span>
+                <span className="font-semibold">Full-day event</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Players:</span>
+                <span className="font-semibold">7 + 2 Subs</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  </div>
+</TabsContent>
+
 
                    {/* Recognition */}
                   <Card>
