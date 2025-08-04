@@ -106,7 +106,6 @@ const AboutUs = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </div>;
 };
 export default AboutUs;
