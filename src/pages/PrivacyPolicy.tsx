@@ -61,8 +61,6 @@ const PrivacyPolicy = () => {
           </Card>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 };
