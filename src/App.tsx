@@ -41,7 +41,7 @@ const App = () => (
               <Route path="privacy-policy" element={<PrivacyPolicy />} />
               <Route path="terms-conditions" element={<TermsConditions />} />
               <Route path="refund-policy" element={<RefundPolicy />} />
-              <Route path="Sponcor-Contact" element={<SponcorContact />} />
+              <Route path="sponsor-contact" element={<SponsorContact />} />
               <Route path="cricket-tournament" element={<CricketTournament />} />
               <Route path="checkout" element={<Checkout />} />
               <Route path="payment-success" element={<PaymentSuccess />} />
