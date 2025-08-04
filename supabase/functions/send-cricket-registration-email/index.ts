@@ -1,5 +1,5 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { SMTPClient } from "https://deno.land/x/denomailer@1.6.0/mod.ts";
+import { Resend } from "npm:resend@2.0.0";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -28,18 +28,8 @@ const handler = async (req: Request): Promise<Response> => {
   try {
     const { teamData, paymentStatus, registrationId, paymentAmount }: EmailRequest = await req.json();
 
-    // Initialize SMTP client with Hostinger settings
-    const client = new SMTPClient({
-      connection: {
-        hostname: "smtp.hostinger.com",
-        port: 465,
-        tls: true,
-        auth: {
-          username: Deno.env.get("SMTP_USERNAME") || "",
-          password: Deno.env.get("SMTP_PASSWORD") || "",
-        },
-      },
-    });
+    // Initialize Resend client
+    const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
     const playersList = teamData.players
       .map((player, index) => `${index + 1}. ${player.name} (Age: ${player.age})`)
@@ -146,24 +136,20 @@ const handler = async (req: Request): Promise<Response> => {
 </html>`;
 
     // Send email to user
-    await client.send({
-      from: "Western Ghats X <events@westernghatsx.in>",
+    await resend.emails.send({
+      from: "Western Ghats X <onboarding@resend.dev>",
       to: teamData.captainEmail,
       subject: `Cricket Tournament Registration Confirmation - ${teamData.teamName}`,
-      content: userEmailContent,
       html: userEmailContent,
     });
 
     // Send email to admin
-    await client.send({
-      from: "Western Ghats X <events@westernghatsx.in>",
+    await resend.emails.send({
+      from: "Western Ghats X <onboarding@resend.dev>",
       to: "events@westernghatsx.in",
       subject: `New Team Registration: ${teamData.teamName}`,
-      content: adminEmailContent,
       html: adminEmailContent,
     });
-
-    await client.close();
 
     console.log("Registration emails sent successfully");
 
