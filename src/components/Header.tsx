@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger, navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
 import AuthButtons from "@/components/AuthButtons";
 const Header = () => {
-  return <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-sm bg-white/10">
+  return <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-sm bg-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
