@@ -72,8 +72,6 @@ const RefundPolicy = () => {
           </Card>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 };
