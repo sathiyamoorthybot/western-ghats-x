@@ -55,7 +55,6 @@ const AboutKattanji = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };
