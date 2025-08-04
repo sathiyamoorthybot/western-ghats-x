@@ -142,7 +142,6 @@ const KattanjiMarathon = () => {
           </div>
         </section>
       </div>
-      <Footer />
     </div>;
 };
 export default KattanjiMarathon;
