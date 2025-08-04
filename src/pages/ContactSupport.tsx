@@ -123,8 +123,6 @@ const ContactSupport = () => {
           </div>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 };
