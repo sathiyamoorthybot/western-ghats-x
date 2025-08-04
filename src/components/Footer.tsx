@@ -82,7 +82,7 @@ const SponsorContact = () => {
                   <Phone className="w-5 h-5 text-secondary" />
                   <div>
                     <p className="font-medium">Call Us</p>
-                    <p className="text-muted-foreground">+91 63745 21141</p>
+                    <p className="text-muted-foreground">+91 98765 43210</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
@@ -113,7 +113,7 @@ const SponsorContact = () => {
 
                   <div>
                     <Label htmlFor="phone">Phone Number</Label>
-                    <Input id="phone" type="tel" placeholder="+91 98765 43210" value={formData.phone} onChange={handleChange} required />
+                    <Input id="phone" type="tel" placeholder="+91 12345 67890" value={formData.phone} onChange={handleChange} required />
                   </div>
 
                   <div>
