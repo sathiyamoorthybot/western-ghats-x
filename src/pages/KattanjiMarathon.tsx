@@ -110,9 +110,9 @@ const KattanjiMarathon = () => {
             Why Run at Kattanji Hills?
           </h2>
           <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto text-center">
-            <p className="text-muted-foreground">Explore breathtaking natural trails and ancient temple paths that weave through the heart of the Western Ghats — a journey as spiritual as it is scenic.</p>
-            <p className="text-muted-foreground">Run with purpose in an event driven by an eco-conscious mission, rooted in collaboration with the local community and care for the environment.</p>
-            <p className="text-muted-foreground">Celebrate spirit, stamina, and sustainability in a single run — where every step honors nature, culture, and personal grit.</p>
+            <p className="text-muted-foreground">Breathtaking natural trails & temple paths</p>
+            <p className="text-muted-foreground">Eco-conscious mission with local community</p>
+            <p className="text-muted-foreground">Spirit, stamina, and sustainability in one run</p>
           </div>
           <img
             src={marathonFinish}
