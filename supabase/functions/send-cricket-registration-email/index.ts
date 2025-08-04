@@ -19,6 +19,10 @@ interface EmailRequest {
   paymentAmount?: number;
 }
 
+// Define sender here
+const SENDER = "Western Ghats X <events@westernghatsx.in>";
+const ADMIN_EMAIL = "events@westernghatsx.in";
+
 const handler = async (req: Request): Promise<Response> => {
   // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
@@ -35,7 +39,7 @@ const handler = async (req: Request): Promise<Response> => {
       .map((player, index) => `${index + 1}. ${player.name} (Age: ${player.age})`)
       .join('\n');
 
-    // Email content for user
+    // User email content
     const userEmailContent = `
 <!DOCTYPE html>
 <html>
@@ -78,7 +82,7 @@ const handler = async (req: Request): Promise<Response> => {
             
             <div class="status ${paymentStatus === 'completed' ? 'success' : 'pending'}">
                 Payment Status: ${paymentStatus.toUpperCase()}
-                ${paymentAmount ? `\nAmount: ₹${paymentAmount.toLocaleString()}` : ''}
+                ${paymentAmount ? `<br>Amount: ₹${paymentAmount.toLocaleString()}` : ''}
             </div>
             
             <p>We will contact you soon with further details about the tournament schedule and venue.</p>
@@ -91,7 +95,7 @@ const handler = async (req: Request): Promise<Response> => {
 </body>
 </html>`;
 
-    // Email content for admin
+    // Admin email content
     const adminEmailContent = `
 <!DOCTYPE html>
 <html>
@@ -135,9 +139,9 @@ const handler = async (req: Request): Promise<Response> => {
 </body>
 </html>`;
 
-    // Send email to user
+    // Send email to user (captain)
     await resend.emails.send({
-      from: "Western Ghats X <onboarding@resend.dev>",
+      from: SENDER,
       to: teamData.captainEmail,
       subject: `Cricket Tournament Registration Confirmation - ${teamData.teamName}`,
       html: userEmailContent,
@@ -145,8 +149,8 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send email to admin
     await resend.emails.send({
-      from: "Western Ghats X <onboarding@resend.dev>",
-      to: "events@westernghatsx.in",
+      from: SENDER,
+      to: ADMIN_EMAIL,
       subject: `New Team Registration: ${teamData.teamName}`,
       html: adminEmailContent,
     });
