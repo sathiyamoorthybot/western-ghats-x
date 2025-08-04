@@ -130,6 +130,8 @@ const SponsorContact = () => {
           </div>
         </div>
       </main>
+      
+      <Footer />
     </div>
   );
 };
