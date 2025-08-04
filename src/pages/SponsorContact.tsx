@@ -84,7 +84,7 @@ const SponsorContact = () => {
                   <MessageCircle className="w-5 h-5 text-muted" />
                   <div>
                     <p className="font-medium">Response Time</p>
-                    <p className="text-muted-foreground">Typically within 24 hours</p>
+                    <p className="text-muted-foreground">Typically within 24 hours. We welcome partnerships that align with our vision. Whether you're a brand looking to support grassroots sports or promote your services to a vibrant audience, we're excited to collaborate.</p>
                   </div>
                 </div>
               </CardContent>
