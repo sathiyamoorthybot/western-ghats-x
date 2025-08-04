@@ -12,7 +12,6 @@ const Index = () => {
         <HeroSlider />
         <WesternGhatsXIntro />
       </div>
-      <Footer />
     </div>
   );
 };
