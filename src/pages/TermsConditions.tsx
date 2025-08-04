@@ -63,8 +63,6 @@ const TermsConditions = () => {
           </Card>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 };
