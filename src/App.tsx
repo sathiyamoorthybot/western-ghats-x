@@ -35,7 +35,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route index element={<Index />} />
-              <Route path="kattanji-marathon" element={<KattanjiMarathon />} />
+              <Route path="kattanji-hills-marathon" element={<KattanjiMarathon />} />
               <Route path="sbl" element={<SBL />} />
               <Route path="contact" element={<Contact />} />
               <Route path="profile" element={<Profile />} />
