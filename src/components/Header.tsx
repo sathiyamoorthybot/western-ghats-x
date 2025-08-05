@@ -24,7 +24,7 @@ const Header = () => {
                 </Link>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <Link to="/kattanji-marathon" className={navigationMenuTriggerStyle()}>Kattanji Hills Marathon</Link>
+                <Link to="/kattanji-hills-marathon" className={navigationMenuTriggerStyle()}>Kattanji Hills Marathon</Link>
               </NavigationMenuItem>
               <NavigationMenuItem>
                 <Link to="/contact" className={navigationMenuTriggerStyle()}>
