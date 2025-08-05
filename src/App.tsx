@@ -13,8 +13,9 @@ import Profile from "./pages/Profile";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsConditions from "./pages/TermsConditions";
-import RefundPolicy from "./pages/RefundPolicy";
-import SponsorContact from "./pages/SponsorContact";
+import CancellationRefundPolicy from "./pages/CancellationRefundPolicy";
+import PricingPolicy from "./pages/PricingPolicy";
+import ShippingPolicy from "./pages/ShippingPolicy";
 import CricketTournament from "./pages/CricketTournament";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
@@ -40,8 +41,9 @@ const App = () => (
               <Route path="profile" element={<Profile />} />
               <Route path="privacy-policy" element={<PrivacyPolicy />} />
               <Route path="terms-conditions" element={<TermsConditions />} />
-              <Route path="refund-policy" element={<RefundPolicy />} />
-              <Route path="sponsor-contact" element={<SponsorContact />} />
+              <Route path="cancellation-refund-policy" element={<CancellationRefundPolicy />} />
+              <Route path="pricing-policy" element={<PricingPolicy />} />
+              <Route path="shipping-policy" element={<ShippingPolicy />} />
               <Route path="cricket-tournament" element={<CricketTournament />} />
               <Route path="checkout" element={<Checkout />} />
               <Route path="payment-success" element={<PaymentSuccess />} />
