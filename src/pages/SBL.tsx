@@ -360,9 +360,10 @@ const SBL = () => {
           <div className="relative container mx-auto px-4 py-24">
             <div className="max-w-4xl mx-auto text-center text-white">
               <div className="mb-8">
-                <Badge className="bg-white/20 text-white border-white/30 mb-4 px-4 py-2 text-sm font-medium">
-                  🏏 One Day Cricket Championship
-                </Badge>
+                      <Badge className="bg-white/20 text-white border-white/30 mb-4 px-2 py-1 text-xs font-medium">
+  🏏 One Day Cricket Championship
+</Badge>
+
                 <h1 className="text-5xl md:text-7xl font-black mb-6 leading-tight">
                   Saravanampatti
                   <span className="block text-4xl md:text-6xl bg-gradient-to-r from-yellow-300 to-orange-400 bg-clip-text text-transparent">
