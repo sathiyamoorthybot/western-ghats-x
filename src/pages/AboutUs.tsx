@@ -95,7 +95,7 @@ const AboutUs = () => {
                 </div>
                 <div>
                   <h3 className="font-semibold mb-2">Email</h3>
-                  <p className="text-mountain-green">info@westernghatsx.in</p>
+                  <p className="text-mountain-green">events@westernghatsx.in</p>
                 </div>
               </div>
               <p className="text-muted-foreground mt-6 leading-relaxed">
