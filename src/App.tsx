@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 import KattanjiMarathon from "./pages/KattanjiMarathon";
 import SBL from "./pages/SBL";
 import Contact from "./pages/Contact";
+import Aboutus from "./pages/AboutUs";
 import Profile from "./pages/Profile";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
@@ -38,6 +39,7 @@ const App = () => (
               <Route path="kattanji-hills-marathon" element={<KattanjiMarathon />} />
               <Route path="sbl" element={<SBL />} />
               <Route path="contact" element={<Contact />} />
+              <Route path="aboutus" element={<Aboutus />} />
               <Route path="profile" element={<Profile />} />
               <Route path="privacy-policy" element={<PrivacyPolicy />} />
               <Route path="terms-conditions" element={<TermsConditions />} />
