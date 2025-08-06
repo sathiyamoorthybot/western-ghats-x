@@ -452,38 +452,38 @@ const SBL = () => {
 
             {/* Prize & Recognition Cards */}
             <div className="grid md:grid-cols-2 gap-8">
-              <Card className="bg-gradient-to-br from-yellow-50 to-orange-50 border-yellow-200">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-3 text-yellow-800">
-                    <Trophy className="h-8 w-8" />
-                    Prize Distribution
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-center p-4 bg-yellow-100 rounded-lg">
-                      <div>
-                        <h4 className="font-bold text-yellow-900">Champion</h4>
-                        <p className="text-sm text-yellow-700">Tournament Winner</p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-2xl font-bold text-yellow-900">₹6,000</p>
-                        <p className="text-sm text-yellow-700">+ Trophy</p>
-                      </div>
-                    </div>
-                    <div className="flex justify-between items-center p-4 bg-orange-100 rounded-lg">
-                      <div>
-                        <h4 className="font-bold text-orange-900">Runner-up</h4>
-                        <p className="text-sm text-orange-700">Second Place</p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-2xl font-bold text-orange-900">₹3,000</p>
-                        <p className="text-sm text-orange-700">+ Trophy</p>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+              <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200">
+  <CardHeader>
+    <CardTitle className="flex items-center gap-3 text-green-800">
+      <Trophy className="h-8 w-8" />
+      Prize Distribution
+    </CardTitle>
+  </CardHeader>
+  <CardContent>
+    <div className="space-y-4">
+      <div className="flex justify-between items-center p-4 bg-green-100 rounded-lg">
+        <div>
+          <h4 className="font-bold text-green-900">Champion</h4>
+          <p className="text-sm text-green-700">Tournament Winner</p>
+        </div>
+        <div className="text-right">
+          <p className="text-2xl font-bold text-green-900">₹6,000</p>
+          <p className="text-sm text-green-700">+ Trophy</p>
+        </div>
+      </div>
+      <div className="flex justify-between items-center p-4 bg-green-200 rounded-lg">
+        <div>
+          <h4 className="font-bold text-green-900">Runner-up</h4>
+          <p className="text-sm text-green-700">Second Place</p>
+        </div>
+        <div className="text-right">
+          <p className="text-2xl font-bold text-green-900">₹3,000</p>
+          <p className="text-sm text-green-700">+ Trophy</p>
+        </div>
+      </div>
+    </div>
+  </CardContent>
+</Card>
 
               <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
                 <CardHeader>
