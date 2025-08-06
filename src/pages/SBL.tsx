@@ -570,38 +570,42 @@ const SBL = () => {
                   </Card>
 
                   {/* Important Dates */}
-                  <Card className="bg-gradient-to-br from-red-50 to-pink-50 border-red-200">
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-3 text-red-800">
-                        <Calendar className="h-6 w-6" />
-                        Important Dates
-                      </CardTitle>
-                      <CardDescription className="text-red-600">
-                        Mark your calendar for these key dates
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-6">
-                        <div className="bg-red-100 p-4 rounded-lg">
-                          <h4 className="font-bold text-red-900 mb-2">Registration Deadline</h4>
-                          <p className="text-red-800 text-lg font-semibold">August 24, 2025</p>
-                          <p className="text-sm text-red-600">Sunday - No extensions!</p>
-                        </div>
-                        <div className="bg-pink-100 p-4 rounded-lg">
-                          <h4 className="font-bold text-pink-900 mb-2">Cancellation Deadline</h4>
-                          <p className="text-pink-800 text-lg font-semibold">August 20, 2025</p>
-                          <p className="text-sm text-pink-600">Monday - For refund eligibility</p>
-                        </div>
-                        <div className="bg-gradient-to-r from-green-100 to-blue-100 p-4 rounded-lg">
-                          <h4 className="font-bold text-green-900 mb-2">Tournament Day</h4>
-                          <p className="text-green-800 text-lg font-semibold">August 31, 2025</p>
-                          <p className="text-sm text-green-600">Sunday - 8:00 AM to 6:15 PM</p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+
+<Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200">
+  <CardHeader>
+    <CardTitle className="flex items-center gap-3 text-green-800">
+      <Calendar className="h-6 w-6" />
+      Important Dates
+    </CardTitle>
+    <CardDescription className="text-green-600">
+      Mark your calendar for these key dates
+    </CardDescription>
+  </CardHeader>
+  <CardContent>
+    <div className="space-y-6">
+      <div className="bg-green-100 p-4 rounded-lg">
+        <h4 className="font-bold text-green-900 mb-2">Registration Deadline</h4>
+        <p className="text-green-800 text-lg font-semibold">August 24, 2025</p>
+        <p className="text-sm text-green-600">Sunday - No extensions!</p>
+      </div>
+      <div className="bg-green-200 p-4 rounded-lg">
+        <h4 className="font-bold text-green-900 mb-2">Cancellation Deadline</h4>
+        <p className="text-green-800 text-lg font-semibold">August 20, 2025</p>
+        <p className="text-sm text-green-700">Monday - For refund eligibility</p>
+      </div>
+      <div className="bg-green-300 p-4 rounded-lg">
+        <h4 className="font-bold text-green-900 mb-2">Tournament Day</h4>
+        <p className="text-green-800 text-lg font-semibold">August 31, 2025</p>
+        <p className="text-sm text-green-700">Sunday - 8:00 AM to 6:15 PM</p>
+      </div>
+    </div>
+  </CardContent>
+</Card>
+
                 </div>
               </TabsContent>
+
+
 
               <TabsContent value="schedule" className="mt-8">
                 <Card>
