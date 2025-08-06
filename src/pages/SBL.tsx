@@ -485,32 +485,32 @@ const SBL = () => {
   </CardContent>
 </Card>
 
-              <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-3 text-blue-800">
-                    <Award className="h-8 w-8" />
-                    Individual Awards
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3 p-4 bg-blue-100 rounded-lg">
-                      <Award className="w-6 h-6 text-blue-600" />
-                      <div>
-                        <h4 className="font-bold text-blue-900">Best Batsman</h4>
-                        <p className="text-sm text-blue-700">Highest run scorer</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3 p-4 bg-indigo-100 rounded-lg">
-                      <Award className="w-6 h-6 text-indigo-600" />
-                      <div>
-                        <h4 className="font-bold text-indigo-900">Best Bowler</h4>
-                        <p className="text-sm text-indigo-700">Most wicket taker</p>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+              <Card className="bg-gradient-to-br from-teal-50 to-emerald-50 border-teal-200">
+  <CardHeader>
+    <CardTitle className="flex items-center gap-3 text-emerald-800">
+      <Award className="h-8 w-8" />
+      Individual Awards
+    </CardTitle>
+  </CardHeader>
+  <CardContent>
+    <div className="space-y-4">
+      <div className="flex items-center gap-3 p-4 bg-emerald-100 rounded-lg">
+        <Award className="w-6 h-6 text-emerald-600" />
+        <div>
+          <h4 className="font-bold text-emerald-900">Best Batsman</h4>
+          <p className="text-sm text-emerald-700">Highest run scorer</p>
+        </div>
+      </div>
+      <div className="flex items-center gap-3 p-4 bg-teal-100 rounded-lg">
+        <Award className="w-6 h-6 text-teal-600" />
+        <div>
+          <h4 className="font-bold text-teal-900">Best Bowler</h4>
+          <p className="text-sm text-teal-700">Most wicket taker</p>
+        </div>
+      </div>
+    </div>
+  </CardContent>
+</Card>
             </div>
           </div>
         </section>
