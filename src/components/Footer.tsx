@@ -36,7 +36,7 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/kattanji-marathon" className="text-white/80 hover:text-white transition-colors">
+                <Link to="/kattanji-hills-marathon" className="text-white/80 hover:text-white transition-colors">
                   Kattanji Hills Marathon
                 </Link>
               </li>
