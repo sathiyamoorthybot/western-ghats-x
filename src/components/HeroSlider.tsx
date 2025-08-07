@@ -37,7 +37,7 @@ const heroData = [
     date: "Coming Soon - 2025",
     venue: "Kattanji Hills, Coimbatore",
     primaryAction: null,
-    secondaryAction: { text: "Explore Routes", link: "/kattanji-marathon" }
+    secondaryAction: { text: "View More", link: "/kattanji-hills-marathon" }
   }
 ];
 
