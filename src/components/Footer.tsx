@@ -110,7 +110,7 @@ const Footer = () => {
                 variant="ghost"
                 size="sm"
                 className="text-white hover:bg-white/20 p-2"
-                onClick={() => window.open("mailto:info@westernghatsx.in", "_blank")}
+                onClick={() => window.open("mailto:events@westernghatsx.in", "_blank")}
               >
                 <Mail className="w-4 h-4" />
               </Button>
