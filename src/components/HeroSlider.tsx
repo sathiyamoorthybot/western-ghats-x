@@ -74,7 +74,7 @@ const HeroSlider = () => {
   const currentHero = heroData[activeIndex];
 
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden">
+    <section className="<div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-10 sm:pt-0 sm:pb-0">
       {/* Background with parallax effect */}
       <div className="absolute inset-0">
         {heroData.map((hero, index) => (
