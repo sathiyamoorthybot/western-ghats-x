@@ -1,128 +1,156 @@
+import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+
 import kattanjiTrail from "@/assets/kattanji-trail.jpg";
 import marathonRunners from "@/assets/marathon-runners.jpg";
 import marathonFinish from "@/assets/marathon-finish.jpg";
 
-const KattanjiMarathon = () => {
+export default function KattanjiMarathon() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="bg-white text-gray-900">
       <Header />
 
-      {/* Hero Section */}
-      <section className="relative bg-card py-24 text-center">
-        <div className="container mx-auto px-4">
-          <h1 className="text-5xl font-bold text-primary mb-4">
-            Kattanji Hills Marathon 2025
-          </h1>
-          <p className="text-2xl text-muted-foreground mb-2">
-            Coming this December
-          </p>
-          <p className="text-lg font-medium text-secondary">
-            Presented by Western Ghats X
-          </p>
+      {/* Green breadcrumb header */}
+      <div className="relative bg-green-700 text-white rounded-xl overflow-hidden mb-8 shadow-md">
+        <div
+          className="relative z-10 text-center"
+          style={{
+            paddingTop: "100px",
+            paddingBottom: "40px",
+            paddingLeft: "30px",
+            paddingRight: "30px",
+          }}
+        >
+          <nav className="text-sm mb-2 flex justify-center">
+            <ol className="flex items-center space-x-2">
+              <li>
+                <Link to="/" className="hover:underline">Home</Link>
+              </li>
+              <li>/</li>
+              <li className="text-gray-200">Kattanji Marathon</li>
+            </ol>
+          </nav>
+          <h1 className="text-3xl font-bold">Kattanji Hills Marathon 2025</h1>
+          <p className="text-lg mt-1">December 2025 | Eco-Conscious Trail Run</p>
         </div>
-      </section>
+      </div>
 
-      {/* Trail Intro with Image */}
-      <section className="bg-gradient-to-br from-secondary/10 to-primary/10 py-16">
-        <div className="container mx-auto px-4 flex flex-col md:flex-row gap-8 items-center">
-          <div className="md:w-1/2 text-center md:text-left">
-            <h2 className="text-4xl font-bold text-foreground mb-4">
-              Run Through the Majestic Kattanji Hills
-            </h2>
-            <p className="text-lg text-muted-foreground mb-2">
+      {/* Page content with margins */}
+      <div className="px-4 md:px-32 lg:px-64">
+        
+        {/* Hero Section */}
+        <div className="grid md:grid-cols-2 gap-6 items-center mb-8">
+          <img
+            src={kattanjiTrail}
+            alt="Kattanji Trail"
+            className="rounded-lg shadow-md h-80 object-cover w-full"
+          />
+          <div>
+            <h2 className="text-2xl font-bold mb-2">Run Through the Majestic Kattanji Hills</h2>
+            <p className="mb-4">
               Conquer the hills, connect with nature, and be part of an eco-conscious running revolution.
             </p>
-            <p className="text-muted-foreground">
-              Located near Periyanaickenpalayam, this trail winds through sacred temples, pristine forests,
-              and conservation zones.
-            </p>
+            <p className="mb-2"><strong>Location:</strong> Near Periyanaickenpalayam, winding through sacred temples, pristine forests, and conservation zones.</p>
+            <p className="mb-4"><strong>Event Month:</strong> December 2025</p>
+            <Button asChild className="bg-green-600 hover:bg-green-700">
+              <Link to="#">Registrations Opening Soon</Link>
+            </Button>
           </div>
-          <div className="md:w-1/2">
+        </div>
+
+        <Separator className="my-8" />
+
+        {/* Categories */}
+        <Card className="mb-8 border-green-500">
+          <CardHeader>
+            <CardTitle>Choose Your Challenge</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid md:grid-cols-3 gap-6">
+              {[
+                { title: "5K", desc: "Great for families & first-timers" },
+                { title: "10K", desc: "Push your pace on scenic trails" },
+                { title: "Half Marathon", desc: "Endurance with elevation" },
+              ].map((cat, idx) => (
+                <div key={idx} className="bg-green-50 p-4 rounded-lg shadow-sm">
+                  <h3 className="text-lg font-semibold text-green-700 mb-2">{cat.title}</h3>
+                  <p className="text-gray-700">{cat.desc}</p>
+                </div>
+              ))}
+            </div>
             <img
-              src={kattanjiTrail}
-              alt="Kattanji Trail"
-              className="rounded-2xl shadow-lg object-cover w-full h-80"
+              src={marathonRunners}
+              alt="Marathon Runners"
+              className="w-full h-72 object-cover mt-6 rounded-2xl shadow-lg"
             />
-          </div>
-        </div>
-      </section>
+          </CardContent>
+        </Card>
 
-      {/* Categories Section */}
-      <section className="bg-card py-20">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl font-bold text-foreground mb-10">
-            Choose Your Challenge
-          </h2>
-          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {[
-              { title: "5K", desc: "Great for families & first-timers" },
-              { title: "10K", desc: "Push your pace on scenic trails" },
-              { title: "Half Marathon", desc: "Endurance with elevation" },
-            ].map((cat, idx) => (
-              <div key={idx} className="bg-secondary/10 p-6 rounded-xl shadow">
-                <h3 className="text-2xl font-semibold text-primary mb-2">{cat.title}</h3>
-                <p className="text-muted-foreground">{cat.desc}</p>
-              </div>
-            ))}
-          </div>
-          <img
-            src={marathonRunners}
-            alt="Marathon Runners"
-            className="w-full h-72 object-cover mt-12 rounded-2xl shadow-lg"
-          />
-        </div>
-      </section>
+        {/* Conservation Message */}
+        <Card className="mb-8 border-green-500">
+          <CardHeader>
+            <CardTitle>More Than Just a Race</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="mb-2">
+              Your steps support environmental awareness and conservation in the region.
+            </p>
+            <p>
+              Join us in promoting sustainability and protecting our trails.
+            </p>
+          </CardContent>
+        </Card>
 
-      {/* Conservation Message */}
-      <section className="bg-secondary/5 py-16 text-center">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-foreground mb-6">
-            More Than Just a Race
-          </h2>
-          <p className="text-lg text-muted-foreground mb-4">
-            Your steps support environmental awareness and conservation in the region.
-          </p>
-          <p className="text-muted-foreground">
-            Join us in promoting sustainability and protecting our trails.
-          </p>
-        </div>
-      </section>
+        {/* Why Kattanji? */}
+        <Card className="mb-8 border-green-500">
+          <CardHeader>
+            <CardTitle>Why Run at Kattanji Hills?</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid md:grid-cols-3 gap-6 text-center">
+              <p>Explore breathtaking natural trails and ancient temple paths that weave through the heart of the Western Ghats — a journey as spiritual as it is scenic.</p>
+              <p>Run with purpose in an event driven by an eco-conscious mission, rooted in collaboration with the local community and care for the environment.</p>
+              <p>Celebrate spirit, stamina, and sustainability in a single run — where every step honors nature, culture, and personal grit.</p>
+            </div>
+            <img
+              src={marathonFinish}
+              alt="Finish Line"
+              className="w-full h-72 object-cover mt-6 rounded-2xl shadow-lg"
+            />
+          </CardContent>
+        </Card>
 
-      {/* Registration CTA */}
-      <section className="bg-primary/5 py-20">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl font-bold text-foreground mb-4">
-            Registrations Opening Soon!
-          </h2>
-          <p className="text-muted-foreground mb-6">
-            Early bird coupons and route reveals coming your way. Stay tuned!
-          </p>
-    
-        </div>
-      </section>
+        {/* FAQ */}
+        <Card className="mb-12 border-green-500">
+          <CardHeader>
+            <CardTitle>Frequently Asked Questions</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Accordion type="single" collapsible>
+              <AccordionItem value="q1">
+                <AccordionTrigger>When will registrations open?</AccordionTrigger>
+                <AccordionContent>Registrations will open in October 2025 with early bird offers.</AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="q2">
+                <AccordionTrigger>Where exactly is the starting point?</AccordionTrigger>
+                <AccordionContent>The starting point is at Kattanji Hills base camp, near Periyanaickenpalayam.</AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="q3">
+                <AccordionTrigger>Are there participation limits?</AccordionTrigger>
+                <AccordionContent>Yes, slots are limited for each category to ensure safety and environmental care.</AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </CardContent>
+        </Card>
 
-      {/* Why Kattanji? */}
-      <section className="bg-card py-20">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center text-foreground mb-12">
-            Why Run at Kattanji Hills?
-          </h2>
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto text-center">
-            <p className="text-muted-foreground">Explore breathtaking natural trails and ancient temple paths that weave through the heart of the Western Ghats — a journey as spiritual as it is scenic.</p>
-            <p className="text-muted-foreground">Run with purpose in an event driven by an eco-conscious mission, rooted in collaboration with the local community and care for the environment.</p>
-            <p className="text-muted-foreground">Celebrate spirit, stamina, and sustainability in a single run — where every step honors nature, culture, and personal grit.</p>
-          </div>
-          <img
-            src={marathonFinish}
-            alt="Finish Line"
-            className="w-full h-72 object-cover mt-12 rounded-2xl shadow-lg"
-          />
-        </div>
-      </section>
+      </div>
+
+      <Footer />
     </div>
   );
-};
-
-export default KattanjiMarathon;
+}
