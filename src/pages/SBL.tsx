@@ -13,7 +13,7 @@ export default function SBL() {
         <div
           className="relative z-10 text-center"
           style={{
-            paddingTop: "130px",
+            paddingTop: "100px",
             paddingBottom: "40px",
             paddingLeft: "30px",
             paddingRight: "30px",
