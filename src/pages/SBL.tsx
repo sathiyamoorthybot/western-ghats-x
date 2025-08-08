@@ -24,7 +24,7 @@ export default function SBL() {
         <div
           className="relative z-10"
           style={{
-            paddingTop: "130px", // fixes overlap
+            paddingTop: "130px",
             paddingBottom: "40px",
             paddingLeft: "30px",
             paddingRight: "30px",
