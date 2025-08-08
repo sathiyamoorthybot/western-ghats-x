@@ -10,7 +10,7 @@ const heroData = [
     category: "Cricket Tournament",
     title: "Saravanampatti Blasters League",
     tagline: "Edition - 1",
-    description: "Where Champions Rise. Experience the thrill of competitive cricket in our high-energy 5-over tournament format.",
+    description: "Experience the thrill of competitive cricket in our high-energy 5-over tournament format.",
     backgroundImage: "https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?ixlib=rb-4.0.3",
     stats: [
       { label: "Teams", value: "18", icon: Users },
