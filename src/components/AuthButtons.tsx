@@ -55,7 +55,7 @@ const AuthButtons = () => {
         </Button>
       </Link>
       <Link to="/signup">
-        <Button size="sm" className="bg-gradient-to-r from-primary to-primary-hover text-white hover:shadow-md transition-all duration-300">
+        <Button size="sm" className="bg-gradient-to-r from-mountain-green to-mountain-blue text-white hover:shadow-md transition-all duration-300">
           <UserPlus className="w-4 h-4" />
           <span className="ml-2 hidden sm:inline">Sign Up</span>
         </Button>
