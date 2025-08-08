@@ -108,7 +108,7 @@ const Contact = () => {
                       <Textarea id="message" placeholder="Tell us more about your inquiry..." className="min-h-[120px]" />
                     </div>
                     
-                    <Button type="submit" className="w-full bg-gradient-to-r from-mountain-green to-primary-hover">
+                    <Button type="submit" className="w-full bg-gradient-to-r from-mountain-green to-mountain-blue">
                       Send Message
                     </Button>
                   </form>
