@@ -211,7 +211,7 @@ const CricketTournament: React.FC = () => {
           <CardHeader className="text-center">
             <div className="flex items-center justify-center gap-2 mb-4">
               <Trophy className="h-8 w-8 text-yellow-500" />
-              <CardTitle className="text-3xl text-green-700">Cricket Tournament 2025</CardTitle>
+              <CardTitle className="text-3xl text-green-700">SBL 2025 - Season 1</CardTitle>
             </div>
             <p className="text-gray-600">
               Team registration only. Guest registrations are not available.
