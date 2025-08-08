@@ -20,7 +20,7 @@ export default function SBL() {
     paddingRight: "30px",
         }}
       >
-        <div className="bg-black/20 p-6">
+        <div 
           <nav className="text-sm mb-2">
             <ol className="flex items-center space-x-2">
               <li>
