@@ -39,7 +39,6 @@ const RazorpayCheckoutButton: React.FC<RazorpayProps> = ({ amount, teamData }) =
           throw new Error('Failed to load Razorpay SDK');
         }
       }
-const amountInPaise = totalAmount * 100;
       const { data, error } = await supabase.functions.invoke('razorpay-payment', {
         body: {
           teamData: teamData || {
@@ -51,7 +50,6 @@ const amountInPaise = totalAmount * 100;
             players: [],
             jerseyColor: "Blue"
           },
-          amount: amountInPaise
         }
       });
 
