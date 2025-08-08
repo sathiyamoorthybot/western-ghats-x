@@ -36,7 +36,7 @@ export default function SBL() {
       </div>
 
       {/* Page content with margin on left/right */}
-      <div className="px-4 md:px-16 lg:px-32">
+      <div className="px-4 md:px-32 lg:px-64">
         {/* Hero Section */}
         <div className="grid md:grid-cols-2 gap-6 items-center">
           <img
