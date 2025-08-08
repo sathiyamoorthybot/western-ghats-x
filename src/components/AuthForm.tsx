@@ -196,7 +196,7 @@ const AuthForm = ({ type }: AuthFormProps) => {
 
             <Button
               type="submit"
-              className="w-full bg-gradient-to-r from-primary to-primary-hover text-white hover:shadow-md transition-all duration-300"
+              className="w-full bg-gradient-to-r from-mountain-green to-mountain-blue text-white hover:shadow-md transition-all duration-300"
               disabled={isSubmitting}
             >
               {isSubmitting 
