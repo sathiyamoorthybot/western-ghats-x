@@ -116,7 +116,7 @@ const RegistrationConfirmDialog: React.FC<RegistrationConfirmDialogProps> = ({
             </Button>
             <Button 
               onClick={onProceedToPayment} 
-              className="flex-1 bg-green-600 hover:bg-green-700"
+              className="flex-1 bg-gradient-to-r from-mountain-green to-mountain-blue"
             >
               Proceed to Payment (₹2,000)
             </Button>
