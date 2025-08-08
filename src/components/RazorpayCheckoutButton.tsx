@@ -66,7 +66,7 @@ const amountInPaise = totalAmount * 100;
         const options = {
           key: data.keyId,
           amount: data.amount,
-          currency: data.currency,
+          currency: data.currency * 100,
           name: 'SBL - Edition 1',
           description: `Team: ${data.teamData.teamName}`,
           order_id: data.orderId,
