@@ -205,7 +205,7 @@ const CricketTournament: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 pt-12 pb-4 px-4 md:p-10">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 pt-16 pb-4 px-4 md:p-10">
 
       <div className="max-w-4xl mx-auto">
         <Card className="shadow-xl">
