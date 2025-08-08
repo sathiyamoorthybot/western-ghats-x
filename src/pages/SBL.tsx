@@ -6,43 +6,34 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 
 export default function SBL() {
   return (
-    <div className="bg-white text-gray-900">
-      {/* Breadcrumb with background */}
-      <div className="relative bg-green-700 text-white rounded-xl overflow-hidden mb-8 shadow-md">
-        {/* Background image layer with opacity */}
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: "url('https://images.unsplash.com/photo-1505761671935-60b3a7427bad')",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            opacity: 0.2,
-          }}
-        ></div>
+   <div className="bg-white text-gray-900">
+  {/* Breadcrumb without background image */}
+  <div className="relative bg-green-700 text-white rounded-xl overflow-hidden mb-8 shadow-md">
+    {/* Breadcrumb content */}
+    <div
+      className="relative z-10"
+      style={{
+        paddingTop: "130px",
+        paddingBottom: "40px",
+        paddingLeft: "30px",
+        paddingRight: "30px",
+      }}
+    >
+      <nav className="text-sm mb-2">
+        <ol className="flex items-center space-x-2">
+          <li>
+            <Link to="/" className="hover:underline">Home</Link>
+          </li>
+          <li>/</li>
+          <li className="text-gray-200">SBL Cricket League</li>
+        </ol>
+      </nav>
+      <h1 className="text-3xl font-bold">SBL Cricket League 2025</h1>
+      <p className="text-lg mt-1">League Format | 22 Matches | ₹2,299 Entry</p>
+    </div>
+  </div>
+</div>
 
-        {/* Breadcrumb content */}
-        <div
-          className="relative z-10"
-          style={{
-            paddingTop: "130px",
-            paddingBottom: "40px",
-            paddingLeft: "30px",
-            paddingRight: "30px",
-          }}
-        >
-          <nav className="text-sm mb-2">
-            <ol className="flex items-center space-x-2">
-              <li>
-                <Link to="/" className="hover:underline">Home</Link>
-              </li>
-              <li>/</li>
-              <li className="text-gray-200">SBL Cricket League</li>
-            </ol>
-          </nav>
-          <h1 className="text-3xl font-bold">SBL Cricket League 2025</h1>
-          <p className="text-lg mt-1">League Format | 22 Matches | ₹2,299 Entry</p>
-        </div>
-      </div>
 
       {/* Page content with padding */}
       <div style={{ padding: "30px" }}>
