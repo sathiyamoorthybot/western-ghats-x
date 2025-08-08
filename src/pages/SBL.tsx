@@ -68,7 +68,7 @@ export default function SBL() {
         <Separator className="my-8" />
 
         {/* Important Dates */}
-        <Card className="mb-8 border-green-500">
+        <Card className="mb-8 border-my-8">
           <CardHeader>
             <CardTitle>Important Dates</CardTitle>
           </CardHeader>
@@ -85,7 +85,7 @@ export default function SBL() {
         </Card>
 
         {/* Prize Details */}
-        <Card className="mb-8 border-green-500">
+        <Card className="mb-8 border-my-8">
           <CardHeader>
             <CardTitle>Prize Pool</CardTitle>
           </CardHeader>
@@ -93,7 +93,7 @@ export default function SBL() {
         </Card>
 
         {/* Fixtures */}
-        <Card className="mb-8 border-green-500">
+        <Card className="mb-8 border-my-8">
           <CardHeader>
             <CardTitle>Complete Tournament Fixtures (22 Matches)</CardTitle>
           </CardHeader>
@@ -180,7 +180,7 @@ export default function SBL() {
         </Card>
 
         {/* FAQ */}
-        <Card className="mb-8 border-green-500">
+        <Card className="mb-8 border-my-8">
           <CardHeader>
             <CardTitle>Frequently Asked Questions</CardTitle>
           </CardHeader>
