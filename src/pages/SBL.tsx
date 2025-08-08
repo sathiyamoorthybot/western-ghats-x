@@ -1,140 +1,144 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Home, ChevronRight } from "lucide-react";
-
-const fixtures = [
-  {
-    group: "Group A",
-    matches: [
-      { team1: "Team A1", team2: "Team A2", date: "2025-08-20", time: "9:00 AM" },
-      { team1: "Team A2", team2: "Team A3", date: "2025-08-20", time: "11:00 AM" },
-      { team1: "Team A3", team2: "Team A1", date: "2025-08-20", time: "1:00 PM" },
-    ],
-  },
-  {
-    group: "Group B",
-    matches: [
-      { team1: "Team B1", team2: "Team B2", date: "2025-08-20", time: "9:00 AM" },
-      { team1: "Team B2", team2: "Team B3", date: "2025-08-20", time: "11:00 AM" },
-      { team1: "Team B3", team2: "Team B1", date: "2025-08-20", time: "1:00 PM" },
-    ],
-  },
-  // Add Groups C–F the same way
-];
-
-const faqs = [
-  {
-    question: "How many overs are played in each match?",
-    answer: "Each match will be played for 5 overs per innings.",
-  },
-  {
-    question: "How many players are allowed per team?",
-    answer: "Each team can have 7 playing members and 2 substitute players.",
-  },
-  {
-    question: "What is the entry fee?",
-    answer: "The entry fee for each team is ₹2,299.",
-  },
-  {
-    question: "What is the tournament format?",
-    answer: "18 teams are divided into 6 groups of 3. Each team plays 2 matches in the league stage.",
-  },
-];
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
+import { Home, Trophy, Calendar, MapPin, IndianRupee } from "lucide-react";
 
 export default function SBL() {
+  const fixtures = [
+    { date: "Sep 7, 2025", time: "8:00 AM", match: "Team A vs Team B" },
+    { date: "Sep 7, 2025", time: "9:30 AM", match: "Team C vs Team D" },
+    { date: "Sep 7, 2025", time: "11:00 AM", match: "Team E vs Team F" },
+    { date: "Sep 7, 2025", time: "12:30 PM", match: "Team G vs Team H" },
+    { date: "Sep 7, 2025", time: "2:00 PM", match: "Semi Final 1" },
+    { date: "Sep 7, 2025", time: "3:30 PM", match: "Semi Final 2" },
+    { date: "Sep 7, 2025", time: "5:00 PM", match: "Final" },
+  ];
+
+  const faqs = [
+    { q: "How many players are allowed per team?", a: "Each team can have 7 players and 2 substitutes." },
+    { q: "What is the format of the tournament?", a: "The tournament will follow a league format." },
+    { q: "What is included in the entry fee?", a: "Ground booking, umpiring, balls, and trophies." },
+    { q: "Where can I register?", a: "You can register online by clicking the 'Register Now' button." },
+  ];
+
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      {/* Breadcrumb */}
-      <div className="flex items-center gap-2 p-4 text-sm text-muted-foreground">
-        <Link to="/" className="flex items-center gap-1 hover:text-primary">
-          <Home className="w-4 h-4" /> Home
-        </Link>
-        <ChevronRight className="w-4 h-4" />
-        <span className="text-primary font-medium">SBL Tournament</span>
-      </div>
+    <div className="container mx-auto px-4 py-8 space-y-12">
+      {/* Modern Breadcrumb */}
+      <Breadcrumb className="bg-white shadow-sm rounded-lg p-3 mb-6">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <Link to="/"><Home className="w-4 h-4 mr-1 inline" /> Home</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <Link to="/cricket">Cricket</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <Link to="/sbl">SBL</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
 
       {/* Hero Section */}
-      <section className="relative bg-primary text-primary-foreground py-16 px-6 text-center">
-        <h1 className="text-4xl font-bold mb-4">SBL Cricket League 2025</h1>
-        <p className="text-lg mb-2">📅 August 20, 2025</p>
-        <p className="text-lg mb-2">📍 Chennai, Tamil Nadu</p>
-        <p className="text-lg mb-6">💰 Entry Fee: ₹2,299</p>
-        <Button size="lg" variant="secondary" asChild>
-          <Link to="/cricket-tournament">Register Your Team</Link>
+      <section className="text-center space-y-4">
+        <h1 className="text-4xl font-bold">SBL Cricket League 2025</h1>
+        <p className="text-lg text-gray-600">League format | Exciting prizes | Competitive matches</p>
+        <div className="flex flex-wrap justify-center gap-6 mt-4">
+          <div className="flex items-center gap-2"><Calendar className="w-5 h-5 text-primary" /> Sep 7, 2025 - Sunday</div>
+          <div className="flex items-center gap-2"><MapPin className="w-5 h-5 text-primary" /> Ten Sports Turf, Saravanampatti</div>
+          <div className="flex items-center gap-2"><IndianRupee className="w-5 h-5 text-primary" /> Entry Fee: ₹2,299</div>
+          <div className="flex items-center gap-2"><Trophy className="w-5 h-5 text-primary" /> Prize Pool: ₹9,000 + Trophies</div>
+        </div>
+        <Button asChild className="mt-6">
+          <Link to="/cricket-tournament">Register Now</Link>
         </Button>
       </section>
 
+      {/* Entry Fee Section */}
+      <section>
+        <Card>
+          <CardHeader>
+            <CardTitle>Entry Fee</CardTitle>
+          </CardHeader>
+          <CardContent>
+            ₹2,299 per team – covers ground booking, umpiring, match balls, and trophies.
+          </CardContent>
+        </Card>
+      </section>
+
+      {/* Important Dates */}
+      <section>
+        <Card>
+          <CardHeader>
+            <CardTitle>Important Dates</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="mb-2 font-semibold">Mark your calendar for these key dates:</p>
+            <ul className="list-disc pl-5 space-y-1">
+              <li><strong>Registration Deadline:</strong> Sep 3, 2025</li>
+              <li><strong>Tournament Day:</strong> Sep 7, 2025 - Sunday</li>
+            </ul>
+          </CardContent>
+        </Card>
+      </section>
+
       {/* Competition Details */}
-      <section className="px-6 py-12 max-w-6xl mx-auto">
-        <h2 className="text-2xl font-bold mb-6">Tournament Details</h2>
-        <div className="grid md:grid-cols-2 gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Format</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p>18 Teams → 6 Groups of 3 Teams</p>
-              <p>League Stage Only</p>
-              <p>Each team plays 2 matches in the group stage</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle>Match Rules</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p>5 Overs per innings</p>
-              <p>7 Players + 2 Substitutes</p>
-              <p>League Stage Points System applies</p>
-            </CardContent>
-          </Card>
-        </div>
+      <section>
+        <Card>
+          <CardHeader>
+            <CardTitle>Competition Details</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>League format – every team gets to play multiple matches.</li>
+              <li>7 players + 2 substitutes per team.</li>
+              <li>6 overs per innings.</li>
+              <li>All matches on the same day.</li>
+            </ul>
+          </CardContent>
+        </Card>
       </section>
 
-      <Separator className="my-8" />
-
-      {/* Fixtures Section */}
-      <section className="px-6 py-12 max-w-6xl mx-auto">
-        <h2 className="text-2xl font-bold mb-6">Fixtures</h2>
-        <div className="grid md:grid-cols-2 gap-6">
-          {fixtures.map((group) => (
-            <Card key={group.group}>
-              <CardHeader>
-                <CardTitle>{group.group}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                {group.matches.map((match, idx) => (
-                  <div key={idx} className="mb-4">
-                    <p className="font-medium">
-                      {match.team1} vs {match.team2}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      {match.date} • {match.time}
-                    </p>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+      {/* Fixtures */}
+      <section>
+        <Card>
+          <CardHeader>
+            <CardTitle>Fixtures</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {fixtures.map((f, i) => (
+              <div key={i} className="flex justify-between border-b py-2 text-sm">
+                <span>{f.date} | {f.time}</span>
+                <span>{f.match}</span>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
       </section>
 
-      <Separator className="my-8" />
-
-      {/* FAQ Section */}
-      <section className="px-6 py-12 max-w-4xl mx-auto">
-        <h2 className="text-2xl font-bold mb-6">Frequently Asked Questions</h2>
-        <Accordion type="single" collapsible className="w-full">
-          {faqs.map((faq, idx) => (
-            <AccordionItem key={idx} value={`faq-${idx}`}>
-              <AccordionTrigger>{faq.question}</AccordionTrigger>
-              <AccordionContent>{faq.answer}</AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
+      {/* FAQ */}
+      <section>
+        <Card>
+          <CardHeader>
+            <CardTitle>FAQ</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {faqs.map((faq, i) => (
+              <div key={i} className="mb-4">
+                <p className="font-semibold">{faq.q}</p>
+                <p className="text-gray-600">{faq.a}</p>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
       </section>
     </div>
   );
