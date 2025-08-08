@@ -6,7 +6,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 
 export default function SBL() {
   return (
-    <div className="bg-white text-gray-900" style={{ padding: "30px" }}>
+    <div className="bg-white text-gray-90" style={{ padding: "30px" }}>
       {/* Breadcrumb with background */}
       <div
         className="relative bg-green-700 text-white rounded-xl overflow-hidden mb-8 shadow-md"
