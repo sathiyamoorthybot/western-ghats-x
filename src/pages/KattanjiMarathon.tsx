@@ -15,7 +15,7 @@ export default function KattanjiMarathon() {
     <div className="min-h-screen bg-background text-foreground">
       <Header />
 
-      {/* Breadcrumb header with dark background */}
+      {/* Breadcrumb header */}
       <div className="relative bg-gray-900 text-white rounded-xl overflow-hidden mb-8 shadow-md">
         <div
           className="relative z-10 text-center px-6 py-20"
@@ -35,7 +35,6 @@ export default function KattanjiMarathon() {
         </div>
       </div>
 
-      {/* Page content with padding */}
       <div className="px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
 
         {/* Hero Section */}
@@ -50,17 +49,19 @@ export default function KattanjiMarathon() {
             <p className="mb-4 text-muted-foreground">
               Conquer the hills, connect with nature, and be part of an eco-conscious running revolution.
             </p>
-            <p className="mb-2 text-muted-foreground"><strong>Location:</strong> Near Periyanaickenpalayam, winding through sacred temples, pristine forests, and conservation zones.</p>
-            <p className="mb-4 text-muted-foreground"><strong>Event Month:</strong> December 2025</p>
+            <p className="mb-2 text-muted-foreground">
+              Located near Periyanaickenpalayam, this trail winds through sacred temples, pristine forests, and conservation zones.
+            </p>
             <Button asChild className="bg-gradient-to-r from-mountain-green to-primary-hover hover:from-mountain-green hover:to-primary">
-              <Link to="#" className="text-white">Registrations Opening Soon</Link>
+              <Link to="#" className="text-white">Registrations Opening Soon!</Link>
             </Button>
+            <p className="mt-2 text-sm text-muted-foreground">Early bird coupons and route reveals coming your way. Stay tuned!</p>
           </div>
         </div>
 
         <Separator className="my-8 border-muted-foreground" />
 
-        {/* Categories */}
+        {/* Choose Your Challenge */}
         <Card className="mb-8 border-mountain-green bg-background">
           <CardHeader>
             <CardTitle className="text-foreground">Choose Your Challenge</CardTitle>
@@ -86,7 +87,7 @@ export default function KattanjiMarathon() {
           </CardContent>
         </Card>
 
-        {/* Conservation Message */}
+        {/* More Than Just a Race */}
         <Card className="mb-8 border-mountain-green bg-background">
           <CardHeader>
             <CardTitle className="text-foreground">More Than Just a Race</CardTitle>
@@ -101,7 +102,7 @@ export default function KattanjiMarathon() {
           </CardContent>
         </Card>
 
-        {/* Why Kattanji? */}
+        {/* Why Run at Kattanji Hills? */}
         <Card className="mb-8 border-mountain-green bg-background">
           <CardHeader>
             <CardTitle className="text-foreground">Why Run at Kattanji Hills?</CardTitle>
