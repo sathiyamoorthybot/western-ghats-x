@@ -67,7 +67,7 @@ const RazorpayCheckoutButton: React.FC<RazorpayProps> = ({ amount, teamData }) =
           key: data.keyId,
           amount: data.amount,
           currency: data.currency,
-          name: 'Cricket Tournament Registration',
+          name: 'SBL - Edition 1',
           description: `Team: ${data.teamData.teamName}`,
           order_id: data.orderId,
           handler: async function (response: any) {
