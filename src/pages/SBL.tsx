@@ -30,7 +30,7 @@ export default function SBL() {
               <li className="text-gray-200">SBL Cricket League</li>
             </ol>
           </nav>
-          <h1 className="text-3xl font-bold">SBL Cricket League 2025</h1>
+          <h1 className="text-3xl font-bold">Saravanampatti Blasters League - Edition 1</h1>
           <p className="text-lg mt-1">League Format | 22 Matches | ₹2,299 Entry</p>
         </div>
       </div>
