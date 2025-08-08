@@ -57,7 +57,7 @@ export default function KattanjiMarathon() {
             </p>
             <p className="mb-2"><strong>Location:</strong> Near Periyanaickenpalayam, winding through sacred temples, pristine forests, and conservation zones.</p>
             <p className="mb-4"><strong>Event Month:</strong> December 2025</p>
-            <Button asChild className="bg-green-600 hover:bg-green-700">
+            <Button asChild className="bg-gradient-to-r from-mountain-green to-mountain-blue hover:bg-green-700">
               <Link to="#">Registrations Opening Soon</Link>
             </Button>
           </div>
