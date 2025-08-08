@@ -6,7 +6,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 
 export default function SBL() {
   return (
-    <div className="bg-white text-gray-90" style={{ padding: "30px" }}>
+    <div className="bg-white text-gray-900" style={{ padding: "30px" }}>
       {/* Breadcrumb with background */}
       <div
         className="relative bg-green-700 text-white rounded-xl overflow-hidden mb-8 shadow-md"
@@ -20,7 +20,7 @@ export default function SBL() {
     paddingRight: "30px",
         }}
       >
-        <div className="bg-black/50 p-6">
+        <div className="bg-black/20 p-6">
           <nav className="text-sm mb-2">
             <ol className="flex items-center space-x-2">
               <li>
