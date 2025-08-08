@@ -107,7 +107,7 @@ const RegistrationConfirmDialog: React.FC<RegistrationConfirmDialogProps> = ({
           
                <p className="text-gray-700">
       Registration Fee: <span className="font-bold text-xl">₹2,299</span>{" "}
-      + Service Fee (0.00235%): <span className="font-bold text-xl">₹54</span>{" "}
+      + Service Fee (2.35%): <span className="font-bold text-xl">₹54</span>{" "}
       = Total: <span className="font-bold text-xl">₹2,353</span>
     </p>
               <p className="text-sm text-gray-600 mt-1">Payment will be processed securely through Razorpay</p>
