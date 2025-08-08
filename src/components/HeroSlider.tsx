@@ -98,57 +98,57 @@ const HeroSlider = () => {
 
       {/* Main content */}
       <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          
+        <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
+
           {/* Left content */}
-          <div className={`space-y-8 transition-all duration-700 ease-out ${
-            isAnimating ? 'opacity-0 translate-x-[-50px]' : 'opacity-100 translate-x-0'
+          <div className={`space-y-6 sm:space-y-8 transition-all duration-700 ease-out ${
+            isAnimating ? 'opacity-0 translate-x-[-40px]' : 'opacity-100 translate-x-0'
           }`}>
-            
+
             {/* Category badge */}
-            <div className="inline-flex items-center gap-2 bg-mountain-orange/20 border border-mountain-orange/30 rounded-full px-4 py-2 text-mountain-orange text-sm font-medium backdrop-blur-sm">
-              <Play className="w-4 h-4 fill-current" />
+            <div className="inline-flex items-center gap-2 bg-mountain-orange/20 border border-mountain-orange/30 rounded-full px-3 py-1.5 text-mountain-orange text-xs sm:text-sm font-medium backdrop-blur-sm">
+              <Play className="w-3.5 h-3.5 fill-current" />
               {currentHero.category}
             </div>
 
             {/* Title */}
-            <div className="space-y-4">
-              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold text-white leading-tight">
+            <div className="space-y-3 sm:space-y-4">
+              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight">
                 {currentHero.title.split(' ').map((word, i) => (
                   <span key={i} className={i === currentHero.title.split(' ').length - 1 ? 'text-mountain-orange' : ''}>
                     {word}{' '}
                   </span>
                 ))}
               </h1>
-              <p className="text-xl sm:text-2xl text-mountain-orange font-light">
+              <p className="text-lg sm:text-xl text-mountain-orange font-light">
                 {currentHero.tagline}
               </p>
             </div>
 
             {/* Description */}
-            <p className="text-lg text-gray-200 leading-relaxed max-w-lg">
+            <p className="text-base sm:text-lg text-gray-200 leading-relaxed max-w-md sm:max-w-lg">
               {currentHero.description}
             </p>
 
             {/* Event info */}
-            <div className="space-y-3">
-              <div className="flex items-center gap-3 text-white">
-                <Calendar className="w-5 h-5 text-mountain-orange" />
-                <span className="text-lg">{currentHero.date}</span>
+            <div className="space-y-2 sm:space-y-3">
+              <div className="flex items-center gap-2 sm:gap-3 text-white text-sm sm:text-base">
+                <Calendar className="w-4 h-4 text-mountain-orange" />
+                <span>{currentHero.date}</span>
               </div>
-              <div className="flex items-center gap-3 text-white">
-                <MapPin className="w-5 h-5 text-mountain-orange" />
-                <span className="text-lg">{currentHero.venue}</span>
+              <div className="flex items-center gap-2 sm:gap-3 text-white text-sm sm:text-base">
+                <MapPin className="w-4 h-4 text-mountain-orange" />
+                <span>{currentHero.venue}</span>
               </div>
             </div>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 pt-4">
+            <div className="flex flex-col sm:flex-row gap-3 pt-3 sm:pt-4">
               {currentHero.primaryAction && (
                 <Link to={currentHero.primaryAction.link}>
                   <Button 
-                    size="lg" 
-                    className="bg-gradient-to-r from-mountain-orange to-mountain-green text-white px-8 py-4 text-lg font-semibold rounded-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 group"
+                    size="md" 
+                    className="bg-gradient-to-r from-mountain-orange to-mountain-green text-white px-6 py-3 text-base font-semibold rounded-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 group"
                   >
                     {currentHero.primaryAction.text}
                     <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
@@ -157,9 +157,9 @@ const HeroSlider = () => {
               )}
               <Link to={currentHero.secondaryAction.link}>
                 <Button 
-                  size="lg" 
+                  size="md" 
                   variant="outline" 
-                  className="border-2 border-white/30 text-white bg-white/10 backdrop-blur-sm px-8 py-4 text-lg font-semibold rounded-xl hover:bg-white/20 hover:border-white/50 transition-all duration-300"
+                  className="border-2 border-white/30 text-white bg-white/10 backdrop-blur-sm px-6 py-3 text-base font-semibold rounded-xl hover:bg-white/20 hover:border-white/50 transition-all duration-300"
                 >
                   {currentHero.secondaryAction.text}
                 </Button>
@@ -168,18 +168,18 @@ const HeroSlider = () => {
           </div>
 
           {/* Right content - Stats cards */}
-          <div className={`space-y-6 transition-all duration-700 delay-200 ease-out ${
-            isAnimating ? 'opacity-0 translate-x-[50px]' : 'opacity-100 translate-x-0'
+          <div className={`space-y-4 sm:space-y-6 transition-all duration-700 delay-200 ease-out ${
+            isAnimating ? 'opacity-0 translate-x-[40px]' : 'opacity-100 translate-x-0'
           }`}>
-            <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-3 sm:gap-4">
               {currentHero.stats.map((stat, index) => (
                 <div 
                   key={index}
-                  className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-6 text-center hover:bg-white/15 transition-all duration-300 group"
+                  className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-4 sm:p-6 text-center hover:bg-white/15 transition-all duration-300 group"
                 >
-                  <stat.icon className="w-8 h-8 text-mountain-orange mx-auto mb-3 group-hover:scale-110 transition-transform" />
-                  <div className="text-3xl font-bold text-white mb-1">{stat.value}</div>
-                  <div className="text-gray-300 text-sm uppercase tracking-wide">{stat.label}</div>
+                  <stat.icon className="w-6 h-6 sm:w-8 sm:h-8 text-mountain-orange mx-auto mb-2 sm:mb-3 group-hover:scale-110 transition-transform" />
+                  <div className="text-2xl sm:text-3xl font-bold text-white mb-1">{stat.value}</div>
+                  <div className="text-gray-300 text-xs sm:text-sm uppercase tracking-wide">{stat.label}</div>
                 </div>
               ))}
             </div>
@@ -188,7 +188,7 @@ const HeroSlider = () => {
       </div>
 
       {/* Navigation dots */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex gap-3 z-20">
+      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-2 sm:gap-3 z-20">
         {heroData.map((_, index) => (
           <button
             key={index}
@@ -201,7 +201,7 @@ const HeroSlider = () => {
                 }, 600);
               }
             }}
-            className={`w-12 h-2 rounded-full transition-all duration-300 ${
+            className={`w-8 h-2 rounded-full transition-all duration-300 ${
               index === activeIndex 
                 ? 'bg-mountain-orange shadow-lg' 
                 : 'bg-white/40 hover:bg-white/60'
@@ -214,17 +214,17 @@ const HeroSlider = () => {
       <button
         onClick={handlePrevious}
         disabled={isAnimating}
-        className="absolute left-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-black/30 backdrop-blur-sm text-white hover:bg-black/50 transition-all duration-300 disabled:opacity-50"
+        className="absolute left-4 sm:left-6 top-1/2 -translate-y-1/2 z-20 p-2 sm:p-3 rounded-full bg-black/30 backdrop-blur-sm text-white hover:bg-black/50 transition-all duration-300 disabled:opacity-50"
       >
-        <ArrowRight className="w-6 h-6 rotate-180" />
+        <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 rotate-180" />
       </button>
       
       <button
         onClick={handleNext}
         disabled={isAnimating}
-        className="absolute right-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-black/30 backdrop-blur-sm text-white hover:bg-black/50 transition-all duration-300 disabled:opacity-50"
+        className="absolute right-4 sm:right-6 top-1/2 -translate-y-1/2 z-20 p-2 sm:p-3 rounded-full bg-black/30 backdrop-blur-sm text-white hover:bg-black/50 transition-all duration-300 disabled:opacity-50"
       >
-        <ArrowRight className="w-6 h-6" />
+        <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6" />
       </button>
     </section>
   );
