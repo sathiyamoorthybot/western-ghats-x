@@ -275,7 +275,7 @@ const CricketTournament: React.FC = () => {
                 disabled={isSubmitting || registered}
                 className="bg-gradient-to-r from-mountain-green to-mountain-blue text-white font-semibold px-8 py-3 text-lg"
               >
-                {isSubmitting ? "Registering..." : registered ? "Registration Complete" : "Register Team & Proceed to Payment"}
+                {isSubmitting ? "Registering..." : registered ? "Registration Complete" : "Proceed to Payment"}
               </Button>
             </div>
             
