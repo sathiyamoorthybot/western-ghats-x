@@ -15,8 +15,8 @@ export default function KattanjiMarathon() {
     <div className="bg-white text-gray-900">
       <Header />
 
-      {/* Green breadcrumb header */}
-      <div className="relative bg-green-700 text-white rounded-xl overflow-hidden mb-8 shadow-md">
+      {/* Breadcrumb Header - Contact page style */}
+      <div className="relative bg-amber-800 text-white rounded-xl overflow-hidden mb-8 shadow-md">
         <div
           className="relative z-10 text-center"
           style={{
@@ -32,7 +32,7 @@ export default function KattanjiMarathon() {
                 <Link to="/" className="hover:underline">Home</Link>
               </li>
               <li>/</li>
-              <li className="text-gray-200">Kattanji Marathon</li>
+              <li className="text-amber-200">Kattanji Marathon</li>
             </ol>
           </nav>
           <h1 className="text-3xl font-bold">Kattanji Hills Marathon 2025</h1>
@@ -40,7 +40,7 @@ export default function KattanjiMarathon() {
         </div>
       </div>
 
-      {/* Page content with margins */}
+      {/* Page content */}
       <div className="px-4 md:px-32 lg:px-64">
         
         {/* Hero Section */}
@@ -51,13 +51,13 @@ export default function KattanjiMarathon() {
             className="rounded-lg shadow-md h-80 object-cover w-full"
           />
           <div>
-            <h2 className="text-2xl font-bold mb-2">Run Through the Majestic Kattanji Hills</h2>
+            <h2 className="text-2xl font-bold mb-2 text-amber-800">Run Through the Majestic Kattanji Hills</h2>
             <p className="mb-4">
               Conquer the hills, connect with nature, and be part of an eco-conscious running revolution.
             </p>
             <p className="mb-2"><strong>Location:</strong> Near Periyanaickenpalayam, winding through sacred temples, pristine forests, and conservation zones.</p>
             <p className="mb-4"><strong>Event Month:</strong> December 2025</p>
-            <Button asChild className="bg-green-600 hover:bg-green-700">
+            <Button asChild className="bg-amber-700 hover:bg-amber-800">
               <Link to="#">Registrations Opening Soon</Link>
             </Button>
           </div>
@@ -66,7 +66,7 @@ export default function KattanjiMarathon() {
         <Separator className="my-8" />
 
         {/* Categories */}
-        <Card className="mb-8 border-green-500">
+        <Card className="mb-8 border-amber-700">
           <CardHeader>
             <CardTitle>Choose Your Challenge</CardTitle>
           </CardHeader>
@@ -77,8 +77,8 @@ export default function KattanjiMarathon() {
                 { title: "10K", desc: "Push your pace on scenic trails" },
                 { title: "Half Marathon", desc: "Endurance with elevation" },
               ].map((cat, idx) => (
-                <div key={idx} className="bg-green-50 p-4 rounded-lg shadow-sm">
-                  <h3 className="text-lg font-semibold text-green-700 mb-2">{cat.title}</h3>
+                <div key={idx} className="bg-amber-50 p-4 rounded-lg shadow-sm">
+                  <h3 className="text-lg font-semibold text-amber-800 mb-2">{cat.title}</h3>
                   <p className="text-gray-700">{cat.desc}</p>
                 </div>
               ))}
@@ -92,7 +92,7 @@ export default function KattanjiMarathon() {
         </Card>
 
         {/* Conservation Message */}
-        <Card className="mb-8 border-green-500">
+        <Card className="mb-8 border-amber-700">
           <CardHeader>
             <CardTitle>More Than Just a Race</CardTitle>
           </CardHeader>
@@ -107,7 +107,7 @@ export default function KattanjiMarathon() {
         </Card>
 
         {/* Why Kattanji? */}
-        <Card className="mb-8 border-green-500">
+        <Card className="mb-8 border-amber-700">
           <CardHeader>
             <CardTitle>Why Run at Kattanji Hills?</CardTitle>
           </CardHeader>
@@ -126,7 +126,7 @@ export default function KattanjiMarathon() {
         </Card>
 
         {/* FAQ */}
-        <Card className="mb-12 border-green-500">
+        <Card className="mb-12 border-amber-700">
           <CardHeader>
             <CardTitle>Frequently Asked Questions</CardTitle>
           </CardHeader>
