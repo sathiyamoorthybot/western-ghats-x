@@ -32,7 +32,7 @@ const Footer = () => {
             <ul className="space-y-2 text-sm mb-6">
               <li>
                 <Link to="/sbl" className="text-white/80 hover:text-white transition-colors">
-                  Saravanampatti Blasters League
+                  Saravanampatti Blasters League - Edition 1
                 </Link>
               </li>
               <li>
@@ -56,6 +56,9 @@ const Footer = () => {
                 <Mail className="w-4 h-4 inline mr-2" />
                 events@westernghatsx.in
               </p>
+              <p className="text-sm text-white/80 mt-1 block md:hidden">
+  +91 63745 2141
+</p>
             </div>
           </div>
 
