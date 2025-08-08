@@ -5,13 +5,12 @@ import Footer from "@/components/Footer";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-background">
       <Header />
-      <main className="flex-grow w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-16 pt-16 space-y-16">
+      <div className="pt-16">
         <HeroSlider />
         <WesternGhatsXIntro />
-      </main>
-      <Footer />
+      </div>
     </div>
   );
 };
