@@ -6,38 +6,37 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 
 export default function SBL() {
   return (
-  <div className="bg-white text-gray-900">
-  {/* Breadcrumb without background image */}
-  <div className="relative bg-green-700 text-white rounded-xl overflow-hidden mb-8 shadow-md">
-    {/* Breadcrumb content */}
-    <div
-      className="relative z-10"
-      style={{
-        paddingTop: "130px",
-        paddingBottom: "40px",
-        paddingLeft: "30px",
-        paddingRight: "30px",
-      }}
-    >
-      <nav className="text-sm mb-2">
-        <ol className="flex items-center space-x-2">
-          <li>
-            <Link to="/" className="hover:underline">Home</Link>
-          </li>
-          <li>/</li>
-          <li className="text-gray-200">SBL Cricket League</li>
-        </ol>
-      </nav>
-      <h1 className="text-3xl font-bold">SBL Cricket League 2025</h1>
-      <p className="text-lg mt-1">League Format | 22 Matches | ₹2,299 Entry</p>
-    </div>
-  </div>
+    <div className="bg-white text-gray-900">
+      {/* Breadcrumb without background image */}
+      <div className="relative bg-green-700 text-white rounded-xl overflow-hidden mb-8 shadow-md">
+        {/* Breadcrumb content */}
+        <div
+          className="relative z-10 text-center"
+          style={{
+            paddingTop: "130px",
+            paddingBottom: "40px",
+            paddingLeft: "30px",
+            paddingRight: "30px",
+          }}
+        >
+          <nav className="text-sm mb-2 flex justify-center">
+            <ol className="flex items-center space-x-2">
+              <li>
+                <Link to="/" className="hover:underline">
+                  Home
+                </Link>
+              </li>
+              <li>/</li>
+              <li className="text-gray-200">SBL Cricket League</li>
+            </ol>
+          </nav>
+          <h1 className="text-3xl font-bold">SBL Cricket League 2025</h1>
+          <p className="text-lg mt-1">League Format | 22 Matches | ₹2,299 Entry</p>
+        </div>
+      </div>
 
-
-
-
-      {/* Page content with padding */}
-      <div style={{ padding: "30px" }}>
+      {/* Page content with margin on left/right */}
+      <div className="px-4 md:px-16 lg:px-32">
         {/* Hero Section */}
         <div className="grid md:grid-cols-2 gap-6 items-center">
           <img
@@ -46,13 +45,20 @@ export default function SBL() {
             className="rounded-lg shadow-md"
           />
           <div>
-            <h2 className="text-2xl font-bold mb-2">Join the Ultimate Cricket Challenge</h2>
+            <h2 className="text-2xl font-bold mb-2">
+              Join the Ultimate Cricket Challenge
+            </h2>
             <p className="mb-4">
-              Get ready for an action-packed cricket league featuring 22 exciting matches across 6 groups.
-              Compete for glory, trophies, and a ₹9,000 prize pool.
+              Get ready for an action-packed cricket league featuring 22 exciting
+              matches across 6 groups. Compete for glory, trophies, and a ₹9,000
+              prize pool.
             </p>
-            <p className="mb-2"><strong>Venue:</strong> Ten Sports Turf, Saravanampatti</p>
-            <p className="mb-4"><strong>Entry Fee:</strong> ₹2,299 per team</p>
+            <p className="mb-2">
+              <strong>Venue:</strong> Ten Sports Turf, Saravanampatti
+            </p>
+            <p className="mb-4">
+              <strong>Entry Fee:</strong> ₹2,299 per team
+            </p>
             <Button asChild className="bg-green-600 hover:bg-green-700">
               <Link to="/cricket-tournament">Register Now</Link>
             </Button>
@@ -68,8 +74,12 @@ export default function SBL() {
           </CardHeader>
           <CardContent>
             <ul className="list-disc list-inside space-y-1">
-              <li><strong>Registration Deadline:</strong> Sep 3, 2025</li>
-              <li><strong>Tournament Day:</strong> Sep 7, 2025 (Sunday)</li>
+              <li>
+                <strong>Registration Deadline:</strong> Sep 3, 2025
+              </li>
+              <li>
+                <strong>Tournament Day:</strong> Sep 7, 2025 (Sunday)
+              </li>
             </ul>
           </CardContent>
         </Card>
@@ -79,9 +89,7 @@ export default function SBL() {
           <CardHeader>
             <CardTitle>Prize Pool</CardTitle>
           </CardHeader>
-          <CardContent>
-            ₹9,000 + Trophies
-          </CardContent>
+          <CardContent>₹9,000 + Trophies</CardContent>
         </Card>
 
         {/* Fixtures */}
@@ -92,7 +100,6 @@ export default function SBL() {
           <CardContent className="overflow-x-auto">
             <h3 className="font-bold mt-4 mb-2">League Matches (18 Matches)</h3>
 
-            {/* Group tables */}
             {[
               { name: "Group A", matches: [["1", "Team A1", "Team A2"], ["2", "Team A2", "Team A3"], ["3", "Team A3", "Team A1"]] },
               { name: "Group B", matches: [["4", "Team B1", "Team B2"], ["5", "Team B2", "Team B3"], ["6", "Team B3", "Team B1"]] },
@@ -134,9 +141,21 @@ export default function SBL() {
                 </tr>
               </thead>
               <tbody>
-                <tr><td className="border px-2 py-1">19</td><td className="border px-2 py-1">Winner Group A</td><td className="border px-2 py-1">Winner Group D</td></tr>
-                <tr><td className="border px-2 py-1">20</td><td className="border px-2 py-1">Winner Group B</td><td className="border px-2 py-1">Winner Group E</td></tr>
-                <tr><td className="border px-2 py-1">21</td><td className="border px-2 py-1">Winner Group C</td><td className="border px-2 py-1">Winner Group F</td></tr>
+                <tr>
+                  <td className="border px-2 py-1">19</td>
+                  <td className="border px-2 py-1">Winner Group A</td>
+                  <td className="border px-2 py-1">Winner Group D</td>
+                </tr>
+                <tr>
+                  <td className="border px-2 py-1">20</td>
+                  <td className="border px-2 py-1">Winner Group B</td>
+                  <td className="border px-2 py-1">Winner Group E</td>
+                </tr>
+                <tr>
+                  <td className="border px-2 py-1">21</td>
+                  <td className="border px-2 py-1">Winner Group C</td>
+                  <td className="border px-2 py-1">Winner Group F</td>
+                </tr>
               </tbody>
             </table>
 
@@ -150,7 +169,11 @@ export default function SBL() {
                 </tr>
               </thead>
               <tbody>
-                <tr><td className="border px-2 py-1">22</td><td className="border px-2 py-1">First Place Qualifier</td><td className="border px-2 py-1">Second Place Qualifier</td></tr>
+                <tr>
+                  <td className="border px-2 py-1">22</td>
+                  <td className="border px-2 py-1">First Place Qualifier</td>
+                  <td className="border px-2 py-1">Second Place Qualifier</td>
+                </tr>
               </tbody>
             </table>
           </CardContent>
@@ -165,11 +188,15 @@ export default function SBL() {
             <Accordion type="single" collapsible>
               <AccordionItem value="q1">
                 <AccordionTrigger>How do I register my team?</AccordionTrigger>
-                <AccordionContent>Click the "Register Now" button above and fill in the registration form.</AccordionContent>
+                <AccordionContent>
+                  Click the "Register Now" button above and fill in the registration form.
+                </AccordionContent>
               </AccordionItem>
               <AccordionItem value="q2">
                 <AccordionTrigger>What is the format of the league?</AccordionTrigger>
-                <AccordionContent>Teams are divided into 6 groups, each playing 3 matches in the league stage. Group winners advance to qualifiers.</AccordionContent>
+                <AccordionContent>
+                  Teams are divided into 6 groups, each playing 3 matches in the league stage. Group winners advance to qualifiers.
+                </AccordionContent>
               </AccordionItem>
               <AccordionItem value="q3">
                 <AccordionTrigger>Where is the venue located?</AccordionTrigger>
