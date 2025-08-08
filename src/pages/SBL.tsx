@@ -6,46 +6,19 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 
 export default function SBL() {
   return (
-  <div className="bg-white text-gray-900" style={{ padding: "30px" }}>
-  {/* Breadcrumb with background */}
-  <div
-    className="relative text-white rounded-xl overflow-hidden mb-8 shadow-md"
-    style={{
-      backgroundImage: "url('https://images.unsplash.com/photo-1505761671935-60b3a7427bad')",
-      backgroundSize: "cover",
-      backgroundPosition: "center",
-      paddingTop: "130px", // fixes overlap
-      paddingBottom: "40px",
-      paddingLeft: "30px",
-      paddingRight: "30px",
-    }}
-  >
-    {/* Overlay for opacity effect */}
-    <div
-      className="absolute inset-0"
-      style={{
-        backgroundColor: "rgba(0, 0, 0, 0.8)", // dark overlay → only 20% image visibility
-      }}
-    ></div>
-
-    {/* Breadcrumb Content */}
-    <div className="relative z-10">
-      <nav>
-        <ol className="flex space-x-2 text-sm font-medium">
-          <li>
-            <a href="/" className="hover:underline">
-              Home
-            </a>
-          </li>
-          <li>/</li>
-          <li>League Series</li>
-        </ol>
-      </nav>
-      <h1 className="mt-3 text-3xl font-bold">League Series</h1>
-    </div>
-  </div>
-</div>
-
+    <div className="bg-white text-gray-900" style={{ padding: "30px" }}>
+      {/* Breadcrumb with background */}
+      <div
+        className="relative bg-green-700 text-white rounded-xl overflow-hidden mb-8 shadow-md"
+        style={{
+          backgroundImage: "url('https://images.unsplash.com/photo-1505761671935-60b3a7427bad')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+              paddingTop: "130px", // fixes overlap
+    paddingBottom: "40px",
+    paddingLeft: "30px",
+    paddingRight: "30px",
+        }}
       >
         <div className="bg-black/0 p-6">
           <nav className="text-sm mb-2">
