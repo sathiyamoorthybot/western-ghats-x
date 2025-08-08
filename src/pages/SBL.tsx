@@ -14,7 +14,7 @@ export default function SBL() {
           backgroundImage: "url('https://images.unsplash.com/photo-1505761671935-60b3a7427bad')",
           backgroundSize: "cover",
           backgroundPosition: "center",
-              paddingTop: "100px", // fixes overlap
+              paddingTop: "130px", // fixes overlap
     paddingBottom: "40px",
     paddingLeft: "30px",
     paddingRight: "30px",
