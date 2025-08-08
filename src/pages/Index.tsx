@@ -1,5 +1,3 @@
-
-
 import Header from "@/components/Header";
 import HeroSlider from "@/components/HeroSlider";
 import WesternGhatsXIntro from "@/components/WesternGhatsXIntro";
@@ -9,7 +7,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Header />
-      <main className="flex-grow pt-16 px-4 sm:px-6 lg:px-8 max-w-[1280px] mx-auto w-full">
+      <main className="flex-grow w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-16 pt-16 space-y-16">
         <HeroSlider />
         <WesternGhatsXIntro />
       </main>
