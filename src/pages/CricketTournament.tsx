@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Upload, Users, Trophy, AlertCircle } from "lucide-react";
+import { Users, Trophy } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import RegistrationConfirmDialog from "@/components/RegistrationConfirmDialog";
 
@@ -141,34 +141,18 @@ const CricketTournament: React.FC = () => {
   const initiateRazorpayPayment = async () => {
     try {
       setShowConfirmDialog(false);
-      
 
+      const baseAmount = 2299; // Entry fee
+      const serviceFeePercent = 2.35; // 2.35% service fee
 
+      // Calculate total amount including service fee (rounded)
+      const totalAmount = Math.round(baseAmount + (baseAmount * serviceFeePercent) / 100);
+      const amountInPaise = totalAmount * 100; // Razorpay expects amount in paise
 
-
-      const baseAmount = 2299; // Your entry fee
-const serviceFeePercent = 2.35; // 2.35% service fee
-
-// Calculate total amount including service fee, rounded to nearest integer
-const totalAmount = Math.round(baseAmount + (baseAmount * serviceFeePercent) / 100);
-
-// If your backend expects paise (most Razorpay integrations do), multiply by 100
-const amountInPaise = totalAmount * 100;
-
-const { data, error } = await supabase.functions.invoke('create-razorpay-order', {
-  body: {
-    teamData,
-    amount: amountInPaise, // Use total amount with fee in paise
-    registrationId
-  }
-});
-
-
-
-
-
-
-      
+      // Call Supabase function to create Razorpay order with total amount
+      const { data, error } = await supabase.functions.invoke('create-razorpay-order', {
+        body: { teamData, amount: amountInPaise, registrationId }
+      });
 
       if (error) throw error;
 
@@ -203,7 +187,7 @@ const { data, error } = await supabase.functions.invoke('create-razorpay-order',
                   teamData,
                   paymentStatus: 'completed',
                   registrationId,
-                  paymentAmount: 2299 + Math.round(2299 * 0.0235) // Base amount + platform fee
+                  paymentAmount: totalAmount // Base amount + platform fee
                 }
               });
 
@@ -255,19 +239,37 @@ const { data, error } = await supabase.functions.invoke('create-razorpay-order',
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Label>Team Name *</Label>
-                  <Input value={teamData.teamName} onChange={(e) => handleInputChange('teamName', e.target.value)} required />
+                  <Input
+                    value={teamData.teamName}
+                    onChange={(e) => handleInputChange('teamName', e.target.value)}
+                    required
+                  />
                 </div>
                 <div>
                   <Label>Captain Name *</Label>
-                  <Input value={teamData.captainName} onChange={(e) => handleInputChange('captainName', e.target.value)} required />
+                  <Input
+                    value={teamData.captainName}
+                    onChange={(e) => handleInputChange('captainName', e.target.value)}
+                    required
+                  />
                 </div>
                 <div>
                   <Label>Captain Phone *</Label>
-                  <Input value={teamData.captainPhone} onChange={(e) => handleInputChange('captainPhone', e.target.value.replace(/\D/g, '').slice(0, 10))} maxLength={10} required />
+                  <Input
+                    value={teamData.captainPhone}
+                    onChange={(e) => handleInputChange('captainPhone', e.target.value.replace(/\D/g, '').slice(0, 10))}
+                    maxLength={10}
+                    required
+                  />
                 </div>
                 <div>
                   <Label>Captain Email *</Label>
-                  <Input type="email" value={teamData.captainEmail} onChange={(e) => handleInputChange('captainEmail', e.target.value)} required />
+                  <Input
+                    type="email"
+                    value={teamData.captainEmail}
+                    onChange={(e) => handleInputChange('captainEmail', e.target.value)}
+                    required
+                  />
                 </div>
               </div>
             </div>
@@ -277,15 +279,27 @@ const { data, error } = await supabase.functions.invoke('create-razorpay-order',
               <h3 className="text-xl font-semibold mb-4">Players (7 + 2 Subs)</h3>
               {teamData.players.map((player, index) => (
                 <div key={index} className="border p-4 rounded-md bg-gray-50 mb-4">
-                  <h4 className="font-medium mb-3">Player {index + 1} ({index < 7 ? "Playing XI" : "Substitute"})</h4>
+                  <h4 className="font-medium mb-3">
+                    Player {index + 1} ({index < 7 ? "Playing XI" : "Substitute"})
+                  </h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <Label>Name *</Label>
-                      <Input value={player.name} onChange={(e) => handlePlayerChange(index, 'name', e.target.value)} required />
+                      <Input
+                        value={player.name}
+                        onChange={(e) => handlePlayerChange(index, 'name', e.target.value)}
+                        required
+                      />
                     </div>
                     <div>
                       <Label>Age *</Label>
-                      <Input type="number" value={player.age} min={16} onChange={(e) => handlePlayerChange(index, 'age', e.target.value)} required />
+                      <Input
+                        type="number"
+                        value={player.age}
+                        min={16}
+                        onChange={(e) => handlePlayerChange(index, 'age', e.target.value)}
+                        required
+                      />
                     </div>
                   </div>
                 </div>
@@ -302,7 +316,7 @@ const { data, error } = await supabase.functions.invoke('create-razorpay-order',
                 {isSubmitting ? "Registering..." : registered ? "Registration Complete" : "Proceed to Payment"}
               </Button>
             </div>
-            
+
             {/* Registration Confirmation Dialog */}
             <RegistrationConfirmDialog
               isOpen={showConfirmDialog}
