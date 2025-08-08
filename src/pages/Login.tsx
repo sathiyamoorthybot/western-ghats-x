@@ -6,7 +6,7 @@ const Login = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <div className="flex-1 pt-16">
+      <div className="flex-1 pt-2">
         <AuthForm type="login" />
       </div>
     </div>
