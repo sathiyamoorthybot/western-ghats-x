@@ -92,7 +92,7 @@ export default function KattanjiMarathon() {
         </Card>
 
         {/* Conservation Message */}
-        <Card className="mb-8 border-green-500">
+        <Card className="mb-8 border-my-8">
           <CardHeader>
             <CardTitle>More Than Just a Race</CardTitle>
           </CardHeader>
@@ -107,7 +107,7 @@ export default function KattanjiMarathon() {
         </Card>
 
         {/* Why Kattanji? */}
-        <Card className="mb-8 border-green-500">
+        <Card className="mb-8 border-my-8">
           <CardHeader>
             <CardTitle>Why Run at Kattanji Hills?</CardTitle>
           </CardHeader>
@@ -126,7 +126,7 @@ export default function KattanjiMarathon() {
         </Card>
 
         {/* FAQ */}
-        <Card className="mb-12 border-green-500">
+        <Card className="mb-12 border-my-8">
           <CardHeader>
             <CardTitle>Frequently Asked Questions</CardTitle>
           </CardHeader>
