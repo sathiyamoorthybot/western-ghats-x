@@ -49,7 +49,7 @@ export default function SBL() {
         {/* Hero Section */}
         <div className="grid md:grid-cols-2 gap-6 items-center">
           <img
-            src="https://images.unsplash.com/photo-1606390194633-a8a7b2f3e4ec"
+            src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4nqOfLK66cm0r0BWguKcTfAPRFToooevRnyQ8PWzTcBuDrR1ZHqCdQMiaNSEHjY8L6zubHHxlTgbUdMolF1QE7Ikvp_KIeSJsELjZoQ4BO1rl1AMt_uWgwSfMMZgPbaxzQmYZNEAMA=s680-w680-h510-rw"
             alt="Cricket Match"
             className="rounded-lg shadow-md"
           />
