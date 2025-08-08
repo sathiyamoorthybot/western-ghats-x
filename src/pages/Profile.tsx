@@ -276,7 +276,7 @@ const Profile: React.FC = () => {
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <Button type="submit" className="bg-green-600 hover:bg-green-700">
+                  <Button type="submit" className="bg-gradient-to-r from-mountain-green to-mountain-blue">
                     Save Changes
                   </Button>
                   <Button 
@@ -336,7 +336,7 @@ const Profile: React.FC = () => {
                 </div>
                 <Button 
                   onClick={() => setIsEditing(true)}
-                  className="bg-green-600 hover:bg-green-700"
+                  className="bg-gradient-to-r from-mountain-green to-mountain-blue"
                 >
                   Edit Profile
                 </Button>
