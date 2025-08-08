@@ -6,20 +6,20 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 
 export default function SBL() {
   return (
-  <div className="bg-white text-gray-900">
+ <div className="bg-white text-gray-900">
   {/* Breadcrumb without background image */}
   <div className="relative bg-green-700 text-white rounded-xl overflow-hidden mb-8 shadow-md">
     {/* Breadcrumb content */}
     <div
-      className="relative z-10"
+      className="relative z-10 text-center"
       style={{
         paddingTop: "130px",
         paddingBottom: "40px",
-        paddingLeft: "30px",
-        paddingRight: "30px",
+        paddingLeft: "20px",
+        paddingRight: "20px",
       }}
     >
-      <nav className="text-sm mb-2">
+      <nav className="text-sm mb-2 flex justify-center">
         <ol className="flex items-center space-x-2">
           <li>
             <Link to="/" className="hover:underline">Home</Link>
@@ -28,10 +28,27 @@ export default function SBL() {
           <li className="text-gray-200">SBL Cricket League</li>
         </ol>
       </nav>
+
       <h1 className="text-3xl font-bold">SBL Cricket League 2025</h1>
-      <p className="text-lg mt-1">League Format | 22 Matches | ₹2,299 Entry</p>
+      <p className="text-lg mt-1">League Format | 22 Matches</p>
+      
+      {/* Highlighted Entry Fee */}
+      <p className="text-xl font-semibold mt-2 bg-white text-green-700 inline-block px-4 py-1 rounded-lg shadow">
+        Entry Fee: ₹2,299
+      </p>
+
+      {/* Register Button */}
+      <div className="mt-4">
+        <Link
+          to="/cricket-tournament"
+          className="bg-yellow-400 text-green-900 font-semibold px-6 py-2 rounded-lg shadow hover:bg-yellow-500 transition"
+        >
+          Register Now
+        </Link>
+      </div>
     </div>
   </div>
+</div>
 
 
 
