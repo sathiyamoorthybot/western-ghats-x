@@ -107,7 +107,7 @@ const CricketTournament: React.FC = () => {
           captain_phone: teamData.captainPhone,
           captain_email: teamData.captainEmail,
           players: teamData.players,
-          entry_fee: 2,299,
+          entry_fee: 2299,
           payment_status: 'pending',
           user_id: user?.id || null
         })
