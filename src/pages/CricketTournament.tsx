@@ -142,9 +142,33 @@ const CricketTournament: React.FC = () => {
     try {
       setShowConfirmDialog(false);
       
-      const { data, error } = await supabase.functions.invoke('create-razorpay-order', {
-        body: { teamData, amount: 2299, registrationId }
-      });
+
+
+
+
+      const baseAmount = 2299; // Your entry fee
+const serviceFeePercent = 2.35; // 2.35% service fee
+
+// Calculate total amount including service fee, rounded to nearest integer
+const totalAmount = Math.round(baseAmount + (baseAmount * serviceFeePercent) / 100);
+
+// If your backend expects paise (most Razorpay integrations do), multiply by 100
+const amountInPaise = totalAmount * 100;
+
+const { data, error } = await supabase.functions.invoke('create-razorpay-order', {
+  body: {
+    teamData,
+    amount: amountInPaise, // Use total amount with fee in paise
+    registrationId
+  }
+});
+
+
+
+
+
+
+      
 
       if (error) throw error;
 
