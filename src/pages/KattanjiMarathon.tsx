@@ -150,7 +150,6 @@ export default function KattanjiMarathon() {
 
       </div>
 
-      <Footer />
     </div>
   );
 }
