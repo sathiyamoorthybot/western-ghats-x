@@ -66,7 +66,7 @@ export default function KattanjiMarathon() {
         <Separator className="my-8" />
 
         {/* Categories */}
-        <Card className="mb-8 border-green-100">
+        <Card className="mb-8 border-my-8">
           <CardHeader>
             <CardTitle>Choose Your Challenge</CardTitle>
           </CardHeader>
