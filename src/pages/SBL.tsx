@@ -8,7 +8,7 @@ export default function SBL() {
   return (
     <div className="bg-white text-gray-900">
       {/* Breadcrumb without background image */}
-      <div className="relative bg-green-700 text-white rounded-xl overflow-hidden mb-8 shadow-md">
+      <div className="bg-gradient-to-r from-mountain-green to-mountain-blue text-white text-white rounded-xl overflow-hidden mb-8 shadow-md">
         {/* Breadcrumb content */}
         <div
           className="relative z-10 text-center"
