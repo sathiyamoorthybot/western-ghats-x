@@ -272,7 +272,7 @@ const CricketTournament: React.FC = () => {
               <Button
                 onClick={handleSubmit}
                 disabled={isSubmitting || registered}
-                className="bg-green-600 hover:bg-green-700 text-white font-semibold px-8 py-3 text-lg"
+                className="bg-gradient-to-r from-mountain-green to-mountain-blue text-white font-semibold px-8 py-3 text-lg"
               >
                 {isSubmitting ? "Registering..." : registered ? "Registration Complete" : "Register Team & Proceed to Payment"}
               </Button>
