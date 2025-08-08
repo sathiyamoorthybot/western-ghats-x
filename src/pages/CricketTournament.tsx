@@ -107,7 +107,7 @@ const CricketTournament: React.FC = () => {
           captain_phone: teamData.captainPhone,
           captain_email: teamData.captainEmail,
           players: teamData.players,
-          entry_fee: 2299,
+          entry_fee: 2,299,
           payment_status: 'pending',
           user_id: user?.id || null
         })
@@ -143,7 +143,7 @@ const CricketTournament: React.FC = () => {
       setShowConfirmDialog(false);
       
       const { data, error } = await supabase.functions.invoke('create-razorpay-order', {
-        body: { teamData, amount: 2, registrationId }
+        body: { teamData, amount: 2,299, registrationId }
       });
 
       if (error) throw error;
@@ -216,7 +216,7 @@ const CricketTournament: React.FC = () => {
             <p className="text-gray-600">
               Team registration only. Guest registrations are not available.
               <br />
-              <strong className="text-green-700">Entry Fee: ₹2,000 per team</strong>
+              <strong className="text-green-700">Entry Fee: ₹2,299 per team</strong>
             </p>
           </CardHeader>
 
