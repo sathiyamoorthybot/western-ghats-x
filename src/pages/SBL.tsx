@@ -1,176 +1,198 @@
-import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 export default function SBL() {
   return (
-    <div className="bg-white text-gray-900" style={{ padding: "30px" }}>
-      {/* Breadcrumb with background */}
-      <div
-        className="relative bg-green-700 text-white rounded-xl overflow-hidden mb-8 shadow-md"
+    <div className="bg-white text-gray-900">
+      {/* Breadcrumb / Hero Section */}
+      <section
+        className="relative bg-cover bg-center text-white"
         style={{
-          backgroundImage: "url('https://images.unsplash.com/photo-1505761671935-60b3a7427bad')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
+          backgroundImage: "url('/images/cricket-abstract.jpg')",
+          paddingTop: "100px", // prevents overlap with fixed header
+          paddingBottom: "40px",
+          paddingLeft: "30px",
+          paddingRight: "30px",
+          backgroundColor: "rgba(0,0,0,0.4)",
+          backgroundBlendMode: "overlay",
         }}
       >
-        <div className="bg-black/50 p-6">
-          <nav className="text-sm mb-2">
+        <div className="max-w-7xl mx-auto">
+          <nav className="text-sm mb-4">
             <ol className="flex items-center space-x-2">
               <li>
-                <Link to="/" className="hover:underline">Home</Link>
+                <a href="/" className="hover:underline">Home</a>
               </li>
               <li>/</li>
-              <li className="text-gray-200">SBL Cricket League</li>
+              <li className="text-green-300 font-semibold">SBL Tournament</li>
             </ol>
           </nav>
-          <h1 className="text-3xl font-bold">SBL Cricket League 2025</h1>
-          <p className="text-lg mt-1">League Format | 22 Matches | ₹2,299 Entry</p>
+          <h1 className="text-3xl font-bold">SBL Tournament 2025</h1>
+          <p className="mt-2 text-lg">Ten Sports Turf, Saravanampatti</p>
         </div>
-      </div>
+      </section>
 
-      {/* Hero Section */}
-      <div className="grid md:grid-cols-2 gap-6 items-center">
-        <img
-          src="https://images.unsplash.com/photo-1606390194633-a8a7b2f3e4ec"
-          alt="Cricket Match"
-          className="rounded-lg shadow-md"
-        />
-        <div>
-          <h2 className="text-2xl font-bold mb-2">Join the Ultimate Cricket Challenge</h2>
-          <p className="mb-4">
-            Get ready for an action-packed cricket league featuring 22 exciting matches across 6 groups.
-            Compete for glory, trophies, and a ₹9,000 prize pool.
-          </p>
-          <p className="mb-2"><strong>Venue:</strong> Ten Sports Turf, Saravanampatti</p>
-          <p className="mb-4"><strong>Entry Fee:</strong> ₹2,299 per team</p>
-          <Button asChild className="bg-green-600 hover:bg-green-700">
-            <Link to="/cricket-tournament">Register Now</Link>
-          </Button>
-        </div>
-      </div>
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-[30px] py-10 space-y-12">
+        
+        {/* Tournament Info */}
+        <section className="grid md:grid-cols-4 gap-6">
+          <Card className="bg-green-50 border-green-200">
+            <CardHeader>
+              <CardTitle className="text-green-700">Entry Fee</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-2xl font-bold text-green-800">₹2,299</p>
+              <p className="text-sm text-green-600">per team</p>
+            </CardContent>
+          </Card>
+          <Card className="bg-green-50 border-green-200">
+            <CardHeader>
+              <CardTitle className="text-green-700">Important Dates</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p><strong>Registration Deadline:</strong> Sep 3, 2025</p>
+              <p><strong>Tournament Day:</strong> Sep 7, 2025 (Sunday)</p>
+            </CardContent>
+          </Card>
+          <Card className="bg-green-50 border-green-200">
+            <CardHeader>
+              <CardTitle className="text-green-700">Venue</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p>Ten Sports Turf</p>
+              <p>Saravanampatti</p>
+            </CardContent>
+          </Card>
+          <Card className="bg-green-50 border-green-200">
+            <CardHeader>
+              <CardTitle className="text-green-700">Prize Pool</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-2xl font-bold text-green-800">₹9,000</p>
+              <p className="text-sm text-green-600">+ Trophies</p>
+            </CardContent>
+          </Card>
+        </section>
 
-      <Separator className="my-8" />
+        {/* Sample Images */}
+        <section className="grid md:grid-cols-3 gap-4">
+          <img src="/images/cricket-action1.jpg" alt="Cricket action" className="rounded-lg shadow" />
+          <img src="/images/cricket-team.jpg" alt="Team huddle" className="rounded-lg shadow" />
+          <img src="/images/cricket-trophy.jpg" alt="Trophy" className="rounded-lg shadow" />
+        </section>
 
-      {/* Important Dates */}
-      <Card className="mb-8 border-green-500">
-        <CardHeader>
-          <CardTitle>Important Dates</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ul className="list-disc list-inside space-y-1">
-            <li><strong>Registration Deadline:</strong> Sep 3, 2025</li>
-            <li><strong>Tournament Day:</strong> Sep 7, 2025 (Sunday)</li>
-          </ul>
-        </CardContent>
-      </Card>
+        {/* Fixtures */}
+        <section>
+          <h2 className="text-2xl font-bold mb-4 text-green-700">Fixtures</h2>
+          <p className="mb-6">The tournament will follow a league series format. The winner of each group advances to the qualifiers.</p>
 
-      {/* Prize Details */}
-      <Card className="mb-8 border-green-500">
-        <CardHeader>
-          <CardTitle>Prize Pool</CardTitle>
-        </CardHeader>
-        <CardContent>
-          ₹9,000 + Trophies
-        </CardContent>
-      </Card>
-
-      {/* Fixtures */}
-      <Card className="mb-8 border-green-500">
-        <CardHeader>
-          <CardTitle>Complete Tournament Fixtures (22 Matches)</CardTitle>
-        </CardHeader>
-        <CardContent className="overflow-x-auto">
-          <h3 className="font-bold mt-4 mb-2">League Matches (18 Matches)</h3>
-
-          {/* Group tables */}
-          {[
-            { name: "Group A", matches: [["1", "Team A1", "Team A2"], ["2", "Team A2", "Team A3"], ["3", "Team A3", "Team A1"]] },
-            { name: "Group B", matches: [["4", "Team B1", "Team B2"], ["5", "Team B2", "Team B3"], ["6", "Team B3", "Team B1"]] },
-            { name: "Group C", matches: [["7", "Team C1", "Team C2"], ["8", "Team C2", "Team C3"], ["9", "Team C3", "Team C1"]] },
-            { name: "Group D", matches: [["10", "Team D1", "Team D2"], ["11", "Team D2", "Team D3"], ["12", "Team D3", "Team D1"]] },
-            { name: "Group E", matches: [["13", "Team E1", "Team E2"], ["14", "Team E2", "Team E3"], ["15", "Team E3", "Team E1"]] },
-            { name: "Group F", matches: [["16", "Team F1", "Team F2"], ["17", "Team F2", "Team F3"], ["18", "Team F3", "Team F1"]] },
-          ].map((group, i) => (
-            <div key={i} className="mb-4">
-              <h4 className="font-semibold">{group.name}</h4>
-              <table className="border border-gray-300 text-sm w-full mb-2">
-                <thead>
-                  <tr className="bg-green-100">
-                    <th className="border px-2 py-1">Match</th>
-                    <th className="border px-2 py-1">Team 1</th>
-                    <th className="border px-2 py-1">Team 2</th>
+          {/* Group Fixtures */}
+          {["A","B","C","D","E","F"].map(group => (
+            <div key={group} className="mb-8">
+              <h3 className="text-lg font-semibold mb-2">Group {group}</h3>
+              <table className="w-full border border-gray-300 text-sm">
+                <thead className="bg-green-100">
+                  <tr>
+                    <th className="p-2 border">Match</th>
+                    <th className="p-2 border">Team 1</th>
+                    <th className="p-2 border">Team 2</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {group.matches.map((m, idx) => (
-                    <tr key={idx}>
-                      <td className="border px-2 py-1">{m[0]}</td>
-                      <td className="border px-2 py-1">{m[1]}</td>
-                      <td className="border px-2 py-1">{m[2]}</td>
-                    </tr>
-                  ))}
+                  <tr>
+                    <td className="p-2 border">1</td>
+                    <td className="p-2 border">Team X</td>
+                    <td className="p-2 border">Team Y</td>
+                  </tr>
+                  <tr>
+                    <td className="p-2 border">2</td>
+                    <td className="p-2 border">Team Z</td>
+                    <td className="p-2 border">Team W</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
           ))}
 
-          <h3 className="font-bold mt-4 mb-2">Qualifier Matches (3 Matches)</h3>
-          <table className="border border-gray-300 text-sm w-full mb-4">
-            <thead>
-              <tr className="bg-green-100">
-                <th className="border px-2 py-1">Match</th>
-                <th className="border px-2 py-1">Team 1</th>
-                <th className="border px-2 py-1">Team 2</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td className="border px-2 py-1">19</td><td className="border px-2 py-1">Winner Group A</td><td className="border px-2 py-1">Winner Group D</td></tr>
-              <tr><td className="border px-2 py-1">20</td><td className="border px-2 py-1">Winner Group B</td><td className="border px-2 py-1">Winner Group E</td></tr>
-              <tr><td className="border px-2 py-1">21</td><td className="border px-2 py-1">Winner Group C</td><td className="border px-2 py-1">Winner Group F</td></tr>
-            </tbody>
-          </table>
+          {/* Qualifiers */}
+          <div className="mb-8">
+            <h3 className="text-lg font-semibold mb-2">Qualifiers</h3>
+            <table className="w-full border border-gray-300 text-sm">
+              <thead className="bg-green-100">
+                <tr>
+                  <th className="p-2 border">Match</th>
+                  <th className="p-2 border">Team 1</th>
+                  <th className="p-2 border">Team 2</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td className="p-2 border">Q1</td>
+                  <td className="p-2 border">Group A Winner</td>
+                  <td className="p-2 border">Group B Winner</td>
+                </tr>
+                <tr>
+                  <td className="p-2 border">Q2</td>
+                  <td className="p-2 border">Group C Winner</td>
+                  <td className="p-2 border">Group D Winner</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
-          <h3 className="font-bold mt-4 mb-2">Final (1 Match)</h3>
-          <table className="border border-gray-300 text-sm w-full">
-            <thead>
-              <tr className="bg-green-100">
-                <th className="border px-2 py-1">Match</th>
-                <th className="border px-2 py-1">Team 1</th>
-                <th className="border px-2 py-1">Team 2</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td className="border px-2 py-1">22</td><td className="border px-2 py-1">First Place Qualifier</td><td className="border px-2 py-1">Second Place Qualifier</td></tr>
-            </tbody>
-          </table>
-        </CardContent>
-      </Card>
+          {/* Final */}
+          <div>
+            <h3 className="text-lg font-semibold mb-2">Final</h3>
+            <table className="w-full border border-gray-300 text-sm">
+              <thead className="bg-green-100">
+                <tr>
+                  <th className="p-2 border">Match</th>
+                  <th className="p-2 border">Team 1</th>
+                  <th className="p-2 border">Team 2</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td className="p-2 border">F</td>
+                  <td className="p-2 border">Qualifier 1 Winner</td>
+                  <td className="p-2 border">Qualifier 2 Winner</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
 
-      {/* FAQ */}
-      <Card className="mb-8 border-green-500">
-        <CardHeader>
-          <CardTitle>Frequently Asked Questions</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Accordion type="single" collapsible>
-            <AccordionItem value="q1">
-              <AccordionTrigger>How do I register my team?</AccordionTrigger>
-              <AccordionContent>Click the "Register Now" button above and fill in the registration form.</AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="q2">
-              <AccordionTrigger>What is the format of the league?</AccordionTrigger>
-              <AccordionContent>Teams are divided into 6 groups, each playing 3 matches in the league stage. Group winners advance to qualifiers.</AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="q3">
-              <AccordionTrigger>Where is the venue located?</AccordionTrigger>
-              <AccordionContent>Ten Sports Turf, Saravanampatti.</AccordionContent>
-            </AccordionItem>
-          </Accordion>
-        </CardContent>
-      </Card>
+        {/* FAQ */}
+        <section>
+          <h2 className="text-2xl font-bold mb-4 text-green-700">FAQ</h2>
+          <div className="space-y-4">
+            <div>
+              <h4 className="font-semibold">How many players per team?</h4>
+              <p>Each team can have 7 players + 2 substitutes.</p>
+            </div>
+            <div>
+              <h4 className="font-semibold">What is the format?</h4>
+              <p>League series format — winners advance to qualifiers.</p>
+            </div>
+            <div>
+              <h4 className="font-semibold">What is included in the entry fee?</h4>
+              <p>Ground booking, umpires, balls, and basic refreshments.</p>
+            </div>
+          </div>
+        </section>
+
+        {/* Register Button */}
+        <div className="text-center">
+          <Button
+            size="lg"
+            className="bg-green-600 hover:bg-green-700 text-white"
+            onClick={() => (window.location.href = "/cricket-tournament")}
+          >
+            Register Now
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }
