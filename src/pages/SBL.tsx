@@ -6,7 +6,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 
 export default function SBL() {
   return (
-   <div className="bg-white text-gray-900">
+  <div className="bg-white text-gray-900">
   {/* Breadcrumb without background image */}
   <div className="relative bg-green-700 text-white rounded-xl overflow-hidden mb-8 shadow-md">
     {/* Breadcrumb content */}
@@ -32,7 +32,8 @@ export default function SBL() {
       <p className="text-lg mt-1">League Format | 22 Matches | ₹2,299 Entry</p>
     </div>
   </div>
-</div>
+
+
 
 
       {/* Page content with padding */}
