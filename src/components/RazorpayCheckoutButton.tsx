@@ -147,7 +147,7 @@ const RazorpayCheckoutButton: React.FC<RazorpayProps> = ({ amount, teamData }) =
       </div>
       <button 
         onClick={initiatePayment} 
-        className="w-full bg-blue-600 hover:bg-blue-700 px-6 py-3 text-white rounded-lg font-semibold transition-colors"
+        className="w-full bg-gradient-to-r from-mountain-green to-mountain-blue px-6 py-3 text-white rounded-lg font-semibold transition-colors"
       >
         Pay with Razorpay - ₹{totalAmount.toLocaleString()}
       </button>
