@@ -74,7 +74,7 @@ const HeroSlider = () => {
   const currentHero = heroData[activeIndex];
 
   return (
-    <section className="<div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-10 sm:pt-0 sm:pb-0">
+    <section className="relative min-h-screen flex items-center overflow-hidden">
       {/* Background with parallax effect */}
       <div className="absolute inset-0">
         {heroData.map((hero, index) => (
@@ -96,8 +96,8 @@ const HeroSlider = () => {
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
       </div>
 
-      {/* Main content */}
-      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Main content wrapper with increased vertical padding on mobile */}
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-16 sm:pt-8 sm:pb-8">
         <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
 
           {/* Left content */}
@@ -231,3 +231,4 @@ const HeroSlider = () => {
 };
 
 export default HeroSlider;
+
