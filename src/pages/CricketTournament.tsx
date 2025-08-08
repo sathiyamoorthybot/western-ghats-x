@@ -107,7 +107,7 @@ const CricketTournament: React.FC = () => {
           captain_phone: teamData.captainPhone,
           captain_email: teamData.captainEmail,
           players: teamData.players,
-          entry_fee: 2000,
+          entry_fee: 2299,
           payment_status: 'pending',
           user_id: user?.id || null
         })
@@ -179,7 +179,7 @@ const CricketTournament: React.FC = () => {
                   teamData,
                   paymentStatus: 'completed',
                   registrationId,
-                  paymentAmount: 2000 + Math.round(2000 * 0.0235) // Base amount + platform fee
+                  paymentAmount: 2299 + Math.round(2299 * 0.0235) // Base amount + platform fee
                 }
               });
 
