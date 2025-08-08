@@ -57,8 +57,8 @@ const Footer = () => {
                 events@westernghatsx.in
               </p>
               <p className="text-sm text-white/80 mt-1 block md:hidden">
-  +91 63745 2141
-</p>
+                +91 63745 2141
+              </p>
             </div>
           </div>
 
