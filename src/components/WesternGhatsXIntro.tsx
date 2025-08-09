@@ -71,13 +71,10 @@ const WesternGhatsXIntro = () => {
                   </Badge>
                 </div>
                 <p className="text-muted-foreground mb-4">
-                  Run for Nature at Kattanji Hills, Coimbatore.
-Discover the scenic trails of Kattanji Hills near Periyanaickenpalayam — known for its natural beauty, Thandi Perumal Kovil, and eco-friendly initiatives.
-
-🏃 Choose your distance: 5K | 10K | Half Marathon
-Perfect for all fitness levels.
-
-Join us where spirituality meets sustainability, and every step supports a cleaner, greener future.
+                  Run for Nature at Kattanji Hills, Coimbatore. Discover the scenic trails of Kattanji Hills near Periyanaickenpalayam — known for its natural beauty and eco-friendly initiatives. 
+                  🏃 Choose your distance: 5K | 10K | Half Marathon. 
+                  Perfect for all fitness levels. 
+                  Join us where spirituality meets sustainability, and every step supports a cleaner, greener future.
 
 
                 </p>
