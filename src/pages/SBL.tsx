@@ -71,21 +71,18 @@ export default function SBL() {
           </CardContent>
         </Card>
 
-        {/* Prize Details */}
-        <Card className="mb-8 border-my-8">
-          <CardHeader>
-            <CardTitle>Prize Pool</CardTitle>
-          </CardHeader>
-          <CardContent>Winner: ₹6,000 + Trophy
-
-Runner-up: ₹3,000 + Trophy
-
-Third Place: Trophy
-
-Man of the Series: Trophy
-
-</CardContent>
-        </Card>
+      {/* Prize Details */}
+<Card className="mb-8 border-my-8">
+  <CardHeader>
+    <CardTitle>Prize Pool</CardTitle>
+  </CardHeader>
+  <CardContent>
+    <p>Winner: ₹6,000 + Trophy</p>
+    <p>Runner-up: ₹3,000 + Trophy</p>
+    <p>Third Place: Trophy</p>
+    <p>Man of the Series: Trophy</p>
+  </CardContent>
+</Card>
 
         {/* Fixtures */}
         <Card className="mb-8 border-my-8">
