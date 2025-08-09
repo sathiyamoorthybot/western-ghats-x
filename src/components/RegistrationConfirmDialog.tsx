@@ -7,6 +7,7 @@ import { Users, Mail, Phone, User } from 'lucide-react';
 interface Player {
   name: string;
   age: string;
+  phone: string;
 }
 
 interface TeamData {
@@ -32,7 +33,7 @@ const RegistrationConfirmDialog: React.FC<RegistrationConfirmDialogProps> = ({
 }) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+      <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl text-green-700">Registration Summary</DialogTitle>
         </DialogHeader>
@@ -82,17 +83,34 @@ const RegistrationConfirmDialog: React.FC<RegistrationConfirmDialogProps> = ({
           <Card>
             <CardContent className="pt-4">
               <h3 className="text-lg font-semibold mb-4">Team Players</h3>
-              <div className="space-y-2">
+              <div className="space-y-3">
                 {teamData.players.map((player, index) => (
-                  <div key={index} className="flex justify-between items-center p-2 bg-gray-50 rounded">
-                    <span className="font-medium">
-                      {index + 1}. {player.name}
-                    </span>
-                    <div className="flex gap-4 text-sm text-gray-600">
-                      <span>Age: {player.age}</span>
-                      <span className={index < 7 ? "text-green-600" : "text-blue-600"}>
-                        {index < 7 ? "Playing VII" : "Substitute"}
-                      </span>
+                  <div key={index} className="p-3 bg-gray-50 rounded-lg border">
+                    <div className="flex justify-between items-start">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="font-semibold text-lg">
+                            {index + 1}. {player.name}
+                          </span>
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                            index < 7 
+                              ? "bg-green-100 text-green-700" 
+                              : "bg-blue-100 text-blue-700"
+                          }`}>
+                            {index < 7 ? "Playing XI" : "Substitute"}
+                          </span>
+                        </div>
+                        <div className="flex gap-6 text-sm text-gray-600">
+                          <div className="flex items-center gap-1">
+                            <User className="h-3 w-3" />
+                            <span>Age: {player.age}</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <Phone className="h-3 w-3" />
+                            <span>Phone: {player.phone}</span>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 ))}
