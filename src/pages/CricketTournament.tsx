@@ -13,6 +13,7 @@ import RegistrationConfirmDialog from "@/components/RegistrationConfirmDialog";
 interface Player {
   name: string;
   age: string;
+  phone: string;
   [key: string]: any;
 }
 
@@ -57,51 +58,44 @@ const CricketTournament: React.FC = () => {
     }));
   };
 
-
-
-const validateForm = () => {
-  if (!teamData.teamName.trim()) {
-    toast({ title: "Error", description: "Team name is required", variant: "destructive" });
-    return false;
-  }
-  if (!teamData.captainName.trim()) {
-    toast({ title: "Error", description: "Captain name is required", variant: "destructive" });
-    return false;
-  }
-  if (!teamData.captainPhone.trim() || teamData.captainPhone.length !== 10) {
-    toast({ title: "Error", description: "Valid 10-digit phone number is required", variant: "destructive" });
-    return false;
-  }
-  if (!teamData.captainEmail.trim() || !teamData.captainEmail.includes('@')) {
-    toast({ title: "Error", description: "Valid email is required", variant: "destructive" });
-    return false;
-  }
-
-  for (let i = 0; i < 9; i++) {
-    const player = teamData.players[i];
-    const playerType = i < 7 ? "Playing VII" : "Substitute";
-
-    if (!player.name.trim()) {
-      toast({ title: "Error", description: `${playerType} Player ${i + 1} name is required`, variant: "destructive" });
+  const validateForm = () => {
+    if (!teamData.teamName.trim()) {
+      toast({ title: "Error", description: "Team name is required", variant: "destructive" });
       return false;
     }
-    if (!player.age.trim() || isNaN(Number(player.age)) || Number(player.age) < 16) {
-      toast({ title: "Error", description: `${playerType} Player ${i + 1} must be at least 16 years old`, variant: "destructive" });
+    if (!teamData.captainName.trim()) {
+      toast({ title: "Error", description: "Captain name is required", variant: "destructive" });
       return false;
     }
-    if (!player.phone?.trim() || player.phone.length !== 10 || !/^\d{10}$/.test(player.phone)) {
-      toast({ title: "Error", description: `${playerType} Player ${i + 1} must have a valid 10-digit phone number`, variant: "destructive" });
+    if (!teamData.captainPhone.trim() || teamData.captainPhone.length !== 10) {
+      toast({ title: "Error", description: "Valid 10-digit phone number is required", variant: "destructive" });
       return false;
     }
-  }
+    if (!teamData.captainEmail.trim() || !teamData.captainEmail.includes('@')) {
+      toast({ title: "Error", description: "Valid email is required", variant: "destructive" });
+      return false;
+    }
 
-  return true;
-};
+    for (let i = 0; i < 9; i++) {
+      const player = teamData.players[i];
+      const playerType = i < 7 ? "Playing XI" : "Substitute";
 
+      if (!player.name.trim()) {
+        toast({ title: "Error", description: `${playerType} Player ${i + 1} name is required`, variant: "destructive" });
+        return false;
+      }
+      if (!player.age.trim() || isNaN(Number(player.age)) || Number(player.age) < 16) {
+        toast({ title: "Error", description: `${playerType} Player ${i + 1} must be at least 16 years old`, variant: "destructive" });
+        return false;
+      }
+      if (!player.phone.trim() || player.phone.length !== 10) {
+        toast({ title: "Error", description: `${playerType} Player ${i + 1} requires a valid 10-digit phone number`, variant: "destructive" });
+        return false;
+      }
+    }
 
-
-
-  
+    return true;
+  };
 
   const handleSubmit = async () => {
     if (!validateForm()) return;
@@ -158,7 +152,7 @@ const validateForm = () => {
 
       // Calculate total amount including service fee (rounded)
       const totalAmount = Math.round(baseAmount + (baseAmount * serviceFeePercent) / 100);
-      const amountInPaise = totalAmount * 1; // Razorpay expects amount in paise
+      const amountInPaise = totalAmount * 100; // Razorpay expects amount in paise
 
       // Call Supabase function to create Razorpay order with total amount
       const { data, error } = await supabase.functions.invoke('create-razorpay-order', {
@@ -175,7 +169,7 @@ const validateForm = () => {
             key: data.keyId,
             amount: data.amount,
             currency: data.currency,
-            name: 'SBL - Edition 1',
+            name: 'Cricket Tournament Registration',
             description: `Team: ${teamData.teamName}`,
             order_id: data.orderId,
             handler: async function (response: any) {
@@ -291,9 +285,9 @@ const validateForm = () => {
               {teamData.players.map((player, index) => (
                 <div key={index} className="border p-4 rounded-md bg-gray-50 mb-4">
                   <h4 className="font-medium mb-3">
-                    Player {index + 1} ({index < 7 ? "Playing VII" : "Substitute"})
+                    Player {index + 1} ({index < 7 ? "Playing XI" : "Substitute"})
                   </h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
                       <Label>Name *</Label>
                       <Input
@@ -309,6 +303,16 @@ const validateForm = () => {
                         value={player.age}
                         min={16}
                         onChange={(e) => handlePlayerChange(index, 'age', e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Label>Phone Number *</Label>
+                      <Input
+                        value={player.phone}
+                        onChange={(e) => handlePlayerChange(index, 'phone', e.target.value.replace(/\D/g, '').slice(0, 10))}
+                        maxLength={10}
+                        placeholder="10-digit phone number"
                         required
                       />
                     </div>
