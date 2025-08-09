@@ -77,7 +77,7 @@ const CricketTournament: React.FC = () => {
 
     for (let i = 0; i < 9; i++) {
       const player = teamData.players[i];
-      const playerType = i < 7 ? "Playing XI" : "Substitute";
+      const playerType = i < 7 ? "Playing VII" : "Substitute";
 
       if (!player.name.trim()) {
         toast({ title: "Error", description: `${playerType} Player ${i + 1} name is required`, variant: "destructive" });
