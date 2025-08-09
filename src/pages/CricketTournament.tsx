@@ -280,7 +280,7 @@ const CricketTournament: React.FC = () => {
               {teamData.players.map((player, index) => (
                 <div key={index} className="border p-4 rounded-md bg-gray-50 mb-4">
                   <h4 className="font-medium mb-3">
-                    Player {index + 1} ({index < 7 ? "Playing XI" : "Substitute"})
+                    Player {index + 1} ({index < 7 ? "Playing VII" : "Substitute"})
                   </h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
