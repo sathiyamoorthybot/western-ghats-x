@@ -320,6 +320,7 @@ const CricketTournament: React.FC = () => {
                         min={16}
                         onChange={(e) => handlePlayerChange(index, 'age', e.target.value)}
                         required
+                        className="w-20"
                       />
                     </div>
                     <div>
