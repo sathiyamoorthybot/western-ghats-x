@@ -87,7 +87,11 @@ const CricketTournament: React.FC = () => {
         toast({ title: "Error", description: `${playerType} Player ${i + 1} must be at least 16 years old`, variant: "destructive" });
         return false;
       }
+        if (!player.phone?.trim() || player.phone.length !== 10 || !/^\d{10}$/.test(player.phone)) {
+      toast({ title: "Error", description: `${playerType} Player ${i + 1} must have a valid 10-digit phone number`, variant: "destructive" });
+      return false;
     }
+    
 
     return true;
   };
