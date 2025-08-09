@@ -95,44 +95,48 @@ const RegistrationConfirmDialog: React.FC<RegistrationConfirmDialogProps> = ({
             </CardContent>
           </Card>
 
-          {/* Players List */}
-          <Card>
-            <CardContent className="pt-4">
-              <h3 className="text-lg font-semibold mb-4">Team Players</h3>
-              <div className="space-y-3">
-                {teamData.players.map((player, index) => (
-                  <div key={index} className="p-3 bg-gray-50 rounded-lg border">
-                    <div className="flex justify-between items-start">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <span className="font-semibold text-lg">
-                            {index + 1}. {player.name}
-                          </span>
-                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                            index < 7 
-                              ? "bg-green-100 text-green-700" 
-                              : "bg-blue-100 text-blue-700"
-                          }`}>
-                            {index < 7 ? "Playing XI" : "Substitute"}
-                          </span>
-                        </div>
-                        <div className="flex gap-6 text-sm text-gray-600">
-                          <div className="flex items-center gap-1">
-                            <User className="h-3 w-3" />
-                            <span>Age: {player.age}</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Phone className="h-3 w-3" />
-                            <span>Phone: {player.phone}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+         {/* Players List */}
+<Card>
+  <CardContent className="pt-4">
+    <h3 className="text-lg font-semibold mb-4">Team Players</h3>
+    <div className="space-y-2">
+      {teamData.players.map((player, index) => (
+        <div
+          key={index}
+          className="p-3 bg-gray-50 rounded-lg border flex items-center justify-between"
+        >
+          {/* Left: Player number, name, and tag */}
+          <div className="flex items-center gap-2">
+            <span className="font-semibold text-lg">
+              {index + 1}. {player.name}
+            </span>
+            <span
+              className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                index < 7
+                  ? "bg-green-100 text-green-700"
+                  : "bg-blue-100 text-blue-700"
+              }`}
+            >
+              {index < 7 ? "Playing XI" : "Substitute"}
+            </span>
+          </div>
+
+          {/* Right: Age and Phone */}
+          <div className="flex items-center gap-6 text-sm text-gray-600">
+            <div className="flex items-center gap-1">
+              <User className="h-3 w-3" />
+              <span>{player.age} yrs</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <Phone className="h-3 w-3" />
+              <span>{player.phone}</span>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </CardContent>
+</Card>
 
           {/* Payment Info */}
           <Card className="border-green-200 bg-green-50">
