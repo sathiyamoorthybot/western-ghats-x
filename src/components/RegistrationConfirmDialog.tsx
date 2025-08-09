@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -31,8 +31,24 @@ const RegistrationConfirmDialog: React.FC<RegistrationConfirmDialogProps> = ({
   teamData,
   onProceedToPayment
 }) => {
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+
+  const handleProceedToPayment = async () => {
+    if (isProcessingPayment) return; // Prevent multiple clicks
+    
+    setIsProcessingPayment(true);
+    try {
+      await onProceedToPayment();
+    } catch (error) {
+      console.error('Payment initiation error:', error);
+      // Reset on error so user can try again
+      setIsProcessingPayment(false);
+    }
+    // Don't reset isProcessingPayment on success - keep it disabled
+  };
+
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={isProcessingPayment ? () => {} : onClose}>
       <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl text-green-700">Registration Summary</DialogTitle>
@@ -134,16 +150,38 @@ const RegistrationConfirmDialog: React.FC<RegistrationConfirmDialogProps> = ({
 
           {/* Action Buttons */}
           <div className="flex gap-4 pt-4">
-            <Button variant="outline" onClick={onClose} className="flex-1">
+            <Button 
+              variant="outline" 
+              onClick={onClose} 
+              className="flex-1"
+              disabled={isProcessingPayment}
+            >
               Edit Details
             </Button>
             <Button 
-              onClick={onProceedToPayment} 
-              className="flex-1 bg-gradient-to-r from-mountain-green to-mountain-blue"
+              onClick={handleProceedToPayment} 
+              className="flex-1 bg-gradient-to-r from-mountain-green to-mountain-blue disabled:opacity-50"
+              disabled={isProcessingPayment}
+              style={{ pointerEvents: isProcessingPayment ? 'none' : 'auto' }}
             >
-              Proceed to Payment (₹2,353)
+              {isProcessingPayment ? (
+                <>
+                  <span className="mr-2">⏳</span>
+                  Processing...
+                </>
+              ) : (
+                "Proceed to Payment (₹2,353)"
+              )}
             </Button>
           </div>
+          
+          {isProcessingPayment && (
+            <div className="text-center">
+              <p className="text-sm text-gray-600">
+                Please wait, initiating payment gateway...
+              </p>
+            </div>
+          )}
         </div>
       </DialogContent>
     </Dialog>
