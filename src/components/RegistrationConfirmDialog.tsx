@@ -3,7 +3,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Users, Mail, Phone, User } from 'lucide-react';
-import { useRouter } from 'next/router';
 
 interface Player {
   name: string;
@@ -33,24 +32,19 @@ const RegistrationConfirmDialog: React.FC<RegistrationConfirmDialogProps> = ({
   onProceedToPayment
 }) => {
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
-  const router = useRouter();
 
   const handleProceedToPayment = async () => {
-    if (isProcessingPayment) return; 
+    if (isProcessingPayment) return; // Prevent multiple clicks
+    
     setIsProcessingPayment(true);
     try {
       await onProceedToPayment();
     } catch (error) {
       console.error('Payment initiation error:', error);
+      // Reset on error so user can try again
       setIsProcessingPayment(false);
     }
-  };
-
-  const handleEditDetails = () => {
-    router.push({
-      pathname: '/CricketTournament',
-      query: { editMode: 'true' } // tells page to show edit form + enable payment button
-    });
+    // Don't reset isProcessingPayment on success - keep it disabled
   };
 
   return (
@@ -101,58 +95,60 @@ const RegistrationConfirmDialog: React.FC<RegistrationConfirmDialogProps> = ({
             </CardContent>
           </Card>
 
-          {/* Players List */}
-          <Card>
-            <CardContent className="pt-4">
-              <h3 className="text-lg font-semibold mb-4">Team Players</h3>
-              <div className="space-y-2">
-                {teamData.players.map((player, index) => (
-                  <div
-                    key={index}
-                    className="p-2 bg-gray-50 rounded-lg border flex items-center justify-between text-sm"
-                  >
-                    <div className="flex items-center gap-2">
-                      <span className="font-medium">
-                        {index + 1}. {player.name}
-                      </span>
-                      <span
-                        className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                          index < 7
-                            ? "bg-green-100 text-green-700"
-                            : "bg-blue-100 text-blue-700"
-                        }`}
-                      >
-                        {index < 7 ? "Playing XI" : "Substitute"}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-4 text-gray-600">
-                      <span className="flex items-center gap-1">
-                        <User className="h-3 w-3" />
-                        {player.age} yrs
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Phone className="h-3 w-3" />
-                        {player.phone}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+         {/* Players List */}
+<Card>
+  <CardContent className="pt-4">
+    <h3 className="text-lg font-semibold mb-4">Team Players</h3>
+    <div className="space-y-2">
+      {teamData.players.map((player, index) => (
+        <div
+          key={index}
+          className="p-3 bg-gray-50 rounded-lg border flex items-center justify-between"
+        >
+          {/* Left: Player number, name, and tag */}
+          <div className="flex items-center gap-2">
+            <span className="font-semibold text-lg">
+              {index + 1}. {player.name}
+            </span>
+            <span
+              className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                index < 7
+                  ? "bg-green-100 text-green-700"
+                  : "bg-blue-100 text-blue-700"
+              }`}
+            >
+              {index < 7 ? "Playing XI" : "Substitute"}
+            </span>
+          </div>
+
+          {/* Right: Age and Phone */}
+          <div className="flex items-center gap-6 text-sm text-gray-600">
+            <div className="flex items-center gap-1">
+              <User className="h-3 w-3" />
+              <span>{player.age} yrs</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <Phone className="h-3 w-3" />
+              <span>{player.phone}</span>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </CardContent>
+</Card>
 
           {/* Payment Info */}
           <Card className="border-green-200 bg-green-50">
             <CardContent className="pt-4">
               <h3 className="text-lg font-semibold text-green-700 mb-2">Payment Details</h3>
-              <p className="text-gray-700">
-                Registration Fee: <span className="font-bold text-xl">₹2,299</span>{" "}
-                + Service Fee (2.35%): <span className="font-bold text-xl">₹54</span>{" "}
-                = Total: <span className="font-bold text-xl">₹2,353</span>
-              </p>
-              <p className="text-sm text-gray-600 mt-1">
-                Payment will be processed securely through Razorpay
-              </p>
+          
+               <p className="text-gray-700">
+      Registration Fee: <span className="font-bold text-xl">₹2,299</span>{" "}
+      + Service Fee (2.35%): <span className="font-bold text-xl">₹54</span>{" "}
+      = Total: <span className="font-bold text-xl">₹2,353</span>
+    </p>
+              <p className="text-sm text-gray-600 mt-1">Payment will be processed securely through Razorpay</p>
             </CardContent>
           </Card>
 
@@ -160,7 +156,7 @@ const RegistrationConfirmDialog: React.FC<RegistrationConfirmDialogProps> = ({
           <div className="flex gap-4 pt-4">
             <Button 
               variant="outline" 
-              onClick={handleEditDetails} 
+              onClick={onClose} 
               className="flex-1"
               disabled={isProcessingPayment}
             >
