@@ -303,7 +303,9 @@ const CricketTournament: React.FC = () => {
                   <h4 className="font-medium mb-3">
                     Player {index + 1} ({index < 7 ? "Playing VII" : "Substitute"})
                   </h4>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+                  <div className="grid grid-cols-[1fr_auto_1fr] gap-4">
+          
                     <div>
                       <Label>Name *</Label>
                       <Input
@@ -320,7 +322,7 @@ const CricketTournament: React.FC = () => {
                         min={16}
                         onChange={(e) => handlePlayerChange(index, 'age', e.target.value)}
                         required
-                    
+                         className="w-26"
                       />
                     </div>
                     <div>
