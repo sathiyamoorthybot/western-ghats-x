@@ -169,7 +169,7 @@ const CricketTournament: React.FC = () => {
             key: data.keyId,
             amount: data.amount,
             currency: data.currency,
-            name: 'Cricket Tournament Registration',
+            name: 'SBL - Edition 1',
             description: `Team: ${teamData.teamName}`,
             order_id: data.orderId,
             handler: async function (response: any) {
