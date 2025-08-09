@@ -76,7 +76,15 @@ export default function SBL() {
           <CardHeader>
             <CardTitle>Prize Pool</CardTitle>
           </CardHeader>
-          <CardContent>₹9,000 + Trophies</CardContent>
+          <CardContent>Winner: ₹6,000 + Trophy
+
+Runner-up: ₹3,000 + Trophy
+
+Third Place: Trophy
+
+Man of the Series: Trophy
+
+</CardContent>
         </Card>
 
         {/* Fixtures */}
