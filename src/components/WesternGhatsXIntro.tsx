@@ -47,18 +47,15 @@ const WesternGhatsXIntro = () => {
                     Cricket
                   </Badge>
                 </div>
-                <p className="text-muted-foreground mb-4">
-                  High-energy 6-over cricket tournament featuring 16 teams in a knockout format. 
-                  Professional turf venue with umpired matches and exciting prize pool.
-                </p>
+                <p className="text-muted-foreground mb-4">High-energy 5-over cricket tournament featuring 16 teams in a knockout format. Professional turf venue with umpired matches and exciting prize pool.</p>
                 <div className="flex items-center gap-4 text-sm text-muted-foreground">
                   <div className="flex items-center gap-1">
                     <Calendar className="w-4 h-4" />
-                    <span>August 31, 2025</span>
+                    <span>Sep 07, 2025</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <Trophy className="w-4 h-4" />
-                    <span>₹8,000 Prize</span>
+                    <span>₹9,000 Prize</span>
                   </div>
                 </div>
               </CardContent>
