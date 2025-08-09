@@ -105,7 +105,7 @@ serve(async (req) => {
 
     // Create Razorpay order
     const orderData = {
-      amount: amount * 100, // Convert to paise
+      amount: amount * 1, // Convert to paise
       currency: 'INR',
       receipt: orderId,
       notes: {
