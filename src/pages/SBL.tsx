@@ -3,22 +3,17 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-
 export default function SBL() {
-  return (
-    <div className="bg-white text-gray-900">
+  return <div className="bg-white text-gray-900">
       {/* Breadcrumb without background image */}
       <div className="bg-gradient-to-r from-mountain-green to-mountain-blue text-white text-white rounded-xl overflow-hidden mb-8 shadow-md">
         {/* Breadcrumb content */}
-        <div
-          className="relative z-10 text-center"
-          style={{
-            paddingTop: "100px",
-            paddingBottom: "40px",
-            paddingLeft: "30px",
-            paddingRight: "30px",
-          }}
-        >
+        <div className="relative z-10 text-center" style={{
+        paddingTop: "100px",
+        paddingBottom: "40px",
+        paddingLeft: "30px",
+        paddingRight: "30px"
+      }}>
           <nav className="text-sm mb-2 flex justify-center">
             <ol className="flex items-center space-x-2">
               <li>
@@ -31,7 +26,7 @@ export default function SBL() {
             </ol>
           </nav>
           <h1 className="text-3xl font-bold">Saravanampatti Blasters League - Edition 1</h1>
-          <p className="text-lg mt-1">League Format | 22 Matches | ₹2,299 Entry</p>
+          <p className="text-lg mt-1">League Format | 18 Teams | 22 Matches | ₹2,299 Entry</p>
         </div>
       </div>
 
@@ -39,20 +34,12 @@ export default function SBL() {
       <div className="px-4 md:px-32 lg:px-64">
         {/* Hero Section */}
         <div className="grid md:grid-cols-2 gap-6 items-center">
-          <img
-            src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4nqOfLK66cm0r0BWguKcTfAPRFToooevRnyQ8PWzTcBuDrR1ZHqCdQMiaNSEHjY8L6zubHHxlTgbUdMolF1QE7Ikvp_KIeSJsELjZoQ4BO1rl1AMt_uWgwSfMMZgPbaxzQmYZNEAMA=s680-w680-h510-rw"
-            alt="Cricket Match"
-            className="rounded-lg shadow-md"
-          />
+          <img src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4nqOfLK66cm0r0BWguKcTfAPRFToooevRnyQ8PWzTcBuDrR1ZHqCdQMiaNSEHjY8L6zubHHxlTgbUdMolF1QE7Ikvp_KIeSJsELjZoQ4BO1rl1AMt_uWgwSfMMZgPbaxzQmYZNEAMA=s680-w680-h510-rw" alt="Cricket Match" className="rounded-lg shadow-md" />
           <div>
             <h2 className="text-2xl font-bold mb-2">
               Join the Ultimate Cricket Challenge
             </h2>
-            <p className="mb-4">
-              Get ready for an action-packed cricket league featuring 22 exciting
-              matches across 6 groups. Compete for glory, trophies, and a ₹9,000
-              prize pool.
-            </p>
+            <p className="mb-4">Get ready for an action-packed cricket league featuring 18 teams battling it out across 6 groups with 22 exciting matches. Compete for glory, trophies, and a ₹9,000 prize pool.</p>
             <p className="mb-2">
               <strong>Venue:</strong> Ten Sports Turf, Saravanampatti
             </p>
@@ -100,15 +87,25 @@ export default function SBL() {
           <CardContent className="overflow-x-auto">
             <h3 className="font-bold mt-4 mb-2">League Matches (18 Matches)</h3>
 
-            {[
-              { name: "Group A", matches: [["1", "Team A1", "Team A2"], ["2", "Team A2", "Team A3"], ["3", "Team A3", "Team A1"]] },
-              { name: "Group B", matches: [["4", "Team B1", "Team B2"], ["5", "Team B2", "Team B3"], ["6", "Team B3", "Team B1"]] },
-              { name: "Group C", matches: [["7", "Team C1", "Team C2"], ["8", "Team C2", "Team C3"], ["9", "Team C3", "Team C1"]] },
-              { name: "Group D", matches: [["10", "Team D1", "Team D2"], ["11", "Team D2", "Team D3"], ["12", "Team D3", "Team D1"]] },
-              { name: "Group E", matches: [["13", "Team E1", "Team E2"], ["14", "Team E2", "Team E3"], ["15", "Team E3", "Team E1"]] },
-              { name: "Group F", matches: [["16", "Team F1", "Team F2"], ["17", "Team F2", "Team F3"], ["18", "Team F3", "Team F1"]] },
-            ].map((group, i) => (
-              <div key={i} className="mb-4">
+            {[{
+            name: "Group A",
+            matches: [["1", "Team A1", "Team A2"], ["2", "Team A2", "Team A3"], ["3", "Team A3", "Team A1"]]
+          }, {
+            name: "Group B",
+            matches: [["4", "Team B1", "Team B2"], ["5", "Team B2", "Team B3"], ["6", "Team B3", "Team B1"]]
+          }, {
+            name: "Group C",
+            matches: [["7", "Team C1", "Team C2"], ["8", "Team C2", "Team C3"], ["9", "Team C3", "Team C1"]]
+          }, {
+            name: "Group D",
+            matches: [["10", "Team D1", "Team D2"], ["11", "Team D2", "Team D3"], ["12", "Team D3", "Team D1"]]
+          }, {
+            name: "Group E",
+            matches: [["13", "Team E1", "Team E2"], ["14", "Team E2", "Team E3"], ["15", "Team E3", "Team E1"]]
+          }, {
+            name: "Group F",
+            matches: [["16", "Team F1", "Team F2"], ["17", "Team F2", "Team F3"], ["18", "Team F3", "Team F1"]]
+          }].map((group, i) => <div key={i} className="mb-4">
                 <h4 className="font-semibold">{group.name}</h4>
                 <table className="border border-gray-300 text-sm w-full mb-2">
                   <thead>
@@ -119,17 +116,14 @@ export default function SBL() {
                     </tr>
                   </thead>
                   <tbody>
-                    {group.matches.map((m, idx) => (
-                      <tr key={idx}>
+                    {group.matches.map((m, idx) => <tr key={idx}>
                         <td className="border px-2 py-1">{m[0]}</td>
                         <td className="border px-2 py-1">{m[1]}</td>
                         <td className="border px-2 py-1">{m[2]}</td>
-                      </tr>
-                    ))}
+                      </tr>)}
                   </tbody>
                 </table>
-              </div>
-            ))}
+              </div>)}
 
             <h3 className="font-bold mt-4 mb-2">Qualifier Matches (3 Matches)</h3>
             <table className="border border-gray-300 text-sm w-full mb-4">
@@ -206,6 +200,5 @@ export default function SBL() {
           </CardContent>
         </Card>
       </div>
-    </div>
-  );
+    </div>;
 }
