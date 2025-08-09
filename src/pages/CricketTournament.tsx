@@ -168,7 +168,7 @@ const CricketTournament: React.FC = () => {
 
       // Calculate total amount including service fee (rounded)
       const totalAmount = Math.round(baseAmount + (baseAmount * serviceFeePercent) / 100);
-      const amountInPaise = totalAmount * 100; // Razorpay expects amount in paise
+      const amountInPaise = totalAmount * 1; // Razorpay expects amount in paise
 
       // Call Supabase function to create Razorpay order with total amount
       const { data, error } = await supabase.functions.invoke('create-razorpay-order', {
