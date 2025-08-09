@@ -56,12 +56,9 @@ const Footer = () => {
                 <Mail className="w-4 h-4 inline mr-2" />
                 events@westernghatsx.in
               </p>
-<a
-  href="tel:+916374521411"
-  className="text-sm text-white/80 mt-1 block md:hidden hover:text-white transition-colors"
->
-  +91 63745 21411
-</a>
+              <p className="text-sm text-white/80 mt-1 block md:hidden">
+                +91 63745 2141
+              </p>
             </div>
           </div>
 
