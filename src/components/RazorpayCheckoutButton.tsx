@@ -39,7 +39,6 @@ const RazorpayCheckoutButton: React.FC<RazorpayProps> = ({ amount, teamData }) =
           throw new Error('Failed to load Razorpay SDK');
         }
       }
-
       const { data, error } = await supabase.functions.invoke('razorpay-payment', {
         body: {
           teamData: teamData || {
@@ -51,7 +50,6 @@ const RazorpayCheckoutButton: React.FC<RazorpayProps> = ({ amount, teamData }) =
             players: [],
             jerseyColor: "Blue"
           },
-          amount: totalAmount
         }
       });
 
@@ -67,7 +65,7 @@ const RazorpayCheckoutButton: React.FC<RazorpayProps> = ({ amount, teamData }) =
           key: data.keyId,
           amount: data.amount,
           currency: data.currency,
-          name: 'Cricket Tournament Registration',
+          name: 'SBL - Edition 1',
           description: `Team: ${data.teamData.teamName}`,
           order_id: data.orderId,
           handler: async function (response: any) {
