@@ -35,6 +35,7 @@ const CricketTournament: React.FC = () => {
   const [registered, setRegistered] = useState(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [registrationId, setRegistrationId] = useState<string | null>(null);
+  const [submissionAttempted, setSubmissionAttempted] = useState(false);
 
   const [teamData, setTeamData] = useState<TeamData>({
     teamName: "",
@@ -98,19 +99,26 @@ const CricketTournament: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    if (!validateForm()) return;
+    // Prevent multiple submissions with a flag
+    if (!validateForm() || isSubmitting || registered || submissionAttempted) {
+      return;
+    }
 
+    // Set flags immediately to prevent race conditions
+    setSubmissionAttempted(true);
     setIsSubmitting(true);
 
     try {
+      console.log('Starting registration process...');
+
       // Save to Supabase cricket_tournaments table
       const { data, error } = await supabase
         .from('cricket_tournaments' as any)
         .insert({
-          team_name: teamData.teamName,
-          captain_name: teamData.captainName,
-          captain_phone: teamData.captainPhone,
-          captain_email: teamData.captainEmail,
+          team_name: teamData.teamName.trim(),
+          captain_name: teamData.captainName.trim(),
+          captain_phone: teamData.captainPhone.trim(),
+          captain_email: teamData.captainEmail.trim(),
           players: teamData.players,
           entry_fee: 2299,
           payment_status: 'pending',
@@ -119,7 +127,12 @@ const CricketTournament: React.FC = () => {
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
+
+      console.log('Registration successful, data:', data);
 
       setRegistrationId((data as any)?.id);
       setRegistered(true);
@@ -133,6 +146,9 @@ const CricketTournament: React.FC = () => {
 
     } catch (error: any) {
       console.error('Registration error:', error);
+      // Reset flags on error so user can try again
+      setSubmissionAttempted(false);
+      
       toast({
         title: "Registration Failed",
         description: error.message || "Failed to register team. Please try again.",
@@ -147,12 +163,12 @@ const CricketTournament: React.FC = () => {
     try {
       setShowConfirmDialog(false);
 
-      const baseAmount = 2; // Entry fee
+      const baseAmount = 2299; // Entry fee
       const serviceFeePercent = 2.35; // 2.35% service fee
 
       // Calculate total amount including service fee (rounded)
       const totalAmount = Math.round(baseAmount + (baseAmount * serviceFeePercent) / 100);
-      const amountInPaise = totalAmount * 1; // Razorpay expects amount in paise
+      const amountInPaise = totalAmount * 100; // Razorpay expects amount in paise
 
       // Call Supabase function to create Razorpay order with total amount
       const { data, error } = await supabase.functions.invoke('create-razorpay-order', {
@@ -169,7 +185,7 @@ const CricketTournament: React.FC = () => {
             key: data.keyId,
             amount: data.amount,
             currency: data.currency,
-            name: 'SBL - Edition 1',
+            name: 'Cricket Tournament Registration',
             description: `Team: ${teamData.teamName}`,
             order_id: data.orderId,
             handler: async function (response: any) {
@@ -325,11 +341,26 @@ const CricketTournament: React.FC = () => {
             <div className="text-center pt-4">
               <Button
                 onClick={handleSubmit}
-                disabled={isSubmitting || registered}
-                className="bg-gradient-to-r from-mountain-green to-mountain-blue text-white font-semibold px-8 py-3 text-lg"
+                disabled={isSubmitting || registered || submissionAttempted}
+                className="bg-gradient-to-r from-mountain-green to-mountain-blue text-white font-semibold px-8 py-3 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{ pointerEvents: (isSubmitting || registered || submissionAttempted) ? 'none' : 'auto' }}
               >
-                {isSubmitting ? "Registering..." : registered ? "Registration Complete" : "Proceed to Payment"}
+                {isSubmitting ? (
+                  <>
+                    <span className="mr-2">⏳</span>
+                    Registering...
+                  </>
+                ) : registered ? (
+                  "Registration Complete"
+                ) : (
+                  "Proceed to Payment"
+                )}
               </Button>
+              {isSubmitting && (
+                <p className="text-sm text-gray-600 mt-2">
+                  Please wait, processing your registration...
+                </p>
+              )}
             </div>
 
             {/* Registration Confirmation Dialog */}
