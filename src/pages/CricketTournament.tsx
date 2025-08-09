@@ -57,44 +57,51 @@ const CricketTournament: React.FC = () => {
     }));
   };
 
-  const validateForm = () => {
-    if (!teamData.teamName.trim()) {
-      toast({ title: "Error", description: "Team name is required", variant: "destructive" });
-      return false;
-    }
-    if (!teamData.captainName.trim()) {
-      toast({ title: "Error", description: "Captain name is required", variant: "destructive" });
-      return false;
-    }
-    if (!teamData.captainPhone.trim() || teamData.captainPhone.length !== 10) {
-      toast({ title: "Error", description: "Valid 10-digit phone number is required", variant: "destructive" });
-      return false;
-    }
-    if (!teamData.captainEmail.trim() || !teamData.captainEmail.includes('@')) {
-      toast({ title: "Error", description: "Valid email is required", variant: "destructive" });
-      return false;
-    }
 
-    for (let i = 0; i < 9; i++) {
-      const player = teamData.players[i];
-      const playerType = i < 7 ? "Playing VII" : "Substitute";
 
-      if (!player.name.trim()) {
-        toast({ title: "Error", description: `${playerType} Player ${i + 1} name is required`, variant: "destructive" });
-        return false;
-      }
-      if (!player.age.trim() || isNaN(Number(player.age)) || Number(player.age) < 16) {
-        toast({ title: "Error", description: `${playerType} Player ${i + 1} must be at least 16 years old`, variant: "destructive" });
-        return false;
-      }
-        if (!player.phone?.trim() || player.phone.length !== 10 || !/^\d{10}$/.test(player.phone)) {
+const validateForm = () => {
+  if (!teamData.teamName.trim()) {
+    toast({ title: "Error", description: "Team name is required", variant: "destructive" });
+    return false;
+  }
+  if (!teamData.captainName.trim()) {
+    toast({ title: "Error", description: "Captain name is required", variant: "destructive" });
+    return false;
+  }
+  if (!teamData.captainPhone.trim() || teamData.captainPhone.length !== 10) {
+    toast({ title: "Error", description: "Valid 10-digit phone number is required", variant: "destructive" });
+    return false;
+  }
+  if (!teamData.captainEmail.trim() || !teamData.captainEmail.includes('@')) {
+    toast({ title: "Error", description: "Valid email is required", variant: "destructive" });
+    return false;
+  }
+
+  for (let i = 0; i < 9; i++) {
+    const player = teamData.players[i];
+    const playerType = i < 7 ? "Playing VII" : "Substitute";
+
+    if (!player.name.trim()) {
+      toast({ title: "Error", description: `${playerType} Player ${i + 1} name is required`, variant: "destructive" });
+      return false;
+    }
+    if (!player.age.trim() || isNaN(Number(player.age)) || Number(player.age) < 16) {
+      toast({ title: "Error", description: `${playerType} Player ${i + 1} must be at least 16 years old`, variant: "destructive" });
+      return false;
+    }
+    if (!player.phone?.trim() || player.phone.length !== 10 || !/^\d{10}$/.test(player.phone)) {
       toast({ title: "Error", description: `${playerType} Player ${i + 1} must have a valid 10-digit phone number`, variant: "destructive" });
       return false;
     }
-    
+  }
 
-    return true;
-  };
+  return true;
+};
+
+
+
+
+  
 
   const handleSubmit = async () => {
     if (!validateForm()) return;
