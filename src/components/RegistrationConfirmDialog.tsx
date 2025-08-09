@@ -91,7 +91,7 @@ const RegistrationConfirmDialog: React.FC<RegistrationConfirmDialogProps> = ({
                     <div className="flex gap-4 text-sm text-gray-600">
                       <span>Age: {player.age}</span>
                       <span className={index < 7 ? "text-green-600" : "text-blue-600"}>
-                        {index < 7 ? "Playing XI" : "Substitute"}
+                        {index < 7 ? "Playing VII" : "Substitute"}
                       </span>
                     </div>
                   </div>
