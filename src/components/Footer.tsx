@@ -59,12 +59,13 @@ const Footer = () => {
               </p>
 
               <a
-                href="tel:+916374521411"
-                className="text-sm text-white/80 mt-1 block md:hidden hover:text-white transition-colors"
-              >
-                <Phone className="w-4 h-4 inline mr-2" />
-                +91 63745 21411
-              </a>
+  href="tel:+916374521411"
+  className="text-sm text-white/80 mt-1 block hover:text-white transition-colors"
+>
+  <Phone className="w-4 h-4 inline mr-2" />
+  +91 63745 21411
+</a>
+
             </div>
           </div>
 
