@@ -138,41 +138,6 @@ const RegistrationConfirmDialog: React.FC<RegistrationConfirmDialogProps> = ({
   </CardContent>
 </Card>
 
-          {/* Right: Age and Phone */}
-          <div className="flex flex-wrap sm:flex-nowrap items-center gap-4 text-sm text-gray-600">
-            <div className="flex items-center gap-1">
-              <User className="h-3 w-3" />
-              <span>{player.age} yrs</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <Phone className="h-3 w-3" />
-              <span>{player.phone}</span>
-            </div>
-          </div>
-        </div>
-      ))}
-    </div>
-  </CardContent>
-</Card>
-
-
-          {/* Right: Age and Phone */}
-          <div className="flex items-center gap-6 text-sm text-gray-600">
-            <div className="flex items-center gap-1">
-              <User className="h-3 w-3" />
-              <span>{player.age} yrs</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <Phone className="h-3 w-3" />
-              <span>{player.phone}</span>
-            </div>
-          </div>
-        </div>
-      ))}
-    </div>
-  </CardContent>
-</Card>
-
           {/* Payment Info */}
           <Card className="border-green-200 bg-green-50">
             <CardContent className="pt-4">
