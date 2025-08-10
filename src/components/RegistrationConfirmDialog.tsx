@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -59,7 +60,6 @@ const RegistrationConfirmDialog: React.FC<RegistrationConfirmDialogProps> = ({
           <Card>
             <CardContent className="pt-4">
               <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                
                 <Users className="h-5 w-5" />
                 Team Information
               </h3>
@@ -112,11 +112,11 @@ const RegistrationConfirmDialog: React.FC<RegistrationConfirmDialogProps> = ({
               {index + 1}. {player.name}
             </span>
             <span
-                className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+              className={`px-2 py-0.5 rounded-full text-xs font-medium ${
                 index < 7
                   ? "bg-green-100 text-green-700"
                   : "bg-blue-100 text-blue-700"
-              }}
+              }`}
             >
               {index < 7 ? "Playing VII" : "Substitute"}
             </span>
