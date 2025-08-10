@@ -99,15 +99,15 @@ const RegistrationConfirmDialog: React.FC<RegistrationConfirmDialogProps> = ({
 <Card>
   <CardContent className="pt-4">
     <h3 className="text-lg font-semibold mb-4">Team Players</h3>
-    <div className="space-y-2">
+    <div className="space-y-3">
       {teamData.players.map((player, index) => (
         <div
           key={index}
-          className="p-3 bg-gray-50 rounded-lg border flex items-center justify-between"
+          className="p-3 bg-gray-50 rounded-lg border flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3"
         >
           {/* Left: Player number, name, and tag */}
-          <div className="flex items-center gap-2">
-            <span className="font-semibold text-lg">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="font-semibold text-base sm:text-lg">
               {index + 1}. {player.name}
             </span>
             <span
@@ -120,6 +120,24 @@ const RegistrationConfirmDialog: React.FC<RegistrationConfirmDialogProps> = ({
               {index < 7 ? "Playing VII" : "Substitute"}
             </span>
           </div>
+
+          {/* Right: Age and Phone */}
+          <div className="flex flex-wrap sm:flex-nowrap items-center gap-4 text-sm text-gray-600">
+            <div className="flex items-center gap-1">
+              <User className="h-3 w-3" />
+              <span>{player.age} yrs</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <Phone className="h-3 w-3" />
+              <span>{player.phone}</span>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </CardContent>
+</Card>
+
 
           {/* Right: Age and Phone */}
           <div className="flex items-center gap-6 text-sm text-gray-600">
