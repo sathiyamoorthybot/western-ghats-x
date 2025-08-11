@@ -92,7 +92,7 @@ const validateForm = () => {
   // Patterns
   const phonePattern = /^\d{10}$/;
   const emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
-  const agePattern = /^\d+$/;
+  const agePattern = /^\d{2}$/;
 
   // --- Team Details ---
   if (!teamData.teamName.trim()) return showError("Team name required", "teamName"), false;
