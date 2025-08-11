@@ -1,4 +1,4 @@
-name: Build, Deploy to Hostinger, and Update Supabase Secrets
+name: Build & Deploy to Hostinger + Update Supabase
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build-and-deploy:
+  build-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,7 +24,7 @@ jobs:
     - name: Build Vite project
       run: npm run build
 
-    - name: Deploy via FTP
+    - name: Deploy via FTP to Hostinger
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
         server: ${{ secrets.FTP_HOST }}
@@ -33,17 +33,13 @@ jobs:
         local-dir: ./dist/
         server-dir: public_html/
 
-  update-supabase-secrets:
-    runs-on: ubuntu-latest
-    needs: build-and-deploy
-    steps:
-    - name: Checkout repo
-      uses: actions/checkout@v3
-
     - name: Install Supabase CLI
       run: npm install -g supabase
 
-    - name: Set Supabase secrets
+    - name: Login to Supabase
+      run: supabase login --token ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+
+    - name: Set Supabase Secrets
       run: |
         supabase secrets set RAZORPAY_KEY_ID=${{ secrets.RAZORPAY_KEY_ID }}
         supabase secrets set RAZORPAY_KEY_SECRET=${{ secrets.RAZORPAY_KEY_SECRET }}
