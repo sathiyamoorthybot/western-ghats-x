@@ -243,7 +243,7 @@ const CricketTournament: React.FC = () => {
       const totalAmountInRupees = Math.round(
         ENTRY_FEE + (ENTRY_FEE * PLATFORM_FEE_PERCENT) / 100
       ); // integer rupees (rounded)
-      const amountInPaise = totalAmountInRupees * 100; // IMPORTANT
+      const amountInPaise = totalAmountInRupees * 1; // IMPORTANT
 
       if (!registrationId) {
         toast({
