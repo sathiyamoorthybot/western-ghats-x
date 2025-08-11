@@ -60,90 +60,62 @@ const CricketTournament: React.FC = () => {
   };
 
 
+
+
 const validateForm = () => {
   const showError = (message, fieldId) => {
     toast({
       title: "Error",
       description: message,
       variant: "destructive",
+      duration: 2500, // shorter for mobile
     });
 
-    // Scroll to field for mobile
     if (fieldId) {
       const el = document.getElementById(fieldId);
       if (el) {
-        el.scrollIntoView({ behavior: "smooth", block: "center" });
-        el.focus();
+        // Delay so toast shows first, then scroll
+        setTimeout(() => {
+          el.scrollIntoView({ behavior: "smooth", block: "center" });
+          // Focus only if it's an input to avoid mobile zoom bug
+          if (el.tagName === "INPUT" || el.tagName === "TEXTAREA") {
+            el.focus({ preventScroll: true });
+          }
+        }, 300);
       }
     }
 
-    // Optional: Mobile haptic feedback
-    if (navigator.vibrate) navigator.vibrate(100);
+    // Gentle haptic feedback
+    if (navigator.vibrate) navigator.vibrate(60);
   };
 
-  if (!teamData.teamName.trim()) {
-    showError("Enter team name", "teamName");
-    return false;
-  }
-  if (!teamData.captainName.trim()) {
-    showError("Enter captain name", "captainName");
-    return false;
-  }
-  if (!/^\d{10}$/.test(teamData.captainPhone.trim())) {
-    showError("Enter valid 10-digit phone", "captainPhone");
-    return false;
-  }
-  if (!/^[^@]+@[^@]+\.[^@]+$/.test(teamData.captainEmail.trim())) {
-    showError("Enter valid email", "captainEmail");
-    return false;
+  // Patterns
+  const phonePattern = /^\d{10}$/;
+  const emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
+  const agePattern = /^\d+$/;
+
+  // --- Team Details ---
+  if (!teamData.teamName.trim()) return showError("Team name required", "teamName"), false;
+  if (!teamData.captainName.trim()) return showError("Captain name required", "captainName"), false;
+  if (!phonePattern.test(teamData.captainPhone.trim())) return showError("10-digit phone", "captainPhone"), false;
+  if (!emailPattern.test(teamData.captainEmail.trim())) return showError("Valid email required", "captainEmail"), false;
+
+  // --- Players ---
+  for (let i = 0; i < 9; i++) {
+    const p = teamData.players[i];
+    const type = i < 7 ? "P" : "S"; // Short labels for mobile (P = Playing, S = Sub)
+    const idx = i + 1;
+
+    if (!p.name.trim()) return showError(`${type}${idx}: Name`, `playerName-${i}`), false;
+    if (!agePattern.test(p.age) || Number(p.age) < 16) return showError(`${type}${idx}: Age ≥16`, `playerAge-${i}`), false;
+    if (!phonePattern.test(p.phone.trim())) return showError(`${type}${idx}: 10-digit phone`, `playerPhone-${i}`), false;
   }
 
-<div className="space-y-4">
-  {teamData.players.map((player, i) => {
-    const playerType = i < 7 ? "Playing VII" : "Substitute";
-    const prefix = `${playerType} ${i + 1}`;
+  return true;
+};
 
-    return (
-      <div key={i} className="p-3 border rounded-md bg-white shadow-sm">
-        <p className="text-sm font-semibold mb-2">{prefix}</p>
-        
-        <div className="grid grid-cols-1 sm:grid-cols-[2fr_1fr_2fr] gap-3">
-          {/* Name */}
-          <input
-            id={`playerName-${i}`}
-            type="text"
-            placeholder="Name *"
-            value={player.name}
-            onChange={(e) => updatePlayerField(i, "name", e.target.value)}
-            className="w-full p-2 border rounded-md"
-          />
 
-          {/* Age */}
-          <input
-            id={`playerAge-${i}`}
-            type="number"
-            min={16}
-            inputMode="numeric"
-            placeholder="Age *"
-            value={player.age}
-            onChange={(e) => updatePlayerField(i, "age", e.target.value)}
-            className="w-full p-2 border rounded-md"
-          />
 
-          {/* Phone */}
-          <input
-            id={`playerPhone-${i}`}
-            type="tel"
-            placeholder="Phone *"
-            value={player.phone}
-            onChange={(e) => updatePlayerField(i, "phone", e.target.value)}
-            className="w-full p-2 border rounded-md"
-          />
-        </div>
-      </div>
-    );
-  })}
-</div>
 
 
   
