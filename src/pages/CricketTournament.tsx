@@ -34,7 +34,7 @@ declare global {
 }
 
 // ---- Pricing constants ----
-const ENTRY_FEE = 2299;            // ₹2,299 per team
+const ENTRY_FEE = 3;            // ₹2,299 per team
 const PLATFORM_FEE_PERCENT = 2.35; // 2.35%
 
 // ---- Helper: load Razorpay script once ----
