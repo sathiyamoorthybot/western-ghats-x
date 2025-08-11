@@ -92,7 +92,7 @@ const validateForm = () => {
   // Patterns
   const phonePattern = /^\d{10}$/;
   const emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
-  const agePattern = /^\d{2}$/;
+  const agePattern = /^\d+$/;
 
   // --- Team Details ---
   if (!teamData.teamName.trim()) return showError("Team name required", "teamName"), false;
@@ -108,7 +108,10 @@ const validateForm = () => {
 
     if (!p.name.trim()) return showError(`${type}${idx}: Name`, `playerName-${i}`), false;
    
-    if (!phonePattern.test(p.age.trim())) || Number(p.age) < 16) return showError(`${type}${idx}: 2-digit phone`, `playerAge-${i}`), false;
+    if (!agePattern.test(p.age.trim()) || Number(p.age) < 16) {
+  return showError(`${type}${idx}: Age ≥ 16`, `playerAge-${i}`), false;
+}
+
     if (!phonePattern.test(p.phone.trim())) return showError(`${type}${idx}: 10-digit phone`, `playerPhone-${i}`), false;
   }
 
