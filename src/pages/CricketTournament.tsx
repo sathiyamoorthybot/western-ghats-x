@@ -98,31 +98,52 @@ const validateForm = () => {
     return false;
   }
 
-  for (let i = 0; i < 9; i++) {
-    const player = teamData.players[i];
+<div className="space-y-4">
+  {teamData.players.map((player, i) => {
     const playerType = i < 7 ? "Playing VII" : "Substitute";
     const prefix = `${playerType} ${i + 1}`;
 
-    if (!player.name.trim()) {
-      showError(`${prefix}: name required`, `playerName-${i}`);
-      return false;
-    }
-    if (!/^\d+$/.test(player.age) || Number(player.age) < 16) {
-      showError(`${prefix}: min age 16`, `playerAge-${i}`);
-      return false;
-    }
-    if (!/^\d{10}$/.test(player.phone.trim())) {
-      showError(`${prefix}: 10-digit phone`, `playerPhone-${i}`);
-      return false;
-    }
-  }
+    return (
+      <div key={i} className="p-3 border rounded-md bg-white shadow-sm">
+        <p className="text-sm font-semibold mb-2">{prefix}</p>
+        
+        <div className="grid grid-cols-1 sm:grid-cols-[2fr_1fr_2fr] gap-3">
+          {/* Name */}
+          <input
+            id={`playerName-${i}`}
+            type="text"
+            placeholder="Name *"
+            value={player.name}
+            onChange={(e) => updatePlayerField(i, "name", e.target.value)}
+            className="w-full p-2 border rounded-md"
+          />
 
-  return true;
-};
+          {/* Age */}
+          <input
+            id={`playerAge-${i}`}
+            type="number"
+            min={16}
+            inputMode="numeric"
+            placeholder="Age *"
+            value={player.age}
+            onChange={(e) => updatePlayerField(i, "age", e.target.value)}
+            className="w-full p-2 border rounded-md"
+          />
 
-
-
-
+          {/* Phone */}
+          <input
+            id={`playerPhone-${i}`}
+            type="tel"
+            placeholder="Phone *"
+            value={player.phone}
+            onChange={(e) => updatePlayerField(i, "phone", e.target.value)}
+            className="w-full p-2 border rounded-md"
+          />
+        </div>
+      </div>
+    );
+  })}
+</div>
 
 
   
