@@ -1,9 +1,9 @@
-name: Build and Deploy to Hostinger
+name: Build, Deploy to Hostinger, and Update Supabase Secrets
 
 on:
   push:
     branches:
-      - main  # or 'master'
+      - main
 
 jobs:
   build-and-deploy:
@@ -32,3 +32,21 @@ jobs:
         password: ${{ secrets.FTP_PASSWORD }}
         local-dir: ./dist/
         server-dir: public_html/
+
+  update-supabase-secrets:
+    runs-on: ubuntu-latest
+    needs: build-and-deploy
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Install Supabase CLI
+      run: npm install -g supabase
+
+    - name: Set Supabase secrets
+      run: |
+        supabase secrets set RAZORPAY_KEY_ID=${{ secrets.RAZORPAY_KEY_ID }}
+        supabase secrets set RAZORPAY_KEY_SECRET=${{ secrets.RAZORPAY_KEY_SECRET }}
+
+    - name: Deploy Supabase function
+      run: supabase functions deploy create-razorpay-order
