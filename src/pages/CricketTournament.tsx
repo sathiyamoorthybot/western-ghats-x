@@ -60,7 +60,11 @@ const CricketTournament: React.FC = () => {
   };
 
 
-const validateForm = () => {
+
+
+
+
+  const validateForm = () => {
   const showError = (message, fieldId) => {
     toast({
       title: "Error",
@@ -68,58 +72,69 @@ const validateForm = () => {
       variant: "destructive",
     });
 
-    // Scroll to field for mobile
+    // Scroll into view & focus for mobile users
     if (fieldId) {
       const el = document.getElementById(fieldId);
       if (el) {
         el.scrollIntoView({ behavior: "smooth", block: "center" });
-        el.focus();
+        el.focus({ preventScroll: true });
       }
     }
 
-    // Optional: Mobile haptic feedback
-    if (navigator.vibrate) navigator.vibrate(100);
+    // Light haptic feedback for mobile devices
+    if (navigator.vibrate) navigator.vibrate(80);
   };
 
+  // Helper regex patterns
+  const phonePattern = /^\d{10}$/;
+  const emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
+  const agePattern = /^\d+$/;
+
+  // --- Captain & Team Details ---
   if (!teamData.teamName.trim()) {
     showError("Enter team name", "teamName");
     return false;
   }
+
   if (!teamData.captainName.trim()) {
     showError("Enter captain name", "captainName");
     return false;
   }
-  if (!/^\d{10}$/.test(teamData.captainPhone.trim())) {
+
+  if (!phonePattern.test(teamData.captainPhone.trim())) {
     showError("Enter valid 10-digit phone", "captainPhone");
     return false;
   }
-  if (!/^[^@]+@[^@]+\.[^@]+$/.test(teamData.captainEmail.trim())) {
+
+  if (!emailPattern.test(teamData.captainEmail.trim())) {
     showError("Enter valid email", "captainEmail");
     return false;
   }
 
+  // --- Players Validation ---
   for (let i = 0; i < 9; i++) {
     const player = teamData.players[i];
     const playerType = i < 7 ? "Playing VII" : "Substitute";
-    const prefix = `${playerType} ${i + 1}`;
+    const label = `${playerType} ${i + 1}`;
 
     if (!player.name.trim()) {
-      showError(`${prefix}: name required`, `playerName-${i}`);
+      showError(`${label}: name required`, `playerName-${i}`);
       return false;
     }
-    if (!/^\d+$/.test(player.age) || Number(player.age) < 16) {
-      showError(`${prefix}: min age 16`, `playerAge-${i}`);
+
+    if (!agePattern.test(player.age) || Number(player.age) < 16) {
+      showError(`${label}: must be at least 16 years old`, `playerAge-${i}`);
       return false;
     }
-    if (!/^\d{10}$/.test(player.phone.trim())) {
-      showError(`${prefix}: 10-digit phone`, `playerPhone-${i}`);
+
+    if (!phonePattern.test(player.phone.trim())) {
+      showError(`${label}: enter valid 10-digit phone`, `playerPhone-${i}`);
       return false;
     }
   }
 
   return true;
 };
-
 
 
 
