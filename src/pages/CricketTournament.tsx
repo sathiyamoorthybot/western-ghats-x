@@ -107,7 +107,8 @@ const validateForm = () => {
     const idx = i + 1;
 
     if (!p.name.trim()) return showError(`${type}${idx}: Name`, `playerName-${i}`), false;
-    if (!agePattern.test(p.age) || Number(p.age) < 16) return showError(`${type}${idx}: Age ≥16`, `playerAge-${i}`), false;
+   
+    if (!phonePattern.test(p.age.trim())) || Number(p.age) < 16) return showError(`${type}${idx}: 2-digit phone`, `playerAge-${i}`), false;
     if (!phonePattern.test(p.phone.trim())) return showError(`${type}${idx}: 10-digit phone`, `playerPhone-${i}`), false;
   }
 
