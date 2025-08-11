@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Facebook, Instagram, Mail, Globe } from "lucide-react";
+import { Facebook, Instagram, Mail, Globe, phone } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Footer = () => {
