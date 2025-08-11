@@ -295,61 +295,50 @@ const CricketTournament: React.FC = () => {
               </div>
             </div>
 
-           {/* Players */}
-<div>
-  <h3 className="text-xl font-semibold mb-4">Players (7 + 2 Subs)</h3>
-  {teamData.players.map((player, index) => (
-    <div
-      key={index}
-      className="border p-4 rounded-md bg-gray-50 mb-4"
-    >
-      <h4 className="font-medium mb-3">
-        Player {index + 1} ({index < 7 ? "Playing VII" : "Substitute"})
-      </h4>
+            {/* Players */}
+            <div>
+              <h3 className="text-xl font-semibold mb-4">Players (7 + 2 Subs)</h3>
+              {teamData.players.map((player, index) => (
+                <div key={index} className="border p-4 rounded-md bg-gray-50 mb-4">
+                  <h4 className="font-medium mb-3">
+                    Player {index + 1} ({index < 7 ? "Playing VII" : "Substitute"})
+                  </h4>
 
-      {/* Responsive Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div>
-          <Label>Name *</Label>
-          <Input
-            value={player.name}
-            onChange={(e) => handlePlayerChange(index, "name", e.target.value)}
-            required
-          />
-        </div>
-
-        <div>
-          <Label>Age *</Label>
-          <Input
-            type="number"
-            value={player.age}
-            min={16}
-            onChange={(e) => handlePlayerChange(index, "age", e.target.value)}
-            required
-          />
-        </div>
-
-        <div>
-          <Label>Phone Number *</Label>
-          <Input
-            value={player.phone}
-            onChange={(e) =>
-              handlePlayerChange(
-                index,
-                "phone",
-                e.target.value.replace(/\D/g, "").slice(0, 10)
-              )
-            }
-            maxLength={10}
-            placeholder="10-digit phone number"
-            required
-          />
-        </div>
-      </div>
-    </div>
-  ))}
-</div>
-
+                  <div className="grid grid-cols-[1fr_auto_1fr] gap-4">
+          
+                    <div>
+                      <Label>Name *</Label>
+                      <Input
+                        value={player.name}
+                        onChange={(e) => handlePlayerChange(index, 'name', e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Label>Age *</Label>
+                      <Input
+                        type="number"
+                        value={player.age}
+                        min={16}
+                        onChange={(e) => handlePlayerChange(index, 'age', e.target.value)}
+                        required
+                         className="w-22"
+                      />
+                    </div>
+                    <div>
+                      <Label>Phone Number *</Label>
+                      <Input
+                        value={player.phone}
+                        onChange={(e) => handlePlayerChange(index, 'phone', e.target.value.replace(/\D/g, '').slice(0, 10))}
+                        maxLength={10}
+                        placeholder="10-digit phone number"
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
 
             {/* Final Actions */}
             <div className="text-center pt-4">
