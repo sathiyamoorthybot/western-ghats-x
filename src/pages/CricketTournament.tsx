@@ -62,75 +62,53 @@ const CricketTournament: React.FC = () => {
 
 
 
-
-
-  const validateForm = () => {
+const validateForm = () => {
   const showError = (message, fieldId) => {
     toast({
       title: "Error",
       description: message,
       variant: "destructive",
+      duration: 2500, // shorter for mobile
     });
 
-    // Scroll into view & focus for mobile users
     if (fieldId) {
       const el = document.getElementById(fieldId);
       if (el) {
-        el.scrollIntoView({ behavior: "smooth", block: "center" });
-        el.focus({ preventScroll: true });
+        // Delay so toast shows first, then scroll
+        setTimeout(() => {
+          el.scrollIntoView({ behavior: "smooth", block: "center" });
+          // Focus only if it's an input to avoid mobile zoom bug
+          if (el.tagName === "INPUT" || el.tagName === "TEXTAREA") {
+            el.focus({ preventScroll: true });
+          }
+        }, 300);
       }
     }
 
-    // Light haptic feedback for mobile devices
-    if (navigator.vibrate) navigator.vibrate(80);
+    // Gentle haptic feedback
+    if (navigator.vibrate) navigator.vibrate(60);
   };
 
-  // Helper regex patterns
+  // Patterns
   const phonePattern = /^\d{10}$/;
   const emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
   const agePattern = /^\d+$/;
 
-  // --- Captain & Team Details ---
-  if (!teamData.teamName.trim()) {
-    showError("Enter team name", "teamName");
-    return false;
-  }
+  // --- Team Details ---
+  if (!teamData.teamName.trim()) return showError("Team name required", "teamName"), false;
+  if (!teamData.captainName.trim()) return showError("Captain name required", "captainName"), false;
+  if (!phonePattern.test(teamData.captainPhone.trim())) return showError("10-digit phone", "captainPhone"), false;
+  if (!emailPattern.test(teamData.captainEmail.trim())) return showError("Valid email required", "captainEmail"), false;
 
-  if (!teamData.captainName.trim()) {
-    showError("Enter captain name", "captainName");
-    return false;
-  }
-
-  if (!phonePattern.test(teamData.captainPhone.trim())) {
-    showError("Enter valid 10-digit phone", "captainPhone");
-    return false;
-  }
-
-  if (!emailPattern.test(teamData.captainEmail.trim())) {
-    showError("Enter valid email", "captainEmail");
-    return false;
-  }
-
-  // --- Players Validation ---
+  // --- Players ---
   for (let i = 0; i < 9; i++) {
-    const player = teamData.players[i];
-    const playerType = i < 7 ? "Playing VII" : "Substitute";
-    const label = `${playerType} ${i + 1}`;
+    const p = teamData.players[i];
+    const type = i < 7 ? "P" : "S"; // Short labels for mobile (P = Playing, S = Sub)
+    const idx = i + 1;
 
-    if (!player.name.trim()) {
-      showError(`${label}: name required`, `playerName-${i}`);
-      return false;
-    }
-
-    if (!agePattern.test(player.age) || Number(player.age) < 16) {
-      showError(`${label}: must be at least 16 years old`, `playerAge-${i}`);
-      return false;
-    }
-
-    if (!phonePattern.test(player.phone.trim())) {
-      showError(`${label}: enter valid 10-digit phone`, `playerPhone-${i}`);
-      return false;
-    }
+    if (!p.name.trim()) return showError(`${type}${idx}: Name`, `playerName-${i}`), false;
+    if (!agePattern.test(p.age) || Number(p.age) < 16) return showError(`${type}${idx}: Age ≥16`, `playerAge-${i}`), false;
+    if (!phonePattern.test(p.phone.trim())) return showError(`${type}${idx}: 10-digit phone`, `playerPhone-${i}`), false;
   }
 
   return true;
