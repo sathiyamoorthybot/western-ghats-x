@@ -163,7 +163,7 @@ const CricketTournament: React.FC = () => {
     try {
       setShowConfirmDialog(false);
 
-      const baseAmount = 2299; // Entry fee
+      const baseAmount = 3; // Entry fee
       const serviceFeePercent = 2.35; // 2.35% service fee
 
       // Calculate total amount including service fee (rounded)
