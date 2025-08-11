@@ -59,45 +59,73 @@ const CricketTournament: React.FC = () => {
     }));
   };
 
-  const validateForm = () => {
-    if (!teamData.teamName.trim()) {
-      toast({ title: "Error", description: "Team name is required", variant: "destructive" });
-      return false;
-    }
-    if (!teamData.captainName.trim()) {
-      toast({ title: "Error", description: "Captain name is required", variant: "destructive" });
-      return false;
-    }
-    if (!teamData.captainPhone.trim() || teamData.captainPhone.length !== 10) {
-      toast({ title: "Error", description: "Valid 10-digit phone number is required", variant: "destructive" });
-      return false;
-    }
-    if (!teamData.captainEmail.trim() || !teamData.captainEmail.includes('@')) {
-      toast({ title: "Error", description: "Valid email is required", variant: "destructive" });
-      return false;
-    }
 
-    for (let i = 0; i < 9; i++) {
-      const player = teamData.players[i];
-      const playerType = i < 7 ? "Playing VII" : "Substitute";
+const validateForm = () => {
+  const showError = (message, fieldId) => {
+    toast({
+      title: "Error",
+      description: message,
+      variant: "destructive",
+    });
 
-      if (!player.name.trim()) {
-        toast({ title: "Error", description: `${playerType} Player ${i + 1} name is required`, variant: "destructive" });
-        return false;
-      }
-      if (!player.age.trim() || isNaN(Number(player.age)) || Number(player.age) < 16) {
-        toast({ title: "Error", description: `${playerType} Player ${i + 1} must be at least 16 years old`, variant: "destructive" });
-        return false;
-      }
-      if (!player.phone.trim() || player.phone.length !== 10) {
-        toast({ title: "Error", description: `${playerType} Player ${i + 1} requires a valid 10-digit phone number`, variant: "destructive" });
-        return false;
+    // Scroll to field for mobile
+    if (fieldId) {
+      const el = document.getElementById(fieldId);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "center" });
+        el.focus();
       }
     }
 
-    return true;
+    // Optional: Mobile haptic feedback
+    if (navigator.vibrate) navigator.vibrate(100);
   };
 
+  if (!teamData.teamName.trim()) {
+    showError("Enter team name", "teamName");
+    return false;
+  }
+  if (!teamData.captainName.trim()) {
+    showError("Enter captain name", "captainName");
+    return false;
+  }
+  if (!/^\d{10}$/.test(teamData.captainPhone.trim())) {
+    showError("Enter valid 10-digit phone", "captainPhone");
+    return false;
+  }
+  if (!/^[^@]+@[^@]+\.[^@]+$/.test(teamData.captainEmail.trim())) {
+    showError("Enter valid email", "captainEmail");
+    return false;
+  }
+
+  for (let i = 0; i < 9; i++) {
+    const player = teamData.players[i];
+    const playerType = i < 7 ? "Playing VII" : "Substitute";
+    const prefix = `${playerType} ${i + 1}`;
+
+    if (!player.name.trim()) {
+      showError(`${prefix}: name required`, `playerName-${i}`);
+      return false;
+    }
+    if (!/^\d+$/.test(player.age) || Number(player.age) < 16) {
+      showError(`${prefix}: min age 16`, `playerAge-${i}`);
+      return false;
+    }
+    if (!/^\d{10}$/.test(player.phone.trim())) {
+      showError(`${prefix}: 10-digit phone`, `playerPhone-${i}`);
+      return false;
+    }
+  }
+
+  return true;
+};
+
+
+
+
+
+
+  
   const handleSubmit = async () => {
     // Prevent multiple submissions with a flag
     if (!validateForm() || isSubmitting || registered || submissionAttempted) {
