@@ -33,8 +33,7 @@ const Footer = () => {
 
 
 
-          {/* Events & Contact Section */}
-<div>
+         <div>
   <h3 className="text-lg font-semibold mb-4">Our Events</h3>
   <ul className="space-y-2 text-sm mb-6">
     <li>
@@ -49,35 +48,29 @@ const Footer = () => {
     </li>
   </ul>
   <div className="space-y-2">
-    <p
-      className="text-sm text-white/80 cursor-pointer hover:text-white transition-colors"
+    <div
+      className="flex items-center text-sm text-white/80 cursor-pointer hover:text-white transition-colors m-0"
       onClick={() => window.open("https://www.westernghatsx.in", "_blank")}
     >
-      <Globe className="w-4 h-4 inline mr-2" />
+      <Globe className="w-4 h-4 mr-2" />
       www.westernghatsx.in
-    </p>
-    <p
-      className="text-sm text-white/80 cursor-pointer hover:text-white transition-colors"
+    </div>
+    <div
+      className="flex items-center text-sm text-white/80 cursor-pointer hover:text-white transition-colors m-0"
       onClick={() => window.open("mailto:events@westernghatsx.in", "_blank")}
     >
-      <Mail className="w-4 h-4 inline mr-2" />
+      <Mail className="w-4 h-4 mr-2" />
       events@westernghatsx.in
-    </p>
+    </div>
     <a
       href="tel:+916374521411"
-      className="text-sm text-white/80 hover:text-white transition-colors"
+      className="flex items-center text-sm text-white/80 hover:text-white transition-colors m-0"
     >
-      <Phone className="w-4 h-4 inline mr-2" />
+      <Phone className="w-4 h-4 mr-2" />
       +91 63745 21411
     </a>
   </div>
 </div>
-
-
-
-
-
-
 
           
 
