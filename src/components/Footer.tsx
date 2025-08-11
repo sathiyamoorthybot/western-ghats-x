@@ -26,44 +26,56 @@ const Footer = () => {
             </p>
           </div>
 
+
+
+
           {/* Events & Contact Section */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Our Events</h3>
-            <ul className="space-y-2 text-sm mb-6">
-              <li>
-                <Link to="/sbl" className="text-white/80 hover:text-white transition-colors">
-                  Saravanampatti Blasters League - Edition 1
-                </Link>
-              </li>
-              <li>
-                <Link to="/kattanji-hills-marathon" className="text-white/80 hover:text-white transition-colors">
-                  Kattanji Hills Marathon
-                </Link>
-              </li>
-            </ul>
-            <div className="space-y-2">
-              <p
-                className="text-sm text-white/80 cursor-pointer hover:text-white transition-colors"
-                onClick={() => window.open("https://www.westernghatsx.in", "_blank")}
-              >
-                <Globe className="w-4 h-4 inline mr-2" />
-                www.westernghatsx.in
-              </p>
-              <p
-                className="text-sm text-white/80 cursor-pointer hover:text-white transition-colors"
-                onClick={() => window.open("mailto:events@westernghatsx.in", "_blank")}
-              >
-                <Mail className="w-4 h-4 inline mr-2" />
-                events@westernghatsx.in
-              </p>
-<a
-  href="tel:+916374521411"
-  className="text-sm text-white/80 mt-1 block md:hidden hover:text-white transition-colors"
->
-  +91 63745 21411
-</a>
-            </div>
-          </div>
+<div>
+  <h3 className="text-lg font-semibold mb-4">Our Events</h3>
+  <ul className="space-y-2 text-sm mb-6">
+    <li>
+      <Link to="/sbl" className="text-white/80 hover:text-white transition-colors">
+        Saravanampatti Blasters League - Edition 1
+      </Link>
+    </li>
+    <li>
+      <Link to="/kattanji-hills-marathon" className="text-white/80 hover:text-white transition-colors">
+        Kattanji Hills Marathon
+      </Link>
+    </li>
+  </ul>
+  <div className="space-y-2">
+    <p
+      className="text-sm text-white/80 cursor-pointer hover:text-white transition-colors"
+      onClick={() => window.open("https://www.westernghatsx.in", "_blank")}
+    >
+      <Globe className="w-4 h-4 inline mr-2" />
+      www.westernghatsx.in
+    </p>
+    <p
+      className="text-sm text-white/80 cursor-pointer hover:text-white transition-colors"
+      onClick={() => window.open("mailto:events@westernghatsx.in", "_blank")}
+    >
+      <Mail className="w-4 h-4 inline mr-2" />
+      events@westernghatsx.in
+    </p>
+    <a
+      href="tel:+916374521411"
+      className="text-sm text-white/80 hover:text-white transition-colors"
+    >
+      <Phone className="w-4 h-4 inline mr-2" />
+      +91 63745 21411
+    </a>
+  </div>
+</div>
+
+
+
+
+
+
+
+          
 
           {/* Support & Social Media Section */}
           <div>
