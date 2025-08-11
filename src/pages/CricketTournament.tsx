@@ -10,13 +10,13 @@ import { Users, Trophy } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import RegistrationConfirmDialog from "@/components/RegistrationConfirmDialog";
 
+// ---- Types ----
 interface Player {
   name: string;
   age: string;
   phone: string;
   [key: string]: any;
 }
-
 interface TeamData {
   teamName: string;
   captainName: string;
@@ -25,6 +25,31 @@ interface TeamData {
   teamJerseyUrl?: string;
   players: Player[];
 }
+
+// ---- Razorpay typing (optional) ----
+declare global {
+  interface Window {
+    Razorpay: any;
+  }
+}
+
+// ---- Pricing constants ----
+const ENTRY_FEE = 2299;            // ₹2,299 per team
+const PLATFORM_FEE_PERCENT = 2.35; // 2.35%
+
+// ---- Helper: load Razorpay script once ----
+const loadRazorpay = (): Promise<boolean> => {
+  return new Promise((resolve) => {
+    if (document.querySelector('script[src="https://checkout.razorpay.com/v1/checkout.js"]')) {
+      return resolve(true);
+    }
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
+};
 
 const CricketTournament: React.FC = () => {
   const { toast } = useToast();
@@ -43,124 +68,102 @@ const CricketTournament: React.FC = () => {
     captainPhone: "",
     captainEmail: "",
     teamJerseyUrl: "",
-    players: Array(9).fill(null).map(() => ({ name: "", age: "", phone: "" }))
+    players: Array(9)
+      .fill(null)
+      .map(() => ({ name: "", age: "", phone: "" })),
   });
 
   const handleInputChange = (field: keyof TeamData, value: string) => {
-    setTeamData(prev => ({ ...prev, [field]: value }));
+    setTeamData((prev) => ({ ...prev, [field]: value }));
   };
 
   const handlePlayerChange = (index: number, field: keyof Player, value: string) => {
-    setTeamData(prev => ({
+    setTeamData((prev) => ({
       ...prev,
       players: prev.players.map((player, i) =>
         i === index ? { ...player, [field]: value } : player
-      )
+      ),
     }));
   };
 
+  const validateForm = () => {
+    const showError = (message: string, fieldId?: string) => {
+      toast({
+        title: "Error",
+        description: message,
+        variant: "destructive",
+        duration: 2500,
+      });
 
-
-
-const validateForm = () => {
-  const showError = (message, fieldId) => {
-    toast({
-      title: "Error",
-      description: message,
-      variant: "destructive",
-      duration: 2500, // shorter for mobile
-    });
-
-    if (fieldId) {
-      const el = document.getElementById(fieldId);
-      if (el) {
-        // Delay so toast shows first, then scroll
-        setTimeout(() => {
-          el.scrollIntoView({ behavior: "smooth", block: "center" });
-          // Focus only if it's an input to avoid mobile zoom bug
-          if (el.tagName === "INPUT" || el.tagName === "TEXTAREA") {
-            el.focus({ preventScroll: true });
-          }
-        }, 300);
+      if (fieldId) {
+        const el = document.getElementById(fieldId);
+        if (el) {
+          setTimeout(() => {
+            el.scrollIntoView({ behavior: "smooth", block: "center" });
+            if (el.tagName === "INPUT" || el.tagName === "TEXTAREA") {
+              (el as HTMLInputElement | HTMLTextAreaElement).focus({ preventScroll: true });
+            }
+          }, 300);
+        }
       }
+
+      if (navigator.vibrate) navigator.vibrate(60);
+    };
+
+    const phonePattern = /^\d{10}$/;
+    const emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
+    const agePattern = /^\d+$/;
+
+    // Team details
+    if (!teamData.teamName.trim()) return showError("Team name required", "teamName"), false;
+    if (!teamData.captainName.trim()) return showError("Captain name required", "captainName"), false;
+    if (!phonePattern.test(teamData.captainPhone.trim()))
+      return showError("Captain phone must be 10 digits", "captainPhone"), false;
+    if (!emailPattern.test(teamData.captainEmail.trim()))
+      return showError("Valid captain email required", "captainEmail"), false;
+
+    // Players (7 + 2 subs)
+    for (let i = 0; i < 9; i++) {
+      const p = teamData.players[i];
+      const type = i < 7 ? "P" : "S";
+      const idx = i + 1;
+
+      if (!p.name.trim()) return showError(`${type}${idx}: Name required`, `playerName-${i}`), false;
+
+      if (!agePattern.test(p.age.trim()) || Number(p.age) < 16) {
+        return showError(`${type}${idx}: Age must be ≥ 16`, `playerAge-${i}`), false;
+      }
+
+      if (!phonePattern.test(p.phone.trim()))
+        return showError(`${type}${idx}: Phone must be 10 digits`, `playerPhone-${i}`), false;
     }
 
-    // Gentle haptic feedback
-    if (navigator.vibrate) navigator.vibrate(60);
+    return true;
   };
 
-  // Patterns
-  const phonePattern = /^\d{10}$/;
-  const emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
-  const agePattern = /^\d+$/;
-
-  // --- Team Details ---
-  if (!teamData.teamName.trim()) return showError("Team name required", "teamName"), false;
-  if (!teamData.captainName.trim()) return showError("Captain name required", "captainName"), false;
-  if (!phonePattern.test(teamData.captainPhone.trim())) return showError("10-digit phone", "captainPhone"), false;
-  if (!emailPattern.test(teamData.captainEmail.trim())) return showError("Valid email required", "captainEmail"), false;
-
-  // --- Players ---
-  for (let i = 0; i < 9; i++) {
-    const p = teamData.players[i];
-    const type = i < 7 ? "P" : "S"; // Short labels for mobile (P = Playing, S = Sub)
-    const idx = i + 1;
-
-    if (!p.name.trim()) return showError(`${type}${idx}: Name`, `playerName-${i}`), false;
-   
-if (!agePattern.test(p.age.trim()) || Number(p.age) < 16) {
-    return showError(`${type}${idx}: Age ≥ 16`, `playerAge-${i}`), false;
-  }
-  
-
-
-    
-    if (!phonePattern.test(p.phone.trim())) return showError(`${type}${idx}: 10-digit phone`, `playerPhone-${i}`), false;
-  }
-
-  return true;
-};
-
-
-
-
-
-  
   const handleSubmit = async () => {
-    // Prevent multiple submissions with a flag
-    if (!validateForm() || isSubmitting || registered || submissionAttempted) {
-      return;
-    }
+    if (!validateForm() || isSubmitting || registered || submissionAttempted) return;
 
-    // Set flags immediately to prevent race conditions
     setSubmissionAttempted(true);
     setIsSubmitting(true);
 
     try {
-      console.log('Starting registration process...');
-
-      // Save to Supabase cricket_tournaments table
       const { data, error } = await supabase
-        .from('cricket_tournaments' as any)
+        .from("cricket_tournaments" as any)
         .insert({
           team_name: teamData.teamName.trim(),
           captain_name: teamData.captainName.trim(),
           captain_phone: teamData.captainPhone.trim(),
           captain_email: teamData.captainEmail.trim(),
           players: teamData.players,
-          entry_fee: 2299,
-          payment_status: 'pending',
-          user_id: user?.id || null
+          entry_fee: ENTRY_FEE,
+          payment_status: "pending",
+          user_id: user?.id || null,
         })
         .select()
         .single();
 
-      if (error) {
-        console.error('Supabase error:', error);
-        throw error;
-      }
-
-      console.log('Registration successful, data:', data);
+      if (error) throw error;
 
       setRegistrationId((data as any)?.id);
       setRegistered(true);
@@ -169,18 +172,14 @@ if (!agePattern.test(p.age.trim()) || Number(p.age) < 16) {
       toast({
         title: "Registration Successful!",
         description: "Your team has been registered. Please proceed to payment.",
-        variant: "default"
+        variant: "default",
       });
-
     } catch (error: any) {
-      console.error('Registration error:', error);
-      // Reset flags on error so user can try again
       setSubmissionAttempted(false);
-      
       toast({
         title: "Registration Failed",
-        description: error.message || "Failed to register team. Please try again.",
-        variant: "destructive"
+        description: error?.message || "Failed to register team. Please try again.",
+        variant: "destructive",
       });
     } finally {
       setIsSubmitting(false);
@@ -191,79 +190,146 @@ if (!agePattern.test(p.age.trim()) || Number(p.age) < 16) {
     try {
       setShowConfirmDialog(false);
 
-      const baseAmount = 3; // Entry fee
-      const serviceFeePercent = 2.35; // 2.35% service fee
+      // ---- Amounts (Razorpay expects paise) ----
+      const totalAmountInRupees = Math.round(
+        ENTRY_FEE + (ENTRY_FEE * PLATFORM_FEE_PERCENT) / 100
+      ); // integer rupees (rounded)
+      const amountInPaise = totalAmountInRupees * 100; // IMPORTANT
 
-      // Calculate total amount including service fee (rounded)
-      const totalAmount = Math.round(baseAmount + (baseAmount * serviceFeePercent) / 100);
-      const amountInPaise = totalAmount * 1; // Razorpay expects amount in paise
+      if (!registrationId) {
+        toast({
+          title: "Missing registration",
+          description: "Please submit the form again.",
+          variant: "destructive",
+        });
+        return;
+      }
 
-      // Call Supabase function to create Razorpay order with total amount
-      const { data, error } = await supabase.functions.invoke('create-razorpay-order', {
-        body: { teamData, amount: amountInPaise, registrationId }
+      const loaded = await loadRazorpay();
+      if (!loaded) {
+        toast({
+          title: "Checkout unavailable",
+          description: "Unable to load Razorpay. Check your connection and try again.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Create order on server (make sure your server uses the right env: test vs live)
+      const { data, error } = await supabase.functions.invoke("create-razorpay-order", {
+        body: { teamData, amount: amountInPaise, registrationId },
       });
 
-      if (error) throw error;
+      if (error) throw new Error(error.message || "Order creation failed");
+      if (!data?.success || !data?.orderId || !data?.amount || !data?.currency || !data?.keyId) {
+        throw new Error("Invalid order response from server");
+      }
 
-      if (data && data.success) {
-        const script = document.createElement('script');
-        script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-        script.onload = () => {
-          const options = {
-            key: data.keyId,
-            amount: data.amount,
-            currency: data.currency,
-            name: 'Cricket Tournament Registration',
-            description: `Team: ${teamData.teamName}`,
-            order_id: data.orderId,
-            handler: async function (response: any) {
-              const { data: verifyData, error: verifyError } = await supabase.functions.invoke('verify-razorpay-payment', {
+      const options = {
+        key: data.keyId,
+        order_id: data.orderId,
+        amount: data.amount, // in paise
+        currency: data.currency, // "INR"
+        name: "Cricket Tournament Registration",
+        description: `Team: ${teamData.teamName}`,
+        notes: {
+          registration_id: String(registrationId),
+          team_name: teamData.teamName,
+          captain_phone: teamData.captainPhone,
+        },
+        prefill: {
+          name: teamData.captainName,
+          email: teamData.captainEmail,
+          contact: teamData.captainPhone,
+        },
+        theme: { color: "#3B82F6" },
+        handler: async (response: any) => {
+          try {
+            const { data: verifyData, error: verifyError } = await supabase.functions.invoke(
+              "verify-razorpay-payment",
+              {
                 body: {
                   razorpay_order_id: response.razorpay_order_id,
                   razorpay_payment_id: response.razorpay_payment_id,
-                  razorpay_signature: response.razorpay_signature
-                }
-              });
-
-              if (verifyError || !verifyData.success) {
-                toast({ title: "Payment Verification Failed", description: "Please contact support.", variant: "destructive" });
-                return;
+                  razorpay_signature: response.razorpay_signature,
+                },
               }
+            );
 
-              // Send email notifications after successful payment
-              await supabase.functions.invoke('send-cricket-registration-email', {
-                body: {
-                  teamData,
-                  paymentStatus: 'completed',
-                  registrationId,
-                  paymentAmount: totalAmount // Base amount + platform fee
-                }
-              });
+            if (verifyError) throw new Error(verifyError.message || "Verification failed");
+            if (!verifyData?.success)
+              throw new Error(verifyData?.message || "Signature verification failed");
 
-              toast({ title: "Payment Successful!", description: "Your team registration is confirmed." });
-              navigate(`/payment-success?paymentId=${response.razorpay_payment_id}&orderId=${response.razorpay_order_id}`);
+            // OPTIONAL: If your verify function doesn't mark it paid, you can do it here:
+            // await supabase.from('cricket_tournaments').update({ payment_status: 'completed' }).eq('id', registrationId);
+
+            await supabase.functions.invoke("send-cricket-registration-email", {
+              body: {
+                teamData,
+                paymentStatus: "completed",
+                registrationId,
+                paymentAmount: totalAmountInRupees,
+              },
+            });
+
+            toast({
+              title: "Payment Successful!",
+              description: "Your team registration is confirmed.",
+            });
+
+            navigate(
+              `/payment-success?paymentId=${response.razorpay_payment_id}&orderId=${response.razorpay_order_id}`
+            );
+          } catch (e: any) {
+            toast({
+              title: "Payment verified, but post-processing failed",
+              description:
+                e?.message ||
+                "We received your payment. Contact support if email/receipt is missing.",
+              variant: "destructive",
+            });
+          }
+        },
+        modal: {
+          ondismiss: () => {
+            // Optional: capture abandoned checkout
+          },
+        },
+      };
+
+      const rzp = new window.Razorpay(options);
+
+      rzp.on("payment.failed", async (resp: any) => {
+        try {
+          await supabase.functions.invoke("send-cricket-registration-email", {
+            body: {
+              teamData,
+              paymentStatus: "failed",
+              registrationId,
+              paymentAmount: totalAmountInRupees,
+              failureReason: resp?.error?.description || "Payment failed",
             },
-            prefill: {
-              name: teamData.captainName,
-              email: teamData.captainEmail,
-              contact: teamData.captainPhone
-            },
-            theme: { color: '#3B82F6' }
-          };
+          });
+        } catch (_) {}
+        toast({
+          title: "Payment Failed",
+          description: resp?.error?.description || "Your payment could not be completed.",
+          variant: "destructive",
+        });
+      });
 
-          const rzp = new (window as any).Razorpay(options);
-          rzp.open();
-        };
-        document.body.appendChild(script);
-      }
+      rzp.open();
     } catch (error: any) {
-      toast({ title: "Payment Failed", description: error.message, variant: "destructive" });
+      toast({
+        title: "Payment Error",
+        description: error?.message || "Something went wrong starting the payment.",
+        variant: "destructive",
+      });
     }
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 pt-16 pb-4 px-4 md:p-10">
-
       <div className="max-w-4xl mx-auto">
         <Card className="shadow-xl">
           <CardHeader className="text-center">
@@ -287,36 +353,45 @@ if (!agePattern.test(p.age.trim()) || Number(p.age) < 16) {
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <Label>Team Name *</Label>
+                  <Label htmlFor="teamName">Team Name *</Label>
                   <Input
+                    id="teamName"
                     value={teamData.teamName}
-                    onChange={(e) => handleInputChange('teamName', e.target.value)}
+                    onChange={(e) => handleInputChange("teamName", e.target.value)}
                     required
                   />
                 </div>
                 <div>
-                  <Label>Captain Name *</Label>
+                  <Label htmlFor="captainName">Captain Name *</Label>
                   <Input
+                    id="captainName"
                     value={teamData.captainName}
-                    onChange={(e) => handleInputChange('captainName', e.target.value)}
+                    onChange={(e) => handleInputChange("captainName", e.target.value)}
                     required
                   />
                 </div>
                 <div>
-                  <Label>Captain Phone *</Label>
+                  <Label htmlFor="captainPhone">Captain Phone *</Label>
                   <Input
+                    id="captainPhone"
                     value={teamData.captainPhone}
-                    onChange={(e) => handleInputChange('captainPhone', e.target.value.replace(/\D/g, '').slice(0, 10))}
+                    onChange={(e) =>
+                      handleInputChange(
+                        "captainPhone",
+                        e.target.value.replace(/\D/g, "").slice(0, 10)
+                      )
+                    }
                     maxLength={10}
                     required
                   />
                 </div>
                 <div>
-                  <Label>Captain Email *</Label>
+                  <Label htmlFor="captainEmail">Captain Email *</Label>
                   <Input
+                    id="captainEmail"
                     type="email"
                     value={teamData.captainEmail}
-                    onChange={(e) => handleInputChange('captainEmail', e.target.value)}
+                    onChange={(e) => handleInputChange("captainEmail", e.target.value)}
                     required
                   />
                 </div>
@@ -333,31 +408,39 @@ if (!agePattern.test(p.age.trim()) || Number(p.age) < 16) {
                   </h4>
 
                   <div className="grid grid-cols-[1fr_auto_1fr] gap-4">
-          
                     <div>
-                      <Label>Name *</Label>
+                      <Label htmlFor={`playerName-${index}`}>Name *</Label>
                       <Input
+                        id={`playerName-${index}`}
                         value={player.name}
-                        onChange={(e) => handlePlayerChange(index, 'name', e.target.value)}
+                        onChange={(e) => handlePlayerChange(index, "name", e.target.value)}
                         required
                       />
                     </div>
                     <div>
-                      <Label>Age *</Label>
+                      <Label htmlFor={`playerAge-${index}`}>Age *</Label>
                       <Input
+                        id={`playerAge-${index}`}
                         type="number"
                         value={player.age}
                         min={16}
-                        onChange={(e) => handlePlayerChange(index, 'age', e.target.value)}
+                        onChange={(e) => handlePlayerChange(index, "age", e.target.value)}
                         required
-                         className="w-22"
+                        className="w-22"
                       />
                     </div>
                     <div>
-                      <Label>Phone Number *</Label>
+                      <Label htmlFor={`playerPhone-${index}`}>Phone Number *</Label>
                       <Input
+                        id={`playerPhone-${index}`}
                         value={player.phone}
-                        onChange={(e) => handlePlayerChange(index, 'phone', e.target.value.replace(/\D/g, '').slice(0, 10))}
+                        onChange={(e) =>
+                          handlePlayerChange(
+                            index,
+                            "phone",
+                            e.target.value.replace(/\D/g, "").slice(0, 10)
+                          )
+                        }
                         maxLength={10}
                         placeholder="10-digit phone number"
                         required
@@ -374,7 +457,10 @@ if (!agePattern.test(p.age.trim()) || Number(p.age) < 16) {
                 onClick={handleSubmit}
                 disabled={isSubmitting || registered || submissionAttempted}
                 className="bg-gradient-to-r from-mountain-green to-mountain-blue text-white font-semibold px-8 py-3 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
-                style={{ pointerEvents: (isSubmitting || registered || submissionAttempted) ? 'none' : 'auto' }}
+                style={{
+                  pointerEvents:
+                    isSubmitting || registered || submissionAttempted ? "none" : "auto",
+                }}
               >
                 {isSubmitting ? (
                   <>
