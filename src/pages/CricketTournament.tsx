@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Users, Trophy } from "lucide-react";
+import { Users, Trophy, CheckCircle, XCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import RegistrationConfirmDialog from "@/components/RegistrationConfirmDialog";
 
@@ -51,6 +51,52 @@ const loadRazorpay = (): Promise<boolean> => {
   });
 };
 
+// Success Message Component
+const PaymentSuccessMessage = ({ onClose }: { onClose: () => void }) => (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+    <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 overflow-hidden">
+      <div className="bg-green-500 p-6 text-center">
+        <CheckCircle className="h-16 w-16 text-white mx-auto mb-4" />
+        <h2 className="text-2xl font-bold text-white">Payment Successful!</h2>
+      </div>
+      <div className="p-6 text-center">
+        <p className="text-gray-700 mb-6">
+          Your team registration has been confirmed. You will receive a confirmation email shortly.
+        </p>
+        <Button 
+          onClick={onClose}
+          className="bg-green-500 hover:bg-green-600 text-white px-6 py-2"
+        >
+          Continue
+        </Button>
+      </div>
+    </div>
+  </div>
+);
+
+// Failure Message Component  
+const PaymentFailureMessage = ({ onClose, message }: { onClose: () => void; message: string }) => (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+    <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 overflow-hidden">
+      <div className="bg-red-500 p-6 text-center">
+        <XCircle className="h-16 w-16 text-white mx-auto mb-4" />
+        <h2 className="text-2xl font-bold text-white">Payment Failed</h2>
+      </div>
+      <div className="p-6 text-center">
+        <p className="text-gray-700 mb-6">
+          {message || "Your payment could not be processed. Please try again."}
+        </p>
+        <Button 
+          onClick={onClose}
+          className="bg-red-500 hover:bg-red-600 text-white px-6 py-2"
+        >
+          Try Again
+        </Button>
+      </div>
+    </div>
+  </div>
+);
+
 const CricketTournament: React.FC = () => {
   const { toast } = useToast();
   const { user } = useAuth();
@@ -59,6 +105,9 @@ const CricketTournament: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [registered, setRegistered] = useState(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [showFailureMessage, setShowFailureMessage] = useState(false);
+  const [failureMessage, setFailureMessage] = useState("");
   const [registrationId, setRegistrationId] = useState<string | null>(null);
   const [submissionAttempted, setSubmissionAttempted] = useState(false);
 
@@ -207,11 +256,8 @@ const CricketTournament: React.FC = () => {
 
       const loaded = await loadRazorpay();
       if (!loaded) {
-        toast({
-          title: "Checkout unavailable",
-          description: "Unable to load Razorpay. Check your connection and try again.",
-          variant: "destructive",
-        });
+        setFailureMessage("Unable to load payment system. Please check your internet connection and try again.");
+        setShowFailureMessage(true);
         return;
       }
 
@@ -260,9 +306,7 @@ const CricketTournament: React.FC = () => {
             if (!verifyData?.success)
               throw new Error(verifyData?.message || "Signature verification failed");
 
-            // OPTIONAL: If your verify function doesn't mark it paid, you can do it here:
-            // await supabase.from('cricket_tournaments').update({ payment_status: 'completed' }).eq('id', registrationId);
-
+            // Send confirmation email
             await supabase.functions.invoke("send-cricket-registration-email", {
               body: {
                 teamData,
@@ -272,22 +316,12 @@ const CricketTournament: React.FC = () => {
               },
             });
 
-            toast({
-              title: "Payment Successful!",
-              description: "Your team registration is confirmed.",
-            });
+            // Show success message
+            setShowSuccessMessage(true);
 
-            navigate(
-              `/payment-success?paymentId=${response.razorpay_payment_id}&orderId=${response.razorpay_order_id}`
-            );
           } catch (e: any) {
-            toast({
-              title: "Payment verified, but post-processing failed",
-              description:
-                e?.message ||
-                "We received your payment. Contact support if email/receipt is missing.",
-              variant: "destructive",
-            });
+            setFailureMessage("Payment was successful but there was an issue with confirmation. Please contact support if you don't receive your confirmation email.");
+            setShowFailureMessage(true);
           }
         },
         modal: {
@@ -311,67 +345,63 @@ const CricketTournament: React.FC = () => {
             },
           });
         } catch (_) {}
-        toast({
-          title: "Payment Failed",
-          description: resp?.error?.description || "Your payment could not be completed.",
-          variant: "destructive",
-        });
+        
+        setFailureMessage(resp?.error?.description || "Your payment could not be completed. Please try again.");
+        setShowFailureMessage(true);
       });
 
       rzp.open();
     } catch (error: any) {
-      toast({
-        title: "Payment Error",
-        description: error?.message || "Something went wrong starting the payment.",
-        variant: "destructive",
-      });
+      setFailureMessage(error?.message || "Something went wrong starting the payment. Please try again.");
+      setShowFailureMessage(true);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 pt-16 pb-4 px-4 md:p-10">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 pt-4 sm:pt-8 md:pt-16 pb-4 px-2 sm:px-4 md:p-10">
       <div className="max-w-4xl mx-auto">
         <Card className="shadow-xl">
-          <CardHeader className="text-center">
+          <CardHeader className="text-center px-4 sm:px-6 py-4 sm:py-6">
             <div className="flex items-center justify-center gap-2 mb-4">
-              <Trophy className="h-8 w-8 text-yellow-500" />
-              <CardTitle className="text-3xl text-green-700">SBL - Edition 1</CardTitle>
+              <Trophy className="h-6 w-6 sm:h-8 sm:w-8 text-yellow-500" />
+              <CardTitle className="text-xl sm:text-2xl md:text-3xl text-green-700">SBL - Edition 1</CardTitle>
             </div>
-            <p className="text-gray-600">
-              Team registration only. Guest registrations are not available.
-              <br />
-              <strong className="text-green-700">Entry Fee: ₹2,299 per team</strong>
-            </p>
+            <div className="text-sm sm:text-base text-gray-600 space-y-2">
+              <p>Team registration only. Guest registrations are not available.</p>
+              <p className="text-green-700 font-semibold text-base sm:text-lg">Entry Fee: ₹2,299 per team</p>
+            </div>
           </CardHeader>
 
-          <CardContent className="space-y-8">
+          <CardContent className="space-y-6 sm:space-y-8 px-4 sm:px-6 pb-6 sm:pb-8">
             {/* Team Details */}
             <div>
-              <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                <Users className="h-5 w-5" />
+              <h3 className="text-lg sm:text-xl font-semibold mb-4 flex items-center gap-2">
+                <Users className="h-4 w-4 sm:h-5 sm:w-5" />
                 Team Details
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="teamName">Team Name *</Label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                <div className="sm:col-span-2 md:col-span-1">
+                  <Label htmlFor="teamName" className="text-sm font-medium">Team Name *</Label>
                   <Input
                     id="teamName"
                     value={teamData.teamName}
                     onChange={(e) => handleInputChange("teamName", e.target.value)}
                     required
+                    className="mt-1"
                   />
                 </div>
-                <div>
-                  <Label htmlFor="captainName">Captain Name *</Label>
+                <div className="sm:col-span-2 md:col-span-1">
+                  <Label htmlFor="captainName" className="text-sm font-medium">Captain Name *</Label>
                   <Input
                     id="captainName"
                     value={teamData.captainName}
                     onChange={(e) => handleInputChange("captainName", e.target.value)}
                     required
+                    className="mt-1"
                   />
                 </div>
-                <div>
-                  <Label htmlFor="captainPhone">Captain Phone *</Label>
+                <div className="sm:col-span-2 md:col-span-1">
+                  <Label htmlFor="captainPhone" className="text-sm font-medium">Captain Phone *</Label>
                   <Input
                     id="captainPhone"
                     value={teamData.captainPhone}
@@ -382,17 +412,20 @@ const CricketTournament: React.FC = () => {
                       )
                     }
                     maxLength={10}
+                    placeholder="10-digit phone number"
                     required
+                    className="mt-1"
                   />
                 </div>
-                <div>
-                  <Label htmlFor="captainEmail">Captain Email *</Label>
+                <div className="sm:col-span-2 md:col-span-1">
+                  <Label htmlFor="captainEmail" className="text-sm font-medium">Captain Email *</Label>
                   <Input
                     id="captainEmail"
                     type="email"
                     value={teamData.captainEmail}
                     onChange={(e) => handleInputChange("captainEmail", e.target.value)}
                     required
+                    className="mt-1"
                   />
                 </div>
               </div>
@@ -400,55 +433,59 @@ const CricketTournament: React.FC = () => {
 
             {/* Players */}
             <div>
-              <h3 className="text-xl font-semibold mb-4">Players (7 + 2 Subs)</h3>
-              {teamData.players.map((player, index) => (
-                <div key={index} className="border p-4 rounded-md bg-gray-50 mb-4">
-                  <h4 className="font-medium mb-3">
-                    Player {index + 1} ({index < 7 ? "Playing VII" : "Substitute"})
-                  </h4>
+              <h3 className="text-lg sm:text-xl font-semibold mb-4">Players (7 + 2 Subs)</h3>
+              <div className="space-y-4">
+                {teamData.players.map((player, index) => (
+                  <div key={index} className="border p-3 sm:p-4 rounded-md bg-gray-50">
+                    <h4 className="font-medium mb-3 text-sm sm:text-base">
+                      Player {index + 1} ({index < 7 ? "Playing VII" : "Substitute"})
+                    </h4>
 
-                  <div className="grid grid-cols-[1fr_auto_1fr] gap-4">
-                    <div>
-                      <Label htmlFor={`playerName-${index}`}>Name *</Label>
-                      <Input
-                        id={`playerName-${index}`}
-                        value={player.name}
-                        onChange={(e) => handlePlayerChange(index, "name", e.target.value)}
-                        required
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor={`playerAge-${index}`}>Age *</Label>
-                      <Input
-                        id={`playerAge-${index}`}
-                        type="number"
-                        value={player.age}
-                        min={16}
-                        onChange={(e) => handlePlayerChange(index, "age", e.target.value)}
-                        required
-                        className="w-22"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor={`playerPhone-${index}`}>Phone Number *</Label>
-                      <Input
-                        id={`playerPhone-${index}`}
-                        value={player.phone}
-                        onChange={(e) =>
-                          handlePlayerChange(
-                            index,
-                            "phone",
-                            e.target.value.replace(/\D/g, "").slice(0, 10)
-                          )
-                        }
-                        maxLength={10}
-                        placeholder="10-digit phone number"
-                        required
-                      />
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+                      <div className="sm:col-span-3 md:col-span-1">
+                        <Label htmlFor={`playerName-${index}`} className="text-sm font-medium">Name *</Label>
+                        <Input
+                          id={`playerName-${index}`}
+                          value={player.name}
+                          onChange={(e) => handlePlayerChange(index, "name", e.target.value)}
+                          required
+                          className="mt-1"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor={`playerAge-${index}`} className="text-sm font-medium">Age *</Label>
+                        <Input
+                          id={`playerAge-${index}`}
+                          type="number"
+                          value={player.age}
+                          min={16}
+                          onChange={(e) => handlePlayerChange(index, "age", e.target.value)}
+                          required
+                          className="mt-1"
+                        />
+                      </div>
+                      <div className="sm:col-span-2 md:col-span-1">
+                        <Label htmlFor={`playerPhone-${index}`} className="text-sm font-medium">Phone Number *</Label>
+                        <Input
+                          id={`playerPhone-${index}`}
+                          value={player.phone}
+                          onChange={(e) =>
+                            handlePlayerChange(
+                              index,
+                              "phone",
+                              e.target.value.replace(/\D/g, "").slice(0, 10)
+                            )
+                          }
+                          maxLength={10}
+                          placeholder="10-digit phone number"
+                          required
+                          className="mt-1"
+                        />
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
 
             {/* Final Actions */}
@@ -456,17 +493,17 @@ const CricketTournament: React.FC = () => {
               <Button
                 onClick={handleSubmit}
                 disabled={isSubmitting || registered || submissionAttempted}
-                className="bg-gradient-to-r from-mountain-green to-mountain-blue text-white font-semibold px-8 py-3 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full sm:w-auto bg-gradient-to-r from-mountain-green to-mountain-blue text-white font-semibold px-6 sm:px-8 py-3 text-base sm:text-lg disabled:opacity-50 disabled:cursor-not-allowed min-h-[48px]"
                 style={{
                   pointerEvents:
                     isSubmitting || registered || submissionAttempted ? "none" : "auto",
                 }}
               >
                 {isSubmitting ? (
-                  <>
+                  <div className="flex items-center justify-center">
                     <span className="mr-2">⏳</span>
                     Registering...
-                  </>
+                  </div>
                 ) : registered ? (
                   "Registration Complete"
                 ) : (
@@ -474,7 +511,7 @@ const CricketTournament: React.FC = () => {
                 )}
               </Button>
               {isSubmitting && (
-                <p className="text-sm text-gray-600 mt-2">
+                <p className="text-xs sm:text-sm text-gray-600 mt-2 px-4">
                   Please wait, processing your registration...
                 </p>
               )}
@@ -487,6 +524,19 @@ const CricketTournament: React.FC = () => {
               teamData={teamData}
               onProceedToPayment={initiateRazorpayPayment}
             />
+
+            {/* Success Message */}
+            {showSuccessMessage && (
+              <PaymentSuccessMessage onClose={() => setShowSuccessMessage(false)} />
+            )}
+
+            {/* Failure Message */}
+            {showFailureMessage && (
+              <PaymentFailureMessage 
+                onClose={() => setShowFailureMessage(false)}
+                message={failureMessage}
+              />
+            )}
           </CardContent>
         </Card>
       </div>
