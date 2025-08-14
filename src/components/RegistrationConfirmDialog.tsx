@@ -117,7 +117,7 @@ const RegistrationConfirmDialog: React.FC<RegistrationConfirmDialogProps> = ({
                   : "bg-blue-100 text-blue-700"
               }`}
             >
-              {index < 7 ? "Playing XI" : "Substitute"}
+              {index < 7 ? "Playing VII" : "Substitute"}
             </span>
           </div>
 
