@@ -17,7 +17,7 @@ const heroData = [
       { label: "Prize Pool", value: "₹9K", icon: Trophy },
       { label: "Overs", value: "5", icon: Star },
     ],
-    date: "August 31, 2025",
+    date: "September 7, 2025 Sunday",
     venue: "Ten Sports Turf, Saravanampatti",
     primaryAction: { text: "Register Now", link: "/cricket-tournament" },
     secondaryAction: { text: "Learn More", link: "/sbl" }
