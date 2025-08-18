@@ -3,7 +3,6 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import AuthCallback from "@/pages/AuthCallback";
 import { AuthProvider } from "@/hooks/useAuth";
 import Layout from "./components/Layout";
 import Index from "./pages/Index";
@@ -53,8 +52,6 @@ const App = () => (
               <Route path="login" element={<Login />} />
               <Route path="signup" element={<SignUp />} />
               <Route path="*" element={<NotFound />} />
-              <Route path="auth/callback" element={<AuthCallback />} />
-
             </Route>
           </Routes>
         </BrowserRouter>
