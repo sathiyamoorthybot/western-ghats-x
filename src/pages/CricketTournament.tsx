@@ -307,7 +307,6 @@ const CricketTournament: React.FC = () => {
               throw new Error(verifyData?.message || "Signature verification failed");
 
             // Send confirmation email
-            await supabase.functions.invoke("send-cricket-registration-email", {
               body: {
                 teamData,
                 paymentStatus: "completed",
@@ -505,7 +504,7 @@ const CricketTournament: React.FC = () => {
                     Registering...
                   </div>
                 ) : registered ? (
-                  "Registration Complete"
+                  "Your form has been submitted successfully."
                 ) : (
                   "Proceed to Payment"
                 )}
