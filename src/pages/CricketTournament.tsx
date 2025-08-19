@@ -219,14 +219,14 @@ const CricketTournament: React.FC = () => {
       setShowConfirmDialog(true);
 
       toast({
-        title: "Registration Successful!",
-        description: "Your team has been registered. Please proceed to payment.",
+        title: "Form Submitted!",
+        description: "Your form submission is completed. Please proceed to payment.",
         variant: "default",
       });
     } catch (error: any) {
       setSubmissionAttempted(false);
       toast({
-        title: "Registration Failed",
+        title: "Submission Failed",
         description: error?.message || "Failed to register team. Please try again.",
         variant: "destructive",
       });
