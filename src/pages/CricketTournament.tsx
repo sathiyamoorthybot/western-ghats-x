@@ -9,6 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Users, Trophy, CheckCircle, XCircle, Tag } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import RegistrationConfirmDialog from "@/components/RegistrationConfirmDialog";
+import { supabase } from "@/lib/supabaseClient";
 
 // ---- Types ----
 interface Player {
@@ -271,7 +272,7 @@ const CricketTournament: React.FC = () => {
 
     try {
       const finalAmount = calculateFinalAmount();
-      
+
       const { data, error } = await supabase
         .from("cricket_tournaments" as any)
         .insert({
