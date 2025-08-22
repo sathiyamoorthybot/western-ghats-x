@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Users, Mail, Phone, User } from 'lucide-react';
+import React, { useState } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Users, Mail, Phone, User } from "lucide-react";
+import { supabase } from "@/lib/supabaseClient"; // <-- your supabase client
 
 interface Player {
   name: string;
@@ -22,29 +23,84 @@ interface RegistrationConfirmDialogProps {
   isOpen: boolean;
   onClose: () => void;
   teamData: TeamData;
-  onProceedToPayment: () => void;
 }
 
 const RegistrationConfirmDialog: React.FC<RegistrationConfirmDialogProps> = ({
   isOpen,
   onClose,
   teamData,
-  onProceedToPayment
 }) => {
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
 
+  const ENTRY_FEE = 2299;
+  const SERVICE_FEE = 54;
+  const TOTAL = ENTRY_FEE + SERVICE_FEE;
+
   const handleProceedToPayment = async () => {
-    if (isProcessingPayment) return; // Prevent multiple clicks
-    
+    if (isProcessingPayment) return;
     setIsProcessingPayment(true);
+
     try {
-      await onProceedToPayment();
-    } catch (error) {
-      console.error('Payment initiation error:', error);
-      // Reset on error so user can try again
+      // 1️⃣ Save team data in Supabase with payment_status=pending
+      const { data, error } = await supabase
+        .from("cricket_tournaments")
+        .insert({
+          team_name: teamData.teamName.trim(),
+          captain_name: teamData.captainName.trim(),
+          captain_phone: teamData.captainPhone.trim(),
+          captain_email: teamData.captainEmail.trim(),
+          players: teamData.players,
+          entry_fee: ENTRY_FEE,
+          final_amount: TOTAL,
+          payment_status: "pending",
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      // 2️⃣ Ask backend to create Razorpay order
+      const orderRes = await fetch("/api/create-razorpay-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount: TOTAL * 100, receipt: data.id }), // amount in paise
+      });
+
+      const { orderId } = await orderRes.json();
+
+      // 3️⃣ Load Razorpay Checkout
+      const options = {
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID, // from .env
+        amount: TOTAL * 100,
+        currency: "INR",
+        name: "Western Ghats X",
+        description: "Cricket Tournament Registration",
+        order_id: orderId,
+        handler: async function (response: any) {
+          // 4️⃣ Update payment_status in Supabase
+          await supabase
+            .from("cricket_tournaments")
+            .update({ payment_status: "success", razorpay_payment_id: response.razorpay_payment_id })
+            .eq("id", data.id);
+
+          alert("✅ Payment Successful!");
+          onClose();
+        },
+        prefill: {
+          name: teamData.captainName,
+          email: teamData.captainEmail,
+          contact: teamData.captainPhone,
+        },
+        theme: { color: "#10b981" },
+      };
+
+      const rzp = new (window as any).Razorpay(options);
+      rzp.open();
+    } catch (err) {
+      console.error("Payment initiation error:", err);
+      alert("❌ Something went wrong. Please try again.");
       setIsProcessingPayment(false);
     }
-    // Don't reset isProcessingPayment on success - keep it disabled
   };
 
   return (
@@ -53,9 +109,9 @@ const RegistrationConfirmDialog: React.FC<RegistrationConfirmDialogProps> = ({
         <DialogHeader>
           <DialogTitle className="text-2xl text-green-700">Registration Summary</DialogTitle>
         </DialogHeader>
-        
+
         <div className="space-y-6">
-          {/* Team Details Card */}
+          {/* Team Details */}
           <Card>
             <CardContent className="pt-4">
               <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
@@ -63,129 +119,49 @@ const RegistrationConfirmDialog: React.FC<RegistrationConfirmDialogProps> = ({
                 Team Information
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="flex items-center gap-2">
-                  <User className="h-4 w-4 text-gray-500" />
-                  <div>
-                    <p className="text-sm text-gray-500">Team Name</p>
-                    <p className="font-medium">{teamData.teamName}</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <User className="h-4 w-4 text-gray-500" />
-                  <div>
-                    <p className="text-sm text-gray-500">Captain</p>
-                    <p className="font-medium">{teamData.captainName}</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Phone className="h-4 w-4 text-gray-500" />
-                  <div>
-                    <p className="text-sm text-gray-500">Phone</p>
-                    <p className="font-medium">{teamData.captainPhone}</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Mail className="h-4 w-4 text-gray-500" />
-                  <div>
-                    <p className="text-sm text-gray-500">Email</p>
-                    <p className="font-medium">{teamData.captainEmail}</p>
-                  </div>
-                </div>
+                <div><p className="text-sm text-gray-500">Team</p><p>{teamData.teamName}</p></div>
+                <div><p className="text-sm text-gray-500">Captain</p><p>{teamData.captainName}</p></div>
+                <div><p className="text-sm text-gray-500">Phone</p><p>{teamData.captainPhone}</p></div>
+                <div><p className="text-sm text-gray-500">Email</p><p>{teamData.captainEmail}</p></div>
               </div>
             </CardContent>
           </Card>
 
-         {/* Players List */}
-<Card>
-  <CardContent className="pt-4">
-    <h3 className="text-lg font-semibold mb-4">Team Players</h3>
-    <div className="space-y-2">
-      {teamData.players.map((player, index) => (
-        <div
-          key={index}
-          className="p-3 bg-gray-50 rounded-lg border flex items-center justify-between"
-        >
-          {/* Left: Player number, name, and tag */}
-          <div className="flex items-center gap-2">
-            <span className="font-semibold text-lg">
-              {index + 1}. {player.name}
-            </span>
-            <span
-              className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                index < 7
-                  ? "bg-green-100 text-green-700"
-                  : "bg-blue-100 text-blue-700"
-              }`}
-            >
-              {index < 7 ? "Playing VII" : "Substitute"}
-            </span>
-          </div>
-
-          {/* Right: Age and Phone */}
-          <div className="flex items-center gap-6 text-sm text-gray-600">
-            <div className="flex items-center gap-1">
-              <User className="h-3 w-3" />
-              <span>{player.age} yrs</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <Phone className="h-3 w-3" />
-              <span>{player.phone}</span>
-            </div>
-          </div>
-        </div>
-      ))}
-    </div>
-  </CardContent>
-</Card>
-
-          {/* Payment Info */}
-          <Card className="border-green-200 bg-green-50">
+          {/* Players */}
+          <Card>
             <CardContent className="pt-4">
-              <h3 className="text-lg font-semibold text-green-700 mb-2">Payment Details</h3>
-          
-               <p className="text-gray-700">
-      Registration Fee: <span className="font-bold text-xl">₹2,299</span>{" "}
-      + Service Fee (2.35%): <span className="font-bold text-xl">₹54</span>{" "}
-      = Total: <span className="font-bold text-xl">₹2,353</span>
-    </p>
-              <p className="text-sm text-gray-600 mt-1">Payment will be processed securely through Razorpay</p>
+              <h3 className="text-lg font-semibold mb-4">Players</h3>
+              {teamData.players.map((p, i) => (
+                <div key={i} className="flex justify-between border-b py-2">
+                  <span>{i + 1}. {p.name} ({p.age} yrs)</span>
+                  <span>{p.phone}</span>
+                </div>
+              ))}
             </CardContent>
           </Card>
 
-          {/* Action Buttons */}
+          {/* Payment */}
+          <Card className="border-green-200 bg-green-50">
+            <CardContent>
+              <h3 className="text-lg font-semibold text-green-700 mb-2">Payment Details</h3>
+              <p>₹{ENTRY_FEE} + Fee ₹{SERVICE_FEE} = <b>₹{TOTAL}</b></p>
+              <p className="text-sm text-gray-600 mt-1">Processed securely with Razorpay</p>
+            </CardContent>
+          </Card>
+
+          {/* Buttons */}
           <div className="flex gap-4 pt-4">
-            <Button 
-              variant="outline" 
-              onClick={onClose} 
-              className="flex-1"
-              disabled={isProcessingPayment}
-            >
+            <Button variant="outline" onClick={onClose} disabled={isProcessingPayment} className="flex-1">
               Edit Details
             </Button>
             <Button 
               onClick={handleProceedToPayment} 
-              className="flex-1 bg-gradient-to-r from-mountain-green to-mountain-blue disabled:opacity-50"
+              className="flex-1 bg-gradient-to-r from-green-600 to-green-400"
               disabled={isProcessingPayment}
-              style={{ pointerEvents: isProcessingPayment ? 'none' : 'auto' }}
             >
-              {isProcessingPayment ? (
-                <>
-                  <span className="mr-2">⏳</span>
-                  Processing...
-                </>
-              ) : (
-                "Proceed to Payment (₹2,353)"
-              )}
+              {isProcessingPayment ? "Processing..." : `Proceed to Payment (₹${TOTAL})`}
             </Button>
           </div>
-          
-          {isProcessingPayment && (
-            <div className="text-center">
-              <p className="text-sm text-gray-600">
-                Please wait, initiating payment gateway...
-              </p>
-            </div>
-          )}
         </div>
       </DialogContent>
     </Dialog>
