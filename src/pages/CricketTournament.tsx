@@ -201,13 +201,34 @@ const CricketTournament: React.FC = () => {
     });
   };
 
-  // Calculate final amount
-  const calculateFinalAmount = () => {
-    const discountedAmount = Math.max(ENTRY_FEE - discount, 0);
-    const platformFee = Math.round((discountedAmount * PLATFORM_FEE_PERCENT) / 100);
-    return discountedAmount + platformFee;
-  };
 
+
+
+
+  
+// Constants
+const ENTRY_FEE = 1500; // Example: change to your real fee
+const PLATFORM_FEE_PERCENT = 5; // Example: change if needed
+
+// Calculate amounts
+const calculateFinalAmount = () => {
+  const discountedAmount = Math.max(ENTRY_FEE - discount, 0);
+  const platformFee = Math.round((discountedAmount * PLATFORM_FEE_PERCENT) / 100);
+  return discountedAmount + platformFee;
+};
+
+// Helpers (optional, for reusability)
+const getDiscountedAmount = () => Math.max(ENTRY_FEE - discount, 0);
+const getPlatformFee = () => Math.round((getDiscountedAmount() * PLATFORM_FEE_PERCENT) / 100);
+const getTotalAmount = () => getDiscountedAmount() + getPlatformFee();
+
+
+
+
+
+
+
+  
   const validateForm = () => {
     const showError = (message: string, fieldId?: string) => {
       toast({
