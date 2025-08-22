@@ -207,8 +207,8 @@ const CricketTournament: React.FC = () => {
 
   
 // Constants
-const ENTRY_FEE = 1500; // Example: change to your real fee
-const PLATFORM_FEE_PERCENT = 5; // Example: change if needed
+const ENTRY_FEE = 2299; // Example: change to your real fee
+const PLATFORM_FEE_PERCENT = 2.35; // Example: change if needed
 
 // Calculate amounts
 const calculateFinalAmount = () => {
