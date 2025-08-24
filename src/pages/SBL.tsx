@@ -26,7 +26,7 @@ export default function SBL() {
             </ol>
           </nav>
           <h1 className="text-3xl font-bold">Saravanampatti Blasters League - Edition 1</h1>
-          <p className="text-lg mt-1">League Format | 18 Teams | 22 Matches | ₹1,699 Entry</p>
+          <p className="text-lg mt-1">League Format | 18 Teams | 22 Matches | ₹1,699 Early Bird Offer</p>
         </div>
       </div>
 
@@ -44,7 +44,7 @@ export default function SBL() {
               <strong>Venue:</strong> Ten Sports Turf, Saravanampatti
             </p>
             <p className="mb-4">
-              <strong>Entry Fee:</strong> ₹1,699 per team
+              <strong>Early Bird Offer:</strong> ₹1,699 per team
             </p>
             <Button asChild className="bg-green-600 hover:bg-green-700">
               <Link to="/cricket-tournament">Register Now</Link>
