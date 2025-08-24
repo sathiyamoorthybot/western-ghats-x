@@ -32,7 +32,7 @@ const heroData = [
     stats: [
       { label: "Distance", value: "21K", icon: MapPin },
       { label: "Elevation", value: "850m", icon: Star },
-      { label: "Difficulty", value: "Moderate", icon: Trophy },
+      { label: "Early Bird Offer", value: "₹1,699", icon: Currency },
     ],
     date: "Coming Soon - 2025",
     venue: "Kattanji Hills, Coimbatore",
