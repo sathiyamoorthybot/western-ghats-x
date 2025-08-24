@@ -368,7 +368,7 @@ const CricketTournament: React.FC = () => {
             </div>
             <div className="text-sm sm:text-base text-gray-600 space-y-2">
               <p>Team registration only. Guest registrations are not available.</p>
-              <p className="text-green-700 font-semibold text-base sm:text-lg">Entry Fee: ₹2,299 per team</p>
+              <p className="text-green-700 font-semibold text-base sm:text-lg">Entry Fee: ₹1,699 per team</p>
             </div>
           </CardHeader>
 
