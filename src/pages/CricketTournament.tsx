@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Users, Trophy, CheckCircle, XCircle, Tag } from "lucide-react";
+import { Users, Trophy, CheckCircle, XCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import RegistrationConfirmDialog from "@/components/RegistrationConfirmDialog";
 
@@ -34,16 +34,8 @@ declare global {
 }
 
 // ---- Pricing constants ----
-const ENTRY_FEE = 2299;            // ₹2,299 per team
+const ENTRY_FEE = 2299 ;            // ₹2,299 per team
 const PLATFORM_FEE_PERCENT = 2.35; // 2.35%
-
-// ---- Coupon constants ----
-const validCoupons: Record<string, number> = {
-  SBL100: 100,   // flat ₹100
-  SBL10: 0.1,    // 10%
-  EARLY20: 0.2,  // 20%
-  SAVE50: 50,    // flat ₹50
-};
 
 // ---- Helper: load Razorpay script once ----
 const loadRazorpay = (): Promise<boolean> => {
@@ -119,11 +111,6 @@ const CricketTournament: React.FC = () => {
   const [registrationId, setRegistrationId] = useState<string | null>(null);
   const [submissionAttempted, setSubmissionAttempted] = useState(false);
 
-  // Coupon state
-  const [couponCode, setCouponCode] = useState("");
-  const [discount, setDiscount] = useState(0);
-  const [couponApplied, setCouponApplied] = useState(false);
-
   const [teamData, setTeamData] = useState<TeamData>({
     teamName: "",
     captainName: "",
@@ -148,87 +135,6 @@ const CricketTournament: React.FC = () => {
     }));
   };
 
-  // Apply coupon function
-  const applyCoupon = () => {
-    const code = couponCode.trim().toUpperCase();
-    if (!code) {
-      toast({
-        title: "Enter Coupon Code",
-        description: "Please enter a coupon code.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (validCoupons[code]) {
-      let discountAmount = 0;
-      if (validCoupons[code] < 1) {
-        // Percentage discount
-        discountAmount = Math.round(ENTRY_FEE * validCoupons[code]);
-      } else {
-        // Flat discount
-        discountAmount = validCoupons[code];
-      }
-      
-      setDiscount(discountAmount);
-      setCouponApplied(true);
-      
-      toast({
-        title: "Coupon Applied! 🎉",
-        description: `You saved ₹${discountAmount}`,
-        variant: "default",
-      });
-    } else {
-      setDiscount(0);
-      setCouponApplied(false);
-      toast({
-        title: "Invalid Coupon",
-        description: "Please check the coupon code and try again.",
-        variant: "destructive",
-      });
-    }
-  };
-
-  // Remove coupon function
-  const removeCoupon = () => {
-    setCouponCode("");
-    setDiscount(0);
-    setCouponApplied(false);
-    toast({
-      title: "Coupon Removed",
-      description: "Coupon discount has been removed.",
-      variant: "default",
-    });
-  };
-
-
-
-
-
-  
-// Constants
-const ENTRY_FEE = 2299; // Example: change to your real fee
-const PLATFORM_FEE_PERCENT = 2.35; // Example: change if needed
-
-// Calculate amounts
-const calculateFinalAmount = () => {
-  const discountedAmount = Math.max(ENTRY_FEE - discount, 0);
-  const platformFee = Math.round((discountedAmount * PLATFORM_FEE_PERCENT) / 100);
-  return discountedAmount + platformFee;
-};
-
-// Helpers (optional, for reusability)
-const getDiscountedAmount = () => Math.max(ENTRY_FEE - discount, 0);
-const getPlatformFee = () => Math.round((getDiscountedAmount() * PLATFORM_FEE_PERCENT) / 100);
-const getTotalAmount = () => getDiscountedAmount() + getPlatformFee();
-
-
-
-
-
-
-
-  
   const validateForm = () => {
     const showError = (message: string, fieldId?: string) => {
       toast({
@@ -291,8 +197,6 @@ const getTotalAmount = () => getDiscountedAmount() + getPlatformFee();
     setIsSubmitting(true);
 
     try {
-      const finalAmount = calculateFinalAmount();
-      
       const { data, error } = await supabase
         .from("cricket_tournaments" as any)
         .insert({
@@ -302,9 +206,6 @@ const getTotalAmount = () => getDiscountedAmount() + getPlatformFee();
           captain_email: teamData.captainEmail.trim(),
           players: teamData.players,
           entry_fee: ENTRY_FEE,
-          discount_amount: discount,
-          coupon_code: couponApplied ? couponCode.toUpperCase() : null,
-          final_amount: finalAmount,
           payment_status: "pending",
           user_id: user?.id || null,
         })
@@ -318,14 +219,14 @@ const getTotalAmount = () => getDiscountedAmount() + getPlatformFee();
       setShowConfirmDialog(true);
 
       toast({
-        title: "Registration Successful!",
-        description: "Your team has been registered. Please proceed to payment.",
+        title: "Form Submitted!",
+        description: "Your form submission is completed. Please proceed to payment.",
         variant: "default",
       });
     } catch (error: any) {
       setSubmissionAttempted(false);
       toast({
-        title: "Registration Failed",
+        title: "Submission Failed",
         description: error?.message || "Failed to register team. Please try again.",
         variant: "destructive",
       });
@@ -338,8 +239,11 @@ const getTotalAmount = () => getDiscountedAmount() + getPlatformFee();
     try {
       setShowConfirmDialog(false);
 
-      const finalAmount = calculateFinalAmount();
-      const amountInPaise = finalAmount * 100; // Convert to paise
+      // ---- Amounts (Razorpay expects paise) ----
+      const totalAmountInRupees = Math.round(
+        ENTRY_FEE + (ENTRY_FEE * PLATFORM_FEE_PERCENT) / 100
+      ); // integer rupees (rounded)
+      const amountInPaise = totalAmountInRupees * 1; // IMPORTANT
 
       if (!registrationId) {
         toast({
@@ -357,9 +261,9 @@ const getTotalAmount = () => getDiscountedAmount() + getPlatformFee();
         return;
       }
 
-      // Create order on server
+      // Create order on server (make sure your server uses the right env: test vs live)
       const { data, error } = await supabase.functions.invoke("create-razorpay-order", {
-        body: { teamData, amount: amountInPaise, registrationId, discount, couponCode: couponApplied ? couponCode : null },
+        body: { teamData, amount: amountInPaise, registrationId },
       });
 
       if (error) throw new Error(error.message || "Order creation failed");
@@ -373,13 +277,11 @@ const getTotalAmount = () => getDiscountedAmount() + getPlatformFee();
         amount: data.amount, // in paise
         currency: data.currency, // "INR"
         name: "Cricket Tournament Registration",
-        description: `Team: ${teamData.teamName}${couponApplied ? ` (Coupon: ${couponCode})` : ''}`,
+        description: `Team: ${teamData.teamName}`,
         notes: {
           registration_id: String(registrationId),
           team_name: teamData.teamName,
           captain_phone: teamData.captainPhone,
-          discount_amount: String(discount),
-          coupon_code: couponApplied ? couponCode : '',
         },
         prefill: {
           name: teamData.captainName,
@@ -405,14 +307,11 @@ const getTotalAmount = () => getDiscountedAmount() + getPlatformFee();
               throw new Error(verifyData?.message || "Signature verification failed");
 
             // Send confirmation email
-            await supabase.functions.invoke("send-cricket-registration-email", {
               body: {
                 teamData,
                 paymentStatus: "completed",
                 registrationId,
-                paymentAmount: finalAmount,
-                discount,
-                couponCode: couponApplied ? couponCode : null,
+                paymentAmount: totalAmountInRupees,
               },
             });
 
@@ -440,10 +339,8 @@ const getTotalAmount = () => getDiscountedAmount() + getPlatformFee();
               teamData,
               paymentStatus: "failed",
               registrationId,
-              paymentAmount: finalAmount,
+              paymentAmount: totalAmountInRupees,
               failureReason: resp?.error?.description || "Payment failed",
-              discount,
-              couponCode: couponApplied ? couponCode : null,
             },
           });
         } catch (_) {}
@@ -590,82 +487,12 @@ const getTotalAmount = () => getDiscountedAmount() + getPlatformFee();
               </div>
             </div>
 
-            {/* Coupon Section */}
-            <div className="border p-4 rounded-md bg-blue-50">
-              <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                <Tag className="h-4 w-4 sm:h-5 sm:w-5" />
-                Have a Coupon Code?
-              </h3>
-              
-              {!couponApplied ? (
-                <div className="flex gap-2">
-                  <Input
-                    value={couponCode}
-                    onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
-                    placeholder="Enter coupon code"
-                    className="flex-1"
-                  />
-                  <Button 
-                    onClick={applyCoupon}
-                    disabled={!couponCode.trim()}
-                    variant="outline"
-                    className="px-4"
-                  >
-                    Apply
-                  </Button>
-                </div>
-              ) : (
-                <div className="bg-green-100 p-3 rounded-md border border-green-200">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="font-medium text-green-800">Coupon Applied: {couponCode}</p>
-                      <p className="text-sm text-green-600">You saved ₹{discount}</p>
-                    </div>
-                    <Button 
-                      onClick={removeCoupon}
-                      variant="outline" 
-                      size="sm"
-                      className="text-red-600 border-red-200 hover:bg-red-50"
-                    >
-                      Remove
-                    </Button>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Price Summary */}
-            <div className="border p-4 rounded-md bg-gray-50">
-              <h3 className="text-lg font-semibold mb-3">Price Summary</h3>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span>Entry Fee</span>
-                  <span>₹{ENTRY_FEE}</span>
-                </div>
-                {discount > 0 && (
-                  <div className="flex justify-between text-green-600">
-                    <span>Discount ({couponCode})</span>
-                    <span>-₹{discount}</span>
-                  </div>
-                )}
-                <div className="flex justify-between">
-                  <span>Platform Fee ({PLATFORM_FEE_PERCENT}%)</span>
-                  <span>₹{Math.round(((ENTRY_FEE - discount) * PLATFORM_FEE_PERCENT) / 100)}</span>
-                </div>
-                <hr className="my-2" />
-                <div className="flex justify-between font-semibold text-lg">
-                  <span>Total Amount</span>
-                  <span>₹{calculateFinalAmount()}</span>
-                </div>
-              </div>
-            </div>
-
             {/* Final Actions */}
             <div className="text-center pt-4">
               <Button
                 onClick={handleSubmit}
                 disabled={isSubmitting || registered || submissionAttempted}
-                className="w-full sm:w-auto bg-gradient-to-r from-green-600 to-blue-600 text-white font-semibold px-6 sm:px-8 py-3 text-base sm:text-lg disabled:opacity-50 disabled:cursor-not-allowed min-h-[48px]"
+                className="w-full sm:w-auto bg-gradient-to-r from-mountain-green to-mountain-blue text-white font-semibold px-6 sm:px-8 py-3 text-base sm:text-lg disabled:opacity-50 disabled:cursor-not-allowed min-h-[48px]"
                 style={{
                   pointerEvents:
                     isSubmitting || registered || submissionAttempted ? "none" : "auto",
@@ -677,9 +504,9 @@ const getTotalAmount = () => getDiscountedAmount() + getPlatformFee();
                     Registering...
                   </div>
                 ) : registered ? (
-                  "Registration Complete"
+                  "Your form has been submitted successfully."
                 ) : (
-                  `Proceed to Payment (₹${calculateFinalAmount()})`
+                  "Proceed to Payment"
                 )}
               </Button>
               {isSubmitting && (
