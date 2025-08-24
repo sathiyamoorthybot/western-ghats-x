@@ -44,7 +44,7 @@ export default function SBL() {
               <strong>Venue:</strong> Ten Sports Turf, Saravanampatti
             </p>
             <p className="mb-4">
-              <strong>Entry Fee:</strong> ₹2,299 per team
+              <strong>Entry Fee:</strong> ₹1,699 per team
             </p>
             <Button asChild className="bg-green-600 hover:bg-green-700">
               <Link to="/cricket-tournament">Register Now</Link>
