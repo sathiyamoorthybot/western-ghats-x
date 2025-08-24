@@ -26,7 +26,7 @@ export default function SBL() {
             </ol>
           </nav>
           <h1 className="text-3xl font-bold">Saravanampatti Blasters League - Edition 1</h1>
-          <p className="text-lg mt-1">League Format | 18 Teams | 22 Matches | ₹2,299 Entry</p>
+          <p className="text-lg mt-1">League Format | 18 Teams | 22 Matches | ₹1,699 Entry</p>
         </div>
       </div>
 
