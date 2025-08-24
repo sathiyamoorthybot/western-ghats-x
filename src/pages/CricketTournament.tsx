@@ -219,14 +219,14 @@ const CricketTournament: React.FC = () => {
       setShowConfirmDialog(true);
 
       toast({
-        title: "Form Submitted!",
-        description: "Your form submission is completed. Please proceed to payment.",
+        title: "Registration Successful!",
+        description: "Your team has been registered. Please proceed to payment.",
         variant: "default",
       });
     } catch (error: any) {
       setSubmissionAttempted(false);
       toast({
-        title: "Submission Failed",
+        title: "Registration Failed",
         description: error?.message || "Failed to register team. Please try again.",
         variant: "destructive",
       });
@@ -307,6 +307,7 @@ const CricketTournament: React.FC = () => {
               throw new Error(verifyData?.message || "Signature verification failed");
 
             // Send confirmation email
+            await supabase.functions.invoke("send-cricket-registration-email", {
               body: {
                 teamData,
                 paymentStatus: "completed",
@@ -504,7 +505,7 @@ const CricketTournament: React.FC = () => {
                     Registering...
                   </div>
                 ) : registered ? (
-                  "Your form has been submitted successfully."
+                  "Registration Complete"
                 ) : (
                   "Proceed to Payment"
                 )}
