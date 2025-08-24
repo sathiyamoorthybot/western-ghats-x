@@ -174,7 +174,7 @@ const RegistrationConfirmDialog: React.FC<RegistrationConfirmDialogProps> = ({
                   Processing...
                 </>
               ) : (
-                "Proceed to Payment (₹2,353)"
+                "Proceed to Payment (₹1,739)"
               )}
             </Button>
           </div>
